@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="#FFFFFF"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/comercio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00D81717"
+                android:gravity="center"
+                android:text="Editar cuenta"
+                android:textAppearance="@style/tituloGrande"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:srcCompat="@drawable/w11" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingTop="20dp"
+                android:paddingRight="30dp">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|left"
+                    android:text=" Nombre" />
+
+                <EditText
+                    android:id="@+id/nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cursorVisible="false"
+                    android:editable="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:text="Christian Marcelo" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|left"
+                    android:text=" Número de teléfono" />
+
+                <EditText
+                    android:id="@+id/contraseña"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:focusable="false"
+                    android:text="+56956844862" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|left"
+                    android:text=" Correo electrónico" />
+
+                <EditText
+                    android:id="@+id/correo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:cursorVisible="false"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:text="marcelmarch95@gmail.com" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|left"
+                    android:text="Contraseña" />
+
+                <EditText
+                    android:id="@+id/contraseña"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:text="12345678" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

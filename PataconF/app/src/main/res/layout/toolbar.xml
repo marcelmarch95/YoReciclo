@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tbar"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:background="?attr/colorPrimary"
+    android:gravity="right"
+    android:minHeight="?attr/actionBarSize"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="5dp"
+    android:theme="@style/AppTheme.NoActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/nombreUsuario"
+                    style="@style/titulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    android:text="Titulo Largo appbar"
+                    android:textAppearance="@style/titulo"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tipoUsuario"
+                    style="@style/stitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:foregroundGravity="right"
+                    android:gravity="right"
+                    android:text="Subtitulo appbar"
+                    android:textAppearance="@style/stitulo"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:foregroundGravity="left"
+                    app:srcCompat="@drawable/logoficial" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:orientation="horizontal"
+                android:paddingRight="5dp">
+
+                <LinearLayout
+                    android:id="@+id/textos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:orientation="vertical"
+                    android:paddingRight="10dp">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/salir"
+
+                    android:layout_width="85dp"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnPerfil"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/w111"
+                            android:paddingRight="10dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="5dp">
+
+                        <Button
+                            android:id="@+id/btnLogout"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/logout30"
+                            android:paddingLeft="5dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabGravity="center"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="#F8FFFFFF"
+                app:tabTextAppearance="@style/titulo"
+                app:tabTextColor="#A8FFFFFF">
+
+                <android.support.design.widget.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="En Curso" />
+
+
+                <android.support.design.widget.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Finalizados" />
+            </android.support.design.widget.TabLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.v7.widget.Toolbar>
