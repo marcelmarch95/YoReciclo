@@ -4,11 +4,11 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-public class AgregarProductoViewModel extends ViewModel {
+public class AgregarPuntoViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public AgregarProductoViewModel() {
+    public AgregarPuntoViewModel() {
     }
 
     public LiveData<String> getText() {

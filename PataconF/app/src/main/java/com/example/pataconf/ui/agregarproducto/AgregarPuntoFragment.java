@@ -2,8 +2,6 @@ package com.example.pataconf.ui.agregarproducto;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,36 +9,31 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.pataconf.ActivityCargando;
-import com.example.pataconf.ActivityPrincipal;
-import com.example.pataconf.Informacion;
-import com.example.pataconf.ModeloVistaOpcionesProductoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
+import com.example.pataconf.SelectorDireccionMapa;
+import com.example.pataconf.SelectorDireccionMapaPunto;
 import com.example.pataconf.ui.cargando.CargandoFragment;
 import com.example.pataconf.ui.informacion.InformacionFragment;
 import com.example.pataconf.ui.optionproducts.OptionsProductListViewModel;
-import com.example.pataconf.ui.products.ProductListFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
@@ -48,32 +41,32 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.regex.Pattern;
+import org.w3c.dom.Text;
 
-import Modelo.ModeloOpcionesProducto;
+import java.io.Serializable;
+
 import Modelo.Producto;
+import Modelo.Punto;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AgregarProductoFragment extends Fragment implements View.OnClickListener {
+public class AgregarPuntoFragment extends Fragment implements View.OnClickListener {
 
     private OptionsProductListViewModel homeViewModel;
-    private EditText eprecio;
     private Button selectfoto;
     private Button eliminarfoto;
     private Button agregar;
-    private Spinner categoria;
-    private EditText nombre;
-    private EditText codigo;
-    private EditText stock;
+    private Spinner area;
+    private Spinner propiedad;
+    private Spinner recinto;
+    private EditText edireccion;
+    private EditText eobservacion;
+    private CheckBox vidrio;
+    private CheckBox lata;
+    private CheckBox plastico;
+    private TextView title;
+
     private FirebaseFirestore db;
-    private EditText descripcion;
     private ImageView foto;
     private Uri imageUri;
     private static final int PICK_IMAGE = 100;
@@ -83,40 +76,33 @@ public class AgregarProductoFragment extends Fragment implements View.OnClickLis
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(OptionsProductListViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_agregarproducto, container, false);
+        View root = inflater.inflate(R.layout.fragment_agregarpunto, container, false);
 
-        nombre = (EditText) root.findViewById(R.id.enombre);
-        eprecio = (EditText) root.findViewById(R.id.eprecio);
-        categoria = (Spinner) root.findViewById(R.id.categoria);
-        codigo = (EditText) root.findViewById(R.id.ecodigo);
-        stock = (EditText) root.findViewById(R.id.stock);
-        descripcion = (EditText) root.findViewById(R.id.edescripcion);
+        edireccion = (EditText) root.findViewById(R.id.edireccion);
+        area = (Spinner) root.findViewById(R.id.area);
+        propiedad = (Spinner) root.findViewById(R.id.propiedad);
+        recinto = (Spinner) root.findViewById(R.id.recinto);
+        eobservacion = (EditText) root.findViewById(R.id.observacion);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.categoriasproductos, android.R.layout.simple_spinner_item);
+        title = (TextView) root.findViewById(R.id.title);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.area, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoria.setAdapter(adapter);
+        area.setAdapter(adapter);
         db = FirebaseFirestore.getInstance();
 
-        eprecio.addTextChangedListener( new TextWatcher() {
-            boolean isEdiging;
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.macrosector, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        propiedad.setAdapter(adapter2);
 
-            @Override public void afterTextChanged(Editable s) {
-                if(isEdiging) return;
-                isEdiging = true;
+        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.recinto, android.R.layout.simple_spinner_item);
+        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        recinto.setAdapter(adapter3);
 
-                String str = s.toString().replaceAll( "[^\\d]", "" );
+        this.vidrio = (CheckBox) root.findViewById(R.id.vidrio);
+        this.lata = (CheckBox) root.findViewById(R.id.lata);
+        this.plastico = (CheckBox) root.findViewById(R.id.plastico);
 
-                if (str.compareTo("")!=0) {
-                    double s1 = Double.parseDouble(str);
-                    NumberFormat nf2 = NumberFormat.getInstance(Locale.ENGLISH);
-                    ((DecimalFormat) nf2).applyPattern("$ ###,###");
-                    s.replace(0, s.length(), nf2.format(s1));
-                }
-                isEdiging = false;
-            }
-        });
 
         this.selectfoto = (Button) root.findViewById(R.id.selectfoto);
         this.agregar = (Button) root.findViewById(R.id.agregar);
@@ -134,7 +120,7 @@ public class AgregarProductoFragment extends Fragment implements View.OnClickLis
             }
         });
 
-        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Agregar Producto");
+        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Agregar Punto");
 
         return root;
     }
@@ -169,27 +155,26 @@ public class AgregarProductoFragment extends Fragment implements View.OnClickLis
     public void validarDatos(){
         boolean error = false;
 
-        if (nombre.getText().toString().isEmpty()) {
-            this.nombre.requestFocus();
-            this.nombre.setError("Ingrese nombre producto");
+        if (edireccion.getText().toString().isEmpty()) {
+            this.edireccion.requestFocus();
+            this.edireccion.setError("Ingrese dirección del punto");
             error = true;
         }
 
-        if (this.codigo.getText().toString().isEmpty()){
-            this.codigo.requestFocus();
-            this.codigo.setError("Ingrese código del producto");
+        int total = 0;
+        if (this.vidrio.isChecked())
+            total++;
+        if (this.lata.isChecked())
+            total++;
+        if(this.plastico.isChecked())
+            total++;
+
+        if (total==0){
+            this.title.requestFocus();
+            this.title.setError("* Obligatorio");
             error = true;
         }
-        if (this.stock.getText().toString().isEmpty()){
-            this.stock.requestFocus();
-            this.stock.setError("Ingrese stock");
-            error = true;
-        }
-        if (this.eprecio.getText().toString().isEmpty()){
-            this.eprecio.requestFocus();
-            this.eprecio.setError("Ingrese precio");
-            error = true;
-        }
+
 
         if (error)
             return;
@@ -198,92 +183,26 @@ public class AgregarProductoFragment extends Fragment implements View.OnClickLis
         FragmentManager fragmentManager = getFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        Fragment lp = new CargandoFragment();
-        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-        fragmentTransaction.commit();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        Producto p = new Producto((this.nombre.getText().toString()), this.codigo.getText().toString(),
-                this.categoria.getSelectedItem().toString(),this.descripcion.getText().toString(),"notlink",
-                Integer.valueOf(this.eprecio.getText().toString()), Integer.valueOf(this.stock.getText().toString()), user.getUid());
+        //this.categoria.getSelectedItem().toString()
+
+        Punto p = new Punto();
+        p.setArea(this.area.getSelectedItem().toString());
+        p.setPropiedad(this.propiedad.getSelectedItem().toString());
+        p.setRecinto(this.recinto.getSelectedItem().toString());
+        p.setDireccion(this.edireccion.getText().toString());
+        p.setObservacion(this.eobservacion.getText().toString());
+        p.setFoto("notlink");
 
         System.out.println("Uri: " + imageUri);
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
+        Intent intent = new Intent(getActivity(), SelectorDireccionMapaPunto.class);
+        intent.putExtra("punto", p);
+        intent.putExtra("uri", imageUri);
+        startActivity(intent);
 
-        StorageReference riversRef = storageRef.child("images/"+p.getComerciante()+"/" + imageUri.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(imageUri);
-
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                System.out.println("error al subir : " + exception.toString());
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
-                {
-                    @Override
-                    public void onSuccess(Uri downloadUrl)
-                    {
-                        p.setFoto(downloadUrl.toString());
-                        System.out.println("subida correctamente link: " + p.getFoto());
-
-                        db.collection("producto").document(p.getCodigo()).set(p).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString("mensaje", "Producto agregado correctamente");
-                                bundle.putBoolean("estado", true);
-                                bundle.putBoolean("productos", true);
-
-                                Fragment lp = new InformacionFragment();
-                                lp.setArguments(bundle);
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                                fragmentTransaction.commit();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString("mensaje", "Error al agregar el Producto");
-                                bundle.putBoolean("estado", false);
-                                bundle.putBoolean("productos", true);
-
-                                Fragment lp = new InformacionFragment();
-                                lp.setArguments(bundle);
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                                fragmentTransaction.commit();
-
-                            }
-                        });
-                    }
-                });
-
-            }
-
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                System.out.println("Upload is " + progress + "% done");
-            }
-        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                System.out.println("Upload is paused");
-            }
-        });
 
     }
 

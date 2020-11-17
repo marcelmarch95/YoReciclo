@@ -8,20 +8,20 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -59,22 +59,22 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.core.Tag;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
-import Modelo.Comerciante;
+import Modelo.Punto;
 import Modelo.Recicladora;
 
-public class SelectorDireccionMapa extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class SelectorDireccionMapaPunto extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private static GoogleApiClient mGoogleApiClient;
     private static final int ACCESS_FINE_LOCATION_INTENT_ID = 3;
@@ -92,12 +92,13 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
     private Marker markerActual;
     private LatLng latLng, latLngOtro;
     private boolean posModificada = false;
-    private Recicladora c;
+    private Punto p;
     private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private boolean primera = true;
+    private Uri uri;
 
     private boolean stateMap;
     private SharedPreferences prefs = null;//Place it before onCreate you can access its values any where in this class
@@ -112,7 +113,7 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
         db = FirebaseFirestore.getInstance();
 
 
-        setContentView(R.layout.activity_selector_direccion_mapa);
+        setContentView(R.layout.activity_selector_direccion_mapa_punto);
         initGoogleAPIClient();  //Init Google API Client
         checkPermissions();     //Check Permission
 
@@ -134,11 +135,10 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
         getSupportActionBar().setTitle("Confirmar dirección");
 
         Intent i = getIntent();
-        Recicladora c = (Recicladora) i.getSerializableExtra("recicladora");
-        this.c = c;
-        System.out.println("el comerciante es: " + c.toString());
+        Punto p = (Punto) i.getExtras().get("punto");
+        uri = (Uri) i.getExtras().get("uri");
 
-
+        System.out.println("Punto: " + p.toString());
     }
 
 
@@ -160,7 +160,7 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
 
     //////////////////////////////////////////////////////////////GPS/////////////////////////////////////////////////////////////////
     private void initGoogleAPIClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(SelectorDireccionMapa.this)
+        mGoogleApiClient = new GoogleApiClient.Builder(SelectorDireccionMapaPunto.this)
                 .addApi(LocationServices.API)
                 .build();
         mGoogleApiClient.connect();
@@ -168,8 +168,8 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
 
     private void checkPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (ContextCompat.checkSelfPermission(SelectorDireccionMapa.this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)
+            if (ContextCompat.checkSelfPermission(SelectorDireccionMapaPunto.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED)
                 requestLocationPermission();
             else
@@ -179,10 +179,10 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
     }
 
     private void requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(SelectorDireccionMapa.this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-            ActivityCompat.requestPermissions(SelectorDireccionMapa.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_INTENT_ID);
+        if (ActivityCompat.shouldShowRequestPermissionRationale(SelectorDireccionMapaPunto.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(SelectorDireccionMapaPunto.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_INTENT_ID);
         } else {
-            ActivityCompat.requestPermissions(SelectorDireccionMapa.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_INTENT_ID);
+            ActivityCompat.requestPermissions(SelectorDireccionMapaPunto.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_INTENT_ID);
         }
     }
 
@@ -209,7 +209,7 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         Log.e("TAG", "RESOLUTION_REQUIRED");
                         try {
-                            status.startResolutionForResult(SelectorDireccionMapa.this, REQUEST_CHECK_SETTINGS);
+                            status.startResolutionForResult(SelectorDireccionMapaPunto.this, REQUEST_CHECK_SETTINGS);
                         } catch (IntentSender.SendIntentException e) {
                             e.printStackTrace();
                         }
@@ -300,7 +300,7 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
 
 
                 } else {
-                    Toast.makeText(SelectorDireccionMapa.this, "Location Permission denied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SelectorDireccionMapaPunto.this, "Location Permission denied.", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
@@ -399,7 +399,7 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
         }
         mGoogleMap.setMyLocationEnabled(true);
         buildGoogleApiClient();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -465,22 +465,27 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View view) {
         if (view == this.confirmar){
-            this.c.setLat(String.valueOf(this.lat));
-            this.c.setLng(String.valueOf(this.lng));
+            //this.c.setLat(String.valueOf(this.lat));
+            //this.c.setLng(String.valueOf(this.lng));
             this.progressBar.setVisibility(View.VISIBLE);
 
-            System.out.println("empresa: " +c);
 
             mAuth = FirebaseAuth.getInstance();
 
-            mAuth.createUserWithEmailAndPassword(this.c.getCorreo(), this.c.getContraseña())
+            System.out.println("Punto creado correctamente");
+            Intent i = new Intent(getBaseContext(), Informacion.class);
+            i.putExtra("result", true);
+            i.putExtra("mensaje", "Punto creado correctamente");
+            startActivity(i);
+
+            /*mAuth.createUserWithEmailAndPassword(this.c.getCorreo(), this.c.getContraseña())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
 
-                                c.setUid(task.getResult().getUser().getUid());
-                                c.setKeyNot("");
+                                //c.setUid(task.getResult().getUser().getUid());
+                                //c.setKeyNot("");
 
                                 db.collection("comerciante").document(task.getResult().getUser().
                                         getUid()).set(c).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -508,8 +513,92 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
                                 startActivity(i);
                             }
                         }
-                    });
+                    });*/
 
         }
+
+
+        /*
+        if (false){
+
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+
+            StorageReference riversRef = storageRef.child("images/"+p.getComerciante()+"/" + imageUri.getLastPathSegment());
+            UploadTask uploadTask = riversRef.putFile(imageUri);
+
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    System.out.println("error al subir : " + exception.toString());
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                    {
+                        @Override
+                        public void onSuccess(Uri downloadUrl)
+                        {
+                            p.setFoto(downloadUrl.toString());
+                            System.out.println("subida correctamente link: " + p.getFoto());
+
+                            db.collection("producto").document(p.getCodigo()).set(p).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("mensaje", "Producto agregado correctamente");
+                                    bundle.putBoolean("estado", true);
+                                    bundle.putBoolean("productos", true);
+
+                                    Fragment lp = new InformacionFragment();
+                                    lp.setArguments(bundle);
+                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                    fragmentTransaction.commit();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("mensaje", "Error al agregar el Producto");
+                                    bundle.putBoolean("estado", false);
+                                    bundle.putBoolean("productos", true);
+
+                                    Fragment lp = new InformacionFragment();
+                                    lp.setArguments(bundle);
+                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                    fragmentTransaction.commit();
+
+                                }
+                            });
+                        }
+                    });
+
+                }
+
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    System.out.println("Upload is " + progress + "% done");
+                }
+            }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                    System.out.println("Upload is paused");
+                }
+            });
+        }
+
+
+       */
     }
 }
