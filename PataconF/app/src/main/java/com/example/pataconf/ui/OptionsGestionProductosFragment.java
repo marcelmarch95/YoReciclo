@@ -19,7 +19,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import com.example.pataconf.ModeloVistaOpcionesProductoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
-import com.example.pataconf.ui.agregarproducto.AgregarProductoFragment;
+import com.example.pataconf.ui.agregarproducto.AgregarPuntoFragment;
 import com.example.pataconf.ui.optionproducts.OptionsProductListFragment;
 import com.example.pataconf.ui.optionproducts.OptionsProductListViewModel;
 import com.example.pataconf.ui.products.ProductListFragment;
@@ -131,7 +131,7 @@ public class OptionsGestionProductosFragment extends Fragment implements View.On
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                Fragment lp = new AgregarProductoFragment();
+                Fragment lp = new AgregarPuntoFragment();
                 fragmentTransaction.replace(R.id.nav_host_fragment, lp);
                 fragmentTransaction.commit();
             }

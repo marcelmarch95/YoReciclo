@@ -22,19 +22,11 @@ import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.optionproducts.OptionsProductListFragment;
 import com.example.pataconf.ui.optionproducts.OptionsProductListViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import Modelo.ModeloVistaProducto;
-import Modelo.Producto;
-import Modelo.Viaje;
 
 public class ProductListFragment extends Fragment implements View.OnClickListener {
 
@@ -65,7 +57,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         this.back = root.findViewById(R.id.back);
         this.back.setOnClickListener(this);
 
-        categoria = (Spinner) root.findViewById(R.id.categoria);
+        categoria = (Spinner) root.findViewById(R.id.propiedad);
 
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.categoriasproductos, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

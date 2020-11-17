@@ -44,7 +44,7 @@
             android:paddingBottom="10dp">
 
             <Spinner
-                android:id="@+id/categoria"
+                android:id="@+id/propiedad"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"

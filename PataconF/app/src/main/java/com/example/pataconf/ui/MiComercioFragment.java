@@ -82,6 +82,7 @@ import Modelo.Comerciante;
 import Modelo.ModeloOpcionesProducto;
 import Modelo.ModeloVistaProducto;
 import Modelo.Producto;
+import Modelo.Recicladora;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -97,10 +98,9 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
     private FirebaseAuth mAuth;
     private Uri imageUri;
     private static final int PICK_IMAGE = 100;
-    private Comerciante comerciante;
+    private Recicladora comerciante;
 
     private TextView nombreComercio;
-    private TextView categoria;
     private TextView correo;
     private ProgressBar progressBar;
 
@@ -118,7 +118,6 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
 
 
         this.nombreComercio = (TextView) root.findViewById(R.id.nombreComercio);
-        this.categoria = (TextView) root.findViewById(R.id.categoria);
         this.correo = (TextView) root.findViewById(R.id.correo);
 
         this.direccion = (EditText) root.findViewById(R.id.direccion);
@@ -143,13 +142,12 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         System.out.println("documento encontrado: " + document.getData());
-                        Comerciante c =  document.toObject(Comerciante.class);
-                        nombreComercio.setText(c.getNombreComercio());
-                        categoria.setText(c.getCategoria());
+                        Recicladora c =  document.toObject(Recicladora.class);
+                        nombreComercio.setText(c.getNombreEmpresa());
                         correo.setText(c.getCorreo());
                         direccion.setText(c.getDireccion());
                         localidad.setText(c.getLocalidad());
-                        nombreEncargado.setText(c.getNombreComercio());
+                        nombreEncargado.setText(c.getNombreEncargado());
                         telefono.setText(c.getNumeroTelefono());
                         comerciante = c;
 
@@ -157,7 +155,7 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
                             new DownloadImageTask(foto).execute(c.getFoto());
                         }
                         catch (Exception e){
-                            foto.setImageResource(R.drawable.sinfoto);
+                            foto.setImageResource(R.drawable.recicon);
                             System.out.println("Error al cargar foto: " + c.getFoto());
                         }
 
@@ -188,7 +186,7 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
             }
         });
 
-        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Mi Comercio");
+        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Mi Recicladora");
 
         return root;
     }

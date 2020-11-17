@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.regex.Pattern;
 
 import Modelo.Comerciante;
+import Modelo.Recicladora;
 
 public class Register2Activity extends AppCompatActivity {
 
@@ -46,7 +47,7 @@ public class Register2Activity extends AppCompatActivity {
     private String numeroTelefono;
     private String correo;
     private String contraseña;
-    private Comerciante c;
+    private Recicladora c;
     private ProgressBar progressBar;
 
 
@@ -55,15 +56,16 @@ public class Register2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_register2);
 
         Intent i = getIntent();
-        Comerciante c = (Comerciante) i.getSerializableExtra("comercio");
+        Recicladora c = (Recicladora) i.getSerializableExtra("recicladora");
         this.c = c;
+        System.out.println("En regiter 2 la recicladora: " + c.toString());
 
         db = FirebaseFirestore.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Registro de comercio");
+        getSupportActionBar().setTitle("Registro de Recicladora");
 
 
         this.enombre = (EditText) findViewById(R.id.nombre);
@@ -102,7 +104,7 @@ public class Register2Activity extends AppCompatActivity {
                                     c.setContraseña(econtraseña.getText().toString());
 
                                     Intent i = new Intent(getBaseContext(), SelectorDireccionMapa.class);
-                                    i.putExtra("comercio",c);
+                                    i.putExtra("recicladora",c);
                                     startActivity(i);
                                 }
                             } else {

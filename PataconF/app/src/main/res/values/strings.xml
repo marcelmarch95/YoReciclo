@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Market</string>
+    <string name="app_name">YoReciclo</string>
 
     <string-array name="localidades">
         <item>Curicó</item>
@@ -26,6 +26,27 @@
         <item>Aseo</item>
         <item>Lacteos</item>
         <item>Abarrotes</item>
+    </string-array>
+
+    <string-array name="area">
+        <item>Urbana</item>
+        <item>Rural</item>
+    </string-array>
+
+    <string-array name="recinto">
+        <item>Publico</item>
+        <item>Privado</item>
+    </string-array>
+
+    <string-array name="macrosector">
+        <item>Rauquen</item>
+        <item>Boldo</item>
+        <item>Centro</item>
+        <item>Sol de Septiembre</item>
+        <item>Bombero Garrido</item>
+        <item>Colon</item>
+        <item>Carretera</item>
+        <item>Av. España</item>
     </string-array>
 
     <string name="title_activity_location">Map</string>

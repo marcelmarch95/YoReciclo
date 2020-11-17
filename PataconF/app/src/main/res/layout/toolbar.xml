@@ -4,7 +4,7 @@
     android:id="@+id/tbar"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:background="?attr/colorPrimary"
+    android:background="#65AD69"
     android:gravity="right"
     android:minHeight="?attr/actionBarSize"
     android:paddingTop="10dp"

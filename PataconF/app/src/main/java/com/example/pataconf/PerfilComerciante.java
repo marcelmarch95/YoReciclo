@@ -49,6 +49,7 @@ import java.util.ArrayList;
 
 import Modelo.Comerciante;
 import Modelo.ModeloVistaDashboard;
+import Modelo.Recicladora;
 
 public class PerfilComerciante extends AppCompatActivity {
 
@@ -58,7 +59,7 @@ public class PerfilComerciante extends AppCompatActivity {
     private TextView encargado;
     private TextView comercio;
     private ImageView logoComercio;
-    private Comerciante usuario;
+    private Recicladora usuario;
 
 
 
@@ -173,7 +174,7 @@ public class PerfilComerciante extends AppCompatActivity {
 
     private void cargarVista(DocumentSnapshot document) {
         System.out.println("cargarvista metodo");
-        this.usuario = (Comerciante) document.toObject(Comerciante.class);
+        this.usuario = (Recicladora) document.toObject(Recicladora.class);
 
         System.out.println("usuario comerciante: " + this.usuario.toString());
 
@@ -181,7 +182,7 @@ public class PerfilComerciante extends AppCompatActivity {
             new PerfilComerciante.DownloadImageTask(this.logoComercio).execute(this.usuario.getFoto());
         }
         catch (Exception e){
-            this.logoComercio.setImageResource(R.drawable.sinfoto);
+            this.logoComercio.setImageResource(R.drawable.recicon);
             System.out.println("Error al cargar foto: " + this.usuario.getFoto());
         }
 
@@ -189,7 +190,7 @@ public class PerfilComerciante extends AppCompatActivity {
         System.out.println();
 
         encargado.setText(this.usuario.getNombreEncargado());
-        comercio.setText(this.usuario.getNombreComercio());
+        comercio.setText(this.usuario.getNombreEmpresa());
 
     }
 

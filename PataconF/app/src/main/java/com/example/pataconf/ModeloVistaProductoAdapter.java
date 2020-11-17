@@ -61,7 +61,7 @@ public class ModeloVistaProductoAdapter extends RecyclerView.Adapter<ModeloVista
             super(itemView);
             imgMusica = (ImageView) itemView.findViewById(R.id.img_musica);
             tvNombre = (TextView) itemView.findViewById(R.id.tv_nombre);
-            categoria = (TextView) itemView.findViewById(R.id.categoria);
+            categoria = (TextView) itemView.findViewById(R.id.propiedad);
             precio = (TextView) itemView.findViewById(R.id.precio);
         }
     }

@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.support.annotation.NonNull;
@@ -20,7 +19,7 @@ import com.example.pataconf.ModeloVistaOpcionesProductoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.OptionsGestionProductosFragment;
-import com.example.pataconf.ui.agregarproducto.AgregarProductoFragment;
+import com.example.pataconf.ui.agregarproducto.AgregarPuntoFragment;
 import com.example.pataconf.ui.products.ProductListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -48,10 +47,10 @@ public class OptionsProductListFragment extends Fragment implements View.OnClick
 
     private ArrayList<ModeloOpcionesProducto> dataSet() {
         ArrayList<ModeloOpcionesProducto> data = new ArrayList<>();
-        data.add(new ModeloOpcionesProducto("Gestionar Productos",  R.drawable.addpro));
-        data.add(new ModeloOpcionesProducto("Gestionar Categorías",  R.drawable.category));
-        data.add(new ModeloOpcionesProducto("Consultar Stock",  R.drawable.stock));
-        data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
+        data.add(new ModeloOpcionesProducto("Agregar Punto Limpio",  R.drawable.addpunto));
+        data.add(new ModeloOpcionesProducto("Gestionar Puntos",  R.drawable.listp));
+        data.add(new ModeloOpcionesProducto("Ver últimos Reportes",  R.drawable.notific));
+        //data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
         return data;
     }
 
@@ -62,7 +61,7 @@ public class OptionsProductListFragment extends Fragment implements View.OnClick
         View root = inflater.inflate(R.layout.fragment_optionsproduct, container, false);
 
 
-        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Menu Productos");
+        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Menú Puntos Limpios");
 
 
         rvMusicas = (RecyclerView) root.findViewById(R.id.rv_musicas);
@@ -77,6 +76,15 @@ public class OptionsProductListFragment extends Fragment implements View.OnClick
     public void onClick(View view) {
         CardView cv = (CardView) view;
         TextView tv = (TextView) view.findViewById(R.id.accion);
+
+        if (tv.getText().toString().compareTo("Agregar Punto Limpio")==0){
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            Fragment lp = new AgregarPuntoFragment();
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
+        }
 
         if (tv.getText().toString().compareTo("Ver Productos")==0){
             db = FirebaseFirestore.getInstance();

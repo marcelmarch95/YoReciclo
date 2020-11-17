@@ -12,12 +12,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import Modelo.Comerciante;
+import Modelo.Recicladora;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private Button btnRegistrarme;
     private EditText enombrecomercio;
-    private Spinner scategoria;
     private Spinner slocalidad;
     private EditText edireccion;
 
@@ -40,19 +40,14 @@ public class RegisterActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        Spinner spinner2 = (Spinner) findViewById(R.id.categoria);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.categorias, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(adapter2);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Registro de comercio");
+        getSupportActionBar().setTitle("Registro de Empresa Recicladora");
 
 
         this.enombrecomercio = (EditText) findViewById(R.id.nombrecomercio);
-        this.scategoria = (Spinner) findViewById(R.id.categoria);
         this.slocalidad = (Spinner) findViewById(R.id.localidad);
         this.edireccion = (EditText) findViewById(R.id.direccion);
 
@@ -64,14 +59,14 @@ public class RegisterActivity extends AppCompatActivity {
                 //barra.setVisibility(View.VISIBLE);
                 if (validar()==false){
                     btnRegistrarme.setEnabled(false);
-                    Comerciante c = new Comerciante();
-                    c.setNombreComercio(enombrecomercio.getText().toString());
-                    c.setCategoria(scategoria.getSelectedItem().toString());
-                    c.setLocalidad(slocalidad.getSelectedItem().toString());
-                    c.setDireccion(edireccion.getText().toString());
+                    Recicladora  r = new Recicladora();
+                    r.setNombreEmpresa(enombrecomercio.getText().toString());
+                    //c.setCategoria(scategoria.getSelectedItem().toString());
+                    r.setLocalidad(slocalidad.getSelectedItem().toString());
+                    r.setDireccion(edireccion.getText().toString());
 
                     Intent i = new Intent(getBaseContext(), Register2Activity.class);
-                    i.putExtra("comercio",c);
+                    i.putExtra("recicladora",r);
                     startActivity(i);
                 }
             }

@@ -30,10 +30,10 @@ public class HomeFragment extends Fragment {
 
     private ArrayList<ModeloVistaDashboard> dataSet() {
         ArrayList<ModeloVistaDashboard> data = new ArrayList<>();
-        data.add(new ModeloVistaDashboard("Pedidos", "Pendientes", R.drawable.pending, 1));
-        data.add(new ModeloVistaDashboard("Pedidos", "En preparación", R.drawable.preparing, 4));
-        data.add(new ModeloVistaDashboard("Pedidos", "En despacho", R.drawable.delivered, 2));
-        data.add(new ModeloVistaDashboard("Pedidos", "Finalizados", R.drawable.orders, 5));
+        data.add(new ModeloVistaDashboard("Retiros", "Pendientes", R.drawable.pending, 7));
+        data.add(new ModeloVistaDashboard("Retiros", "En curso", R.drawable.preparing, 1));
+        data.add(new ModeloVistaDashboard("Retiros", "Finalizados", R.drawable.delivered, 12));
+        //data.add(new ModeloVistaDashboard("Pedidos", "Finalizados", R.drawable.orders, 5));
         return data;
     }
 

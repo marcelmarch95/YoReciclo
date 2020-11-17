@@ -43,6 +43,8 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
         finalizar = (Button) root.findViewById(R.id.finalizar);
         finalizar.setOnClickListener(this);
 
+
+
         String msj =  getArguments().getString("mensaje");
         productos = getArguments().getBoolean("productos");
         boolean result =  getArguments().getBoolean("estado");

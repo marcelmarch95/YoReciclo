@@ -57,6 +57,9 @@
             android:name=".SelectorDireccionMapa"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".SelectorDireccionMapaPunto"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ActivityPrincipal"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
