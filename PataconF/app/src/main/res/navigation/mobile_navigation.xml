@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.pataconf.ui.optionproducts.OptionsProductListFragment"
+        android:name="com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_optionsproduct" />
 

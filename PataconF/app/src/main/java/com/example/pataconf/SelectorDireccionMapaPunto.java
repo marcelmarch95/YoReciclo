@@ -60,6 +60,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
@@ -92,7 +93,7 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
     private Marker markerActual;
     private LatLng latLng, latLngOtro;
     private boolean posModificada = false;
-    private Punto p;
+    private Punto punto;
     private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
@@ -135,10 +136,10 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
         getSupportActionBar().setTitle("Confirmar dirección");
 
         Intent i = getIntent();
-        Punto p = (Punto) i.getExtras().get("punto");
+        punto = (Punto) i.getExtras().get("punto");
         uri = (Uri) i.getExtras().get("uri");
 
-        System.out.println("Punto: " + p.toString());
+        System.out.println("Punto: " + punto.toString());
     }
 
 
@@ -202,6 +203,7 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
             public void onResult(LocationSettingsResult result) {
                 final Status status = result.getStatus();
                 final LocationSettingsStates state = result.getLocationSettingsStates();
+
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
                         Log.e("TAG", "SUCCESS");
@@ -350,6 +352,11 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
         markerOptions.position(latLng);
         markerOptions.title("Posición Actual");
 
+        System.out.println("LAT: " + location.getLatitude());
+        System.out.println("LNG: " + location.getLongitude());
+        this.lat = location.getLatitude();
+        this.lng = location.getLongitude();
+
         if (primera){
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));//AQUI MODIFICA EL ZOOM AL MAPA SEGUN TUS NECESIDADES
             primera = false;
@@ -465,18 +472,41 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
     @Override
     public void onClick(View view) {
         if (view == this.confirmar){
-            //this.c.setLat(String.valueOf(this.lat));
-            //this.c.setLng(String.valueOf(this.lng));
-            this.progressBar.setVisibility(View.VISIBLE);
-
 
             mAuth = FirebaseAuth.getInstance();
 
-            System.out.println("Punto creado correctamente");
-            Intent i = new Intent(getBaseContext(), Informacion.class);
-            i.putExtra("result", true);
-            i.putExtra("mensaje", "Punto creado correctamente");
-            startActivity(i);
+
+            this.punto.setLat(String.valueOf(this.lat));
+            this.punto.setLng(String.valueOf(this.lng));
+            this.progressBar.setVisibility(View.VISIBLE);
+            this.punto.setPid(mAuth.getUid());
+
+            db.collection("punto")
+                    .add(punto)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                            System.out.println("Punto creado correctamente con ID: " + documentReference.getId());
+                            Intent i = new Intent(getBaseContext(), Informacion.class);
+                            i.putExtra("result", true);
+                            i.putExtra("mensaje", "Punto creado correctamente");
+                            startActivity(i);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                            System.out.println("Error al crear el punto");
+                            Intent i = new Intent(getBaseContext(), Informacion.class);
+                            i.putExtra("result", false);
+                            i.putExtra("mensaje", "Error al crear el punto");
+                            startActivity(i);
+                        }
+                    });
+
+
 
             /*mAuth.createUserWithEmailAndPassword(this.c.getCorreo(), this.c.getContraseña())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

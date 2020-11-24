@@ -17,24 +17,25 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.pataconf.ModeloVistaProductoAdapter;
+import com.example.pataconf.ModeloVistaPuntoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
-import com.example.pataconf.ui.optionproducts.OptionsProductListFragment;
-import com.example.pataconf.ui.optionproducts.OptionsProductListViewModel;
+import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
+import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-import Modelo.ModeloVistaProducto;
+import Modelo.ModeloVistaPunto;
+
 
 public class ProductListFragment extends Fragment implements View.OnClickListener {
 
     private Spinner scategoria;
-    private OptionsProductListViewModel homeViewModel;
+    private OptionsPuntosListViewModel homeViewModel;
     private RecyclerView rvMusicas;
     private GridLayoutManager glm;
-    private ModeloVistaProductoAdapter adapter;
+    private ModeloVistaPuntoAdapter adapter;
     private Button back;
     private PerfilComerciante padre;
     private Spinner categoria;
@@ -47,28 +48,28 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
-                ViewModelProviders.of(this).get(OptionsProductListViewModel.class);
+                ViewModelProviders.of(this).get(OptionsPuntosListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_listproduct, container, false);
 
         padre = (PerfilComerciante) getActivity();
         //padre.getSupportActionBar().hide();
-        padre.getSupportActionBar().setTitle("Listado Productos");
+        padre.getSupportActionBar().setTitle("Listado Puntos");
 
         this.back = root.findViewById(R.id.back);
         this.back.setOnClickListener(this);
 
-        categoria = (Spinner) root.findViewById(R.id.propiedad);
+        categoria = (Spinner) root.findViewById(R.id.sector);
 
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.categoriasproductos, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoria.setAdapter(adapter2);
 
-        ArrayList<ModeloVistaProducto> data = (ArrayList<ModeloVistaProducto>) getArguments().getSerializable("productos");
+        ArrayList<ModeloVistaPunto> data = (ArrayList<ModeloVistaPunto>) getArguments().getSerializable("puntos");
 
         rvMusicas = (RecyclerView) root.findViewById(R.id.rv_musicas);
         glm = new GridLayoutManager(getActivity(), 1);
         rvMusicas.setLayoutManager(glm);
-        adapter = new ModeloVistaProductoAdapter(data, this);
+        adapter = new ModeloVistaPuntoAdapter(data, this);
         rvMusicas.setAdapter(adapter);
 
         setHasOptionsMenu(true);
@@ -83,7 +84,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            Fragment lp = new OptionsProductListFragment();
+            Fragment lp = new OptionsPuntosListFragment();
             fragmentTransaction.replace(R.id.nav_host_fragment, lp);
             fragmentTransaction.commit();
         }
@@ -91,7 +92,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
         else {
             CardView cv = (CardView) view;
             TextView tv = (TextView) view.findViewById(R.id.accion);
-            if (tv.getText().toString().compareTo("Ver Productos")==0){
+            if (tv.getText().toString().compareTo("Ver Puntos")==0){
 
             }
         }

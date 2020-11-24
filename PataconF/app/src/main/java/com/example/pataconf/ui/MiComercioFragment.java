@@ -1,87 +1,45 @@
 package com.example.pataconf.ui;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.pataconf.ActivityCargando;
-import com.example.pataconf.ActivityPrincipal;
-import com.example.pataconf.Informacion;
 import com.example.pataconf.MainActivity;
-import com.example.pataconf.ModeloVistaOpcionesProductoAdapter;
-import com.example.pataconf.ModeloVistaProductoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
-import com.example.pataconf.ui.cargando.CargandoFragment;
-import com.example.pataconf.ui.informacion.InformacionFragment;
-import com.example.pataconf.ui.optionproducts.OptionsProductListViewModel;
-import com.example.pataconf.ui.products.ProductListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Map;
-import java.util.regex.Pattern;
 
-import Modelo.Comerciante;
-import Modelo.ModeloOpcionesProducto;
-import Modelo.ModeloVistaProducto;
-import Modelo.Producto;
 import Modelo.Recicladora;
 
 import static android.app.Activity.RESULT_OK;
@@ -134,7 +92,7 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
         guardar.setOnClickListener(this);
 
 
-        DocumentReference docRef = db.collection("comerciante").document(mAuth.getUid().toString());
+        DocumentReference docRef = db.collection("recicladora").document(mAuth.getUid().toString());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

@@ -15,14 +15,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
-import Modelo.ModeloVistaProducto;
+import Modelo.ModeloVistaPunto;
 
 public class ModeloVistaProductoAdapter extends RecyclerView.Adapter<ModeloVistaProductoAdapter.MusicaViewHolder> {
 
-    private ArrayList<ModeloVistaProducto> data;
+    private ArrayList<ModeloVistaPunto> data;
     private View.OnClickListener listener;
 
-    public ModeloVistaProductoAdapter(ArrayList<ModeloVistaProducto> data, View.OnClickListener ls) {
+    public ModeloVistaProductoAdapter(ArrayList<ModeloVistaPunto> data, View.OnClickListener ls) {
         this.data = data;
         this.listener = ls;
     }
@@ -34,7 +34,7 @@ public class ModeloVistaProductoAdapter extends RecyclerView.Adapter<ModeloVista
 
     @Override
     public void onBindViewHolder(MusicaViewHolder holder, int position) {
-        ModeloVistaProducto musica = data.get(position);
+        ModeloVistaPunto musica = data.get(position);
 
         //holder.imgMusica.setImageDrawable(LoadImageFromWebOperations(musica.getFoto()));
         holder.tvNombre.setText(musica.getNombre());
@@ -61,7 +61,7 @@ public class ModeloVistaProductoAdapter extends RecyclerView.Adapter<ModeloVista
             super(itemView);
             imgMusica = (ImageView) itemView.findViewById(R.id.img_musica);
             tvNombre = (TextView) itemView.findViewById(R.id.tv_nombre);
-            categoria = (TextView) itemView.findViewById(R.id.propiedad);
+            categoria = (TextView) itemView.findViewById(R.id.sector);
             precio = (TextView) itemView.findViewById(R.id.precio);
         }
     }

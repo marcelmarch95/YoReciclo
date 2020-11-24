@@ -2,7 +2,8 @@ package Modelo;
 
 import java.io.Serializable;
 
-public class Punto implements Serializable {
+public class ModeloVistaPunto implements Serializable {
+
     private String direccion;
     private String pid;
     private String area;
@@ -13,7 +14,21 @@ public class Punto implements Serializable {
     private String lng;
     private String foto;
 
-    public Punto() {
+
+    public ModeloVistaPunto(){
+
+    }
+
+    public ModeloVistaPunto(String direccion, String sector, String pid, String area, String recinto, String observacion, String lat, String lng, String foto) {
+        this.direccion = direccion;
+        this.pid = pid;
+        this.area = area;
+        this.recinto = recinto;
+        this.observacion = observacion;
+        this.lat = lat;
+        this.lng = lng;
+        this.foto = foto;
+        this.sector = sector;
     }
 
     public String getDireccion() {
@@ -40,13 +55,7 @@ public class Punto implements Serializable {
         this.area = area;
     }
 
-    public String getSector() {
-        return sector;
-    }
 
-    public void setSector(String sector) {
-        this.sector = sector;
-    }
 
     public String getRecinto() {
         return recinto;
@@ -88,18 +97,11 @@ public class Punto implements Serializable {
         this.foto = foto;
     }
 
-    @Override
-    public String toString() {
-        return "Punto{" +
-                "direccion='" + direccion + '\'' +
-                ", pid='" + pid + '\'' +
-                ", area='" + area + '\'' +
-                ", sector='" + sector + '\'' +
-                ", recinto='" + recinto + '\'' +
-                ", observacion='" + observacion + '\'' +
-                ", lat='" + lat + '\'' +
-                ", lng='" + lng + '\'' +
-                ", foto='" + foto + '\'' +
-                '}';
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
     }
 }

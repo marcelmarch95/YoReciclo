@@ -48,7 +48,7 @@ public class ModeloVistaDashboardAdapter extends RecyclerView.Adapter<ModeloVist
         public MusicaViewHolder(View itemView) {
             super(itemView);
             imgMusica = (ImageView) itemView.findViewById(R.id.img_musica);
-            tvNombre = (TextView) itemView.findViewById(R.id.tv_nombre);
+            tvNombre = (TextView) itemView.findViewById(R.id.direccion);
             tvArtista = (TextView) itemView.findViewById(R.id.tv_artista);
             number = (TextView) itemView.findViewById(R.id.number);
         }

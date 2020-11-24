@@ -15,93 +15,72 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
-import com.example.pataconf.SelectorDireccionMapa;
 import com.example.pataconf.SelectorDireccionMapaPunto;
-import com.example.pataconf.ui.cargando.CargandoFragment;
-import com.example.pataconf.ui.informacion.InformacionFragment;
-import com.example.pataconf.ui.optionproducts.OptionsProductListViewModel;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
-import java.io.Serializable;
-
-import Modelo.Producto;
 import Modelo.Punto;
 
 import static android.app.Activity.RESULT_OK;
 
 public class AgregarPuntoFragment extends Fragment implements View.OnClickListener {
 
-    private OptionsProductListViewModel homeViewModel;
+    private OptionsPuntosListViewModel homeViewModel;
     private Button selectfoto;
     private Button eliminarfoto;
     private Button agregar;
-    private Spinner area;
-    private Spinner propiedad;
-    private Spinner recinto;
+    private Spinner sector;
     private EditText edireccion;
     private EditText eobservacion;
     private CheckBox vidrio;
     private CheckBox lata;
     private CheckBox plastico;
     private TextView title;
+    private RadioGroup recintog;
+    private RadioGroup areag;
 
     private FirebaseFirestore db;
     private ImageView foto;
     private Uri imageUri;
+    private View root;
     private static final int PICK_IMAGE = 100;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
-                ViewModelProviders.of(this).get(OptionsProductListViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_agregarpunto, container, false);
+                ViewModelProviders.of(this).get(OptionsPuntosListViewModel.class);
+        root = inflater.inflate(R.layout.fragment_agregarpunto, container, false);
 
         edireccion = (EditText) root.findViewById(R.id.edireccion);
-        area = (Spinner) root.findViewById(R.id.area);
-        propiedad = (Spinner) root.findViewById(R.id.propiedad);
-        recinto = (Spinner) root.findViewById(R.id.recinto);
+        sector = (Spinner) root.findViewById(R.id.sector);
         eobservacion = (EditText) root.findViewById(R.id.observacion);
 
         title = (TextView) root.findViewById(R.id.title);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.area, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        area.setAdapter(adapter);
-        db = FirebaseFirestore.getInstance();
 
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.macrosector, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        propiedad.setAdapter(adapter2);
+        sector.setAdapter(adapter2);
 
-        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.recinto, android.R.layout.simple_spinner_item);
-        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        recinto.setAdapter(adapter3);
+
 
         this.vidrio = (CheckBox) root.findViewById(R.id.vidrio);
         this.lata = (CheckBox) root.findViewById(R.id.lata);
         this.plastico = (CheckBox) root.findViewById(R.id.plastico);
+        this.recintog = (RadioGroup) root.findViewById(R.id.recintog);
+        this.areag = (RadioGroup) root.findViewById(R.id.areag);
 
 
         this.selectfoto = (Button) root.findViewById(R.id.selectfoto);
@@ -188,13 +167,20 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
 
         //this.categoria.getSelectedItem().toString()
 
+        int idrecinto = recintog.getCheckedRadioButtonId();
+        int idarea = areag.getCheckedRadioButtonId();
+
+        // find the radiobutton by returned id
+        RadioButton recinto = (RadioButton) root.findViewById(idrecinto);
+        RadioButton area = (RadioButton) root.findViewById(idarea);
+
         Punto p = new Punto();
-        p.setArea(this.area.getSelectedItem().toString());
-        p.setPropiedad(this.propiedad.getSelectedItem().toString());
-        p.setRecinto(this.recinto.getSelectedItem().toString());
+        p.setSector(this.sector.getSelectedItem().toString());
         p.setDireccion(this.edireccion.getText().toString());
         p.setObservacion(this.eobservacion.getText().toString());
         p.setFoto("notlink");
+        p.setRecinto(recinto.getText().toString());
+        p.setArea(area.getText().toString());
 
         System.out.println("Uri: " + imageUri);
 

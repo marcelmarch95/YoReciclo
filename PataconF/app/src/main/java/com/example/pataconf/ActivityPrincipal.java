@@ -49,6 +49,7 @@ import java.util.HashMap;
 
 import Modelo.Comerciante;
 import Modelo.Notificacion;
+import Modelo.Recicladora;
 import Modelo.Usuario;
 import Modelo.Viaje;
 
@@ -65,7 +66,7 @@ public class ActivityPrincipal extends AppCompatActivity implements View.OnClick
     private ActivityReporte fragmentReporte;
     private ActivityCargando fragmentCargando;
     private ActivityPerfil fragmentPerfil;
-    private Comerciante usuario;
+    private Recicladora usuario;
     private FragmentManager fragmentManager;
     private RelativeLayout layoutPrincipal;
     private Toolbar toolbar;
@@ -156,7 +157,7 @@ public class ActivityPrincipal extends AppCompatActivity implements View.OnClick
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection("comerciante").document(user.getUid().toString());
+        final DocumentReference docRef = db.collection("recicladora").document(user.getUid().toString());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -476,11 +477,11 @@ public class ActivityPrincipal extends AppCompatActivity implements View.OnClick
 
     private void cargarVista(DocumentSnapshot document) {
         System.out.println("cargarvista metodo");
-        this.usuario = (Comerciante) document.toObject(Comerciante.class);
+        this.usuario = (Recicladora) document.toObject(Recicladora.class);
 
         System.out.println("usuario comerciante: " + this.usuario.toString());
 
-        this.nombreUsuario.setText(usuario.getNombreComercio());
+        this.nombreUsuario.setText(usuario.getNombreEmpresa());
         this.tipoUsuario.setText("Comerciante");
 
 

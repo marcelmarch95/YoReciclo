@@ -17,10 +17,10 @@
 
         <ImageView
             android:id="@+id/img_musica"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/imagen2" />
+            app:srcCompat="@drawable/pto" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:paddingBottom="10dp">
 
             <TextView
-                android:id="@+id/tv_nombre"
+                android:id="@+id/direccion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -40,23 +40,12 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/propiedad"
+                android:id="@+id/sector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Imagine Dragons"
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/precio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="5"
-                android:textAppearance="@style/stitulo"
-                android:textSize="20dp" />
 
         </LinearLayout>
 
@@ -66,19 +55,6 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="vertical">
-
-            <Switch
-                android:id="@+id/switch1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:checked="true"
-                android:gravity="center" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="10dp"
-                android:orientation="vertical"></LinearLayout>
 
             <Button
                 android:id="@+id/editar"

@@ -482,7 +482,7 @@ public class SelectorDireccionMapa extends AppCompatActivity implements View.OnC
                                 c.setUid(task.getResult().getUser().getUid());
                                 c.setKeyNot("");
 
-                                db.collection("comerciante").document(task.getResult().getUser().
+                                db.collection("recicladora").document(task.getResult().getUser().
                                         getUid()).set(c).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {

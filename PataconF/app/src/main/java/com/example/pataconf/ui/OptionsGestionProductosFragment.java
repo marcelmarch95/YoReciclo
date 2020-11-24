@@ -20,9 +20,9 @@ import com.example.pataconf.ModeloVistaOpcionesProductoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.agregarproducto.AgregarPuntoFragment;
-import com.example.pataconf.ui.optionproducts.OptionsProductListFragment;
-import com.example.pataconf.ui.optionproducts.OptionsProductListViewModel;
-import com.example.pataconf.ui.products.ProductListFragment;
+import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
+import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,17 +34,17 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import Modelo.ModeloOpcionesProducto;
-import Modelo.ModeloVistaProducto;
+import Modelo.ModeloVistaPunto;
 import Modelo.Producto;
 
 public class OptionsGestionProductosFragment extends Fragment implements View.OnClickListener {
 
     private Spinner scategoria;
-    private OptionsProductListViewModel homeViewModel;
+    private OptionsPuntosListViewModel homeViewModel;
     private RecyclerView rvMusicas;
     private GridLayoutManager glm;
     private Button back;
-    private ArrayList<ModeloVistaProducto> data = new ArrayList<>();
+    private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
     private FirebaseFirestore db;
     private ModeloVistaOpcionesProductoAdapter adapter;
 
@@ -60,7 +60,7 @@ public class OptionsGestionProductosFragment extends Fragment implements View.On
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
-                ViewModelProviders.of(this).get(OptionsProductListViewModel.class);
+                ViewModelProviders.of(this).get(OptionsPuntosListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_optionsgestionproductos, container, false);
         this.back = root.findViewById(R.id.back);
         this.back.setOnClickListener(this);
@@ -83,7 +83,7 @@ public class OptionsGestionProductosFragment extends Fragment implements View.On
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            Fragment lp = new OptionsProductListFragment();
+            Fragment lp = new OptionsPuntosListFragment();
             fragmentTransaction.replace(R.id.nav_host_fragment, lp);
             fragmentTransaction.commit();
         }
@@ -106,7 +106,8 @@ public class OptionsGestionProductosFragment extends Fragment implements View.On
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         Producto p = document.toObject(Producto.class);
-                                        ModeloVistaProducto mo = new ModeloVistaProducto(p.getNombre(),p.getCategoria(),p.getFoto(),p.getPrecio());
+                                        ModeloVistaPunto mo = new ModeloVistaPunto();
+                                        //ModeloVistaPunto mo = new ModeloVistaPunto(p.getNombre(),p.getCategoria(),p.getFoto(),p.getPrecio());
                                         data.add(mo);
                                     }
 
@@ -116,7 +117,7 @@ public class OptionsGestionProductosFragment extends Fragment implements View.On
                                     FragmentManager fragmentManager = getFragmentManager();
                                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                                    Fragment lp = new ProductListFragment();
+                                    Fragment lp = new PuntosListFragment();
                                     lp.setArguments(bundle);
                                     fragmentTransaction.replace(R.id.nav_host_fragment, lp);
                                     fragmentTransaction.commit();

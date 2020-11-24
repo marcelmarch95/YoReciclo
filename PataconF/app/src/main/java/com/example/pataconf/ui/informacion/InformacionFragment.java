@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pataconf.R;
-import com.example.pataconf.ui.products.ProductListFragment;
+import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import Modelo.ModeloVistaProducto;
+import Modelo.ModeloVistaPunto;
 import Modelo.Producto;
 
 public class InformacionFragment extends Fragment implements View.OnClickListener {
@@ -32,7 +32,7 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
     private Button finalizar;
     private boolean productos;
     private FirebaseFirestore db;
-    private ArrayList<ModeloVistaProducto> data = new ArrayList<>();
+    private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +74,8 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Producto p = document.toObject(Producto.class);
-                                    ModeloVistaProducto mo = new ModeloVistaProducto(p.getNombre(),p.getCategoria(),p.getFoto(),p.getPrecio());
+                                    ModeloVistaPunto mo = new ModeloVistaPunto();
+                                    //ModeloVistaPunto mo = new ModeloVistaPunto(p.getNombre(),p.getCategoria(),p.getFoto(),p.getPrecio());
                                     data.add(mo);
                                 }
 
@@ -84,7 +85,7 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
                                 FragmentManager fragmentManager = getFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                                Fragment lp = new ProductListFragment();
+                                Fragment lp = new PuntosListFragment();
                                 lp.setArguments(bundle);
                                 fragmentTransaction.replace(R.id.nav_host_fragment, lp);
                                 fragmentTransaction.commit();
