@@ -1,4 +1,4 @@
-package com.example.pataconf.ui.products;
+package com.example.pataconf.ui.puntos;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import Modelo.ModeloVistaPunto;
 
 
-public class ProductListFragment extends Fragment implements View.OnClickListener {
+public class PuntosListFragment extends Fragment implements View.OnClickListener {
 
     private Spinner scategoria;
     private OptionsPuntosListViewModel homeViewModel;
@@ -60,7 +60,7 @@ public class ProductListFragment extends Fragment implements View.OnClickListene
 
         categoria = (Spinner) root.findViewById(R.id.sector);
 
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.categoriasproductos, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.macrosector, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoria.setAdapter(adapter2);
 

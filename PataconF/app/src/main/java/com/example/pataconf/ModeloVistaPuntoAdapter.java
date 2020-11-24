@@ -17,19 +17,20 @@ import java.util.ArrayList;
 
 import Modelo.ModeloVistaPunto;
 
-public class ModeloVistaProductoAdapter extends RecyclerView.Adapter<ModeloVistaProductoAdapter.MusicaViewHolder> {
+public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPuntoAdapter.MusicaViewHolder> {
 
     private ArrayList<ModeloVistaPunto> data;
     private View.OnClickListener listener;
 
-    public ModeloVistaProductoAdapter(ArrayList<ModeloVistaPunto> data, View.OnClickListener ls) {
+
+    public ModeloVistaPuntoAdapter(ArrayList<ModeloVistaPunto> data, View.OnClickListener ls) {
         this.data = data;
         this.listener = ls;
     }
 
     @Override
     public MusicaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MusicaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_modeloproducto, parent, false));
+        return new MusicaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_modelopunto, parent, false));
     }
 
     @Override
@@ -37,9 +38,8 @@ public class ModeloVistaProductoAdapter extends RecyclerView.Adapter<ModeloVista
         ModeloVistaPunto musica = data.get(position);
 
         //holder.imgMusica.setImageDrawable(LoadImageFromWebOperations(musica.getFoto()));
-        holder.tvNombre.setText(musica.getNombre());
-        holder.categoria.setText(musica.getCategoria());
-        holder.precio.setText("$ "+ String.valueOf(musica.getPrecio()));
+        holder.direccion.setText(musica.getDireccion());
+        holder.sector.setText(musica.getSector());
 
         // show The Image in a ImageView
         new DownloadImageTask(holder.imgMusica).execute(musica.getFoto());
@@ -53,16 +53,15 @@ public class ModeloVistaProductoAdapter extends RecyclerView.Adapter<ModeloVista
     class MusicaViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imgMusica;
-        TextView tvNombre;
-        TextView categoria;
-        TextView precio;
+        TextView direccion;
+        TextView sector;
 
         public MusicaViewHolder(View itemView) {
             super(itemView);
             imgMusica = (ImageView) itemView.findViewById(R.id.img_musica);
-            tvNombre = (TextView) itemView.findViewById(R.id.tv_nombre);
-            categoria = (TextView) itemView.findViewById(R.id.sector);
-            precio = (TextView) itemView.findViewById(R.id.precio);
+            imgMusica.setImageResource(R.drawable.pto);
+            direccion = (TextView) itemView.findViewById(R.id.direccion);
+            sector = (TextView) itemView.findViewById(R.id.sector);
         }
     }
 
@@ -93,6 +92,7 @@ public class ModeloVistaProductoAdapter extends RecyclerView.Adapter<ModeloVista
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
+                System.out.println("NO PUDE DESCARGAR LA IMG");
                 //Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
@@ -100,7 +100,14 @@ public class ModeloVistaProductoAdapter extends RecyclerView.Adapter<ModeloVista
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            System.out.println("RESULTTTTTT: " + result);
+            if (result == null){
+                bmImage.setImageResource(R.drawable.pto);
+            }
+            else {
+                bmImage.setImageBitmap(result);
+            }
+
         }
     }
 }

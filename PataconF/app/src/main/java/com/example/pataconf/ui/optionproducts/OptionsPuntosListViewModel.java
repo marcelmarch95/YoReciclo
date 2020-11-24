@@ -4,11 +4,11 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-public class OptionsProductListViewModel extends ViewModel {
+public class OptionsPuntosListViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public OptionsProductListViewModel() {
+    public OptionsPuntosListViewModel() {
     }
 
     public LiveData<String> getText() {

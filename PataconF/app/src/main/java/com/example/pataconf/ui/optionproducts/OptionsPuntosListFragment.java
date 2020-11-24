@@ -20,7 +20,7 @@ import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.OptionsGestionProductosFragment;
 import com.example.pataconf.ui.agregarproducto.AgregarPuntoFragment;
-import com.example.pataconf.ui.products.ProductListFragment;
+import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,16 +32,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import Modelo.ModeloOpcionesProducto;
-import Modelo.ModeloVistaProducto;
-import Modelo.Producto;
+import Modelo.ModeloVistaPunto;
+import Modelo.Punto;
 
-public class OptionsProductListFragment extends Fragment implements View.OnClickListener {
+public class OptionsPuntosListFragment extends Fragment implements View.OnClickListener {
 
     private Spinner scategoria;
-    private OptionsProductListViewModel homeViewModel;
+    private OptionsPuntosListViewModel homeViewModel;
     private RecyclerView rvMusicas;
     private GridLayoutManager glm;
-    private ArrayList<ModeloVistaProducto> data = new ArrayList<>();
+    private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
     private FirebaseFirestore db;
     private ModeloVistaOpcionesProductoAdapter adapter;
 
@@ -57,7 +57,7 @@ public class OptionsProductListFragment extends Fragment implements View.OnClick
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
-                ViewModelProviders.of(this).get(OptionsProductListViewModel.class);
+                ViewModelProviders.of(this).get(OptionsPuntosListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_optionsproduct, container, false);
 
 
@@ -86,30 +86,37 @@ public class OptionsProductListFragment extends Fragment implements View.OnClick
             fragmentTransaction.commit();
         }
 
-        if (tv.getText().toString().compareTo("Ver Productos")==0){
+        if (tv.getText().toString().compareTo("Gestionar Puntos")==0){
             db = FirebaseFirestore.getInstance();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            db.collection("producto")
-            .whereEqualTo("comerciante", user.getUid())
+            db.collection("punto")
+            .whereEqualTo("pid", user.getUid())
             .get()
             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Producto p = document.toObject(Producto.class);
-                            ModeloVistaProducto mo = new ModeloVistaProducto(p.getNombre(),p.getCategoria(),p.getFoto(),p.getPrecio());
-                            data.add(mo);
+                            Punto p = document.toObject(Punto.class);
+                            ModeloVistaPunto pu = new ModeloVistaPunto();
+                            pu.setDireccion(p.getDireccion());
+                            pu.setLat(p.getLat());
+                            pu.setLng(p.getLng());
+                            pu.setSector(p.getSector());
+                            pu.setRecinto(p.getRecinto());
+                            pu.setArea(p.getArea());
+                            pu.setFoto(p.getFoto());
+                            data.add(pu);
                         }
 
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("productos", data);
+                        bundle.putSerializable("puntos", data);
 
                         FragmentManager fragmentManager = getFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                        Fragment lp = new ProductListFragment();
+                        Fragment lp = new PuntosListFragment();
                         lp.setArguments(bundle);
                         fragmentTransaction.replace(R.id.nav_host_fragment, lp);
                         fragmentTransaction.commit();
@@ -124,7 +131,7 @@ public class OptionsProductListFragment extends Fragment implements View.OnClick
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                Fragment lp = new OptionsGestionProductosFragment();
+            Fragment lp = new OptionsGestionProductosFragment();
             fragmentTransaction.replace(R.id.nav_host_fragment, lp);
             fragmentTransaction.commit();
         }
