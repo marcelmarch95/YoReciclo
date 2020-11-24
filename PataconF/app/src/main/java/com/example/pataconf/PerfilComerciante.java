@@ -103,7 +103,7 @@ public class PerfilComerciante extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection("comerciante").document(user.getUid().toString());
+        final DocumentReference docRef = db.collection("recicladora").document(user.getUid().toString());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
