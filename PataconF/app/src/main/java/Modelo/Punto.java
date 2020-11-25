@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Punto implements Serializable {
     private String direccion;
     private String pid;
+    private String id;
     private String area;
     private String sector;
     private String recinto;
@@ -12,6 +13,9 @@ public class Punto implements Serializable {
     private String lat;
     private String lng;
     private String foto;
+    private boolean isplastico;
+    private boolean islatas;
+    private boolean isvidrio;
 
     public Punto() {
     }
@@ -88,6 +92,38 @@ public class Punto implements Serializable {
         this.foto = foto;
     }
 
+    public boolean isIsplastico() {
+        return isplastico;
+    }
+
+    public void setIsplastico(boolean isplastico) {
+        this.isplastico = isplastico;
+    }
+
+    public boolean isIslatas() {
+        return islatas;
+    }
+
+    public void setIslatas(boolean islatas) {
+        this.islatas = islatas;
+    }
+
+    public boolean isIsvidrio() {
+        return isvidrio;
+    }
+
+    public void setIsvidrio(boolean isvidrio) {
+        this.isvidrio = isvidrio;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Punto{" +
@@ -100,6 +136,10 @@ public class Punto implements Serializable {
                 ", lat='" + lat + '\'' +
                 ", lng='" + lng + '\'' +
                 ", foto='" + foto + '\'' +
+                ", isplastico=" + isplastico +
+                ", islatas=" + islatas +
+                ", isvidrio=" + isvidrio +
+                ", id=" + id +
                 '}';
     }
 }

@@ -23,61 +23,6 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/imageView4"
-                            android:layout_width="130dp"
-                            android:layout_height="80dp"
-                            app:srcCompat="@drawable/imagen2" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/selectfoto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="Seleccionar Foto"
-                            android:textSize="10sp" />
-
-                        <Button
-                            android:id="@+id/eliminarfoto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:enabled="false"
-                            android:gravity="center"
-                            android:text="Eliminar Foto"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:background="?android:attr/listDivider" />
-
-                <LinearLayout
                     android:id="@+id/lay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -85,8 +30,9 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingLeft="20dp"
+                    android:paddingTop="20dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="5dp">
+                    android:paddingBottom="20dp">
 
 
                     <LinearLayout
@@ -119,7 +65,7 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:id="@+id/imageView7"
+                                android:id="@+id/imgp"
                                 android:layout_width="77dp"
                                 android:layout_height="82dp"
                                 android:layout_gravity="center"
@@ -141,7 +87,7 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:id="@+id/imageView6"
+                                android:id="@+id/imgl"
                                 android:layout_width="77dp"
                                 android:layout_height="82dp"
                                 android:layout_gravity="center"
@@ -163,7 +109,7 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:id="@+id/imageView5"
+                                android:id="@+id/imgv"
                                 android:layout_width="77dp"
                                 android:layout_height="82dp"
                                 android:layout_gravity="center"
@@ -184,7 +130,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingBottom="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.pataconf.ui.agregarproducto;
+package com.example.pataconf.ui.agregarpunto;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -89,15 +89,15 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
         foto = (ImageView) root.findViewById(R.id.imageView4);
         this.agregar.setOnClickListener(this);
 
-        this.eliminarfoto = (Button) root.findViewById(R.id.eliminarfoto);
-        this.eliminarfoto.setOnClickListener(this);
+        //this.eliminarfoto = (Button) root.findViewById(R.id.eliminarfoto);
+        //this.eliminarfoto.setOnClickListener(this);
 
-        this.selectfoto.setOnClickListener(new View.OnClickListener() {
+        /*this.selectfoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
             }
-        });
+        });*/
 
         ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Agregar Punto");
 
@@ -181,6 +181,9 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
         p.setFoto("notlink");
         p.setRecinto(recinto.getText().toString());
         p.setArea(area.getText().toString());
+        p.setIslatas(this.lata.isChecked());
+        p.setIsplastico(this.plastico.isChecked());
+        p.setIsvidrio(this.vidrio.isChecked());
 
         System.out.println("Uri: " + imageUri);
 

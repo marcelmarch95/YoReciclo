@@ -13,13 +13,18 @@ public class ModeloVistaPunto implements Serializable {
     private String lat;
     private String lng;
     private String foto;
+    private String id;
+    private boolean isplastico;
+    private boolean islatas;
+    private boolean isvidrio;
 
 
     public ModeloVistaPunto(){
 
     }
 
-    public ModeloVistaPunto(String direccion, String sector, String pid, String area, String recinto, String observacion, String lat, String lng, String foto) {
+    public ModeloVistaPunto(String direccion, String sector, String pid, String area, String recinto, String id,
+                            String observacion, String lat, String lng, String foto, boolean islatas, boolean isplastico, boolean isvidrio) {
         this.direccion = direccion;
         this.pid = pid;
         this.area = area;
@@ -29,6 +34,10 @@ public class ModeloVistaPunto implements Serializable {
         this.lng = lng;
         this.foto = foto;
         this.sector = sector;
+        this.isplastico = isplastico;
+        this.islatas = islatas;
+        this.isvidrio = isvidrio;
+        this.id = id;
     }
 
     public String getDireccion() {
@@ -103,5 +112,37 @@ public class ModeloVistaPunto implements Serializable {
 
     public void setSector(String sector) {
         this.sector = sector;
+    }
+
+    public boolean isIsplastico() {
+        return isplastico;
+    }
+
+    public void setIsplastico(boolean isplastico) {
+        this.isplastico = isplastico;
+    }
+
+    public boolean isIslatas() {
+        return islatas;
+    }
+
+    public void setIslatas(boolean islatas) {
+        this.islatas = islatas;
+    }
+
+    public boolean isIsvidrio() {
+        return isvidrio;
+    }
+
+    public void setIsvidrio(boolean isvidrio) {
+        this.isvidrio = isvidrio;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

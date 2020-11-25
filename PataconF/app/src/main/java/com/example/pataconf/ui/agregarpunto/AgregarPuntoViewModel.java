@@ -1,4 +1,4 @@
-package com.example.pataconf.ui.agregarproducto;
+package com.example.pataconf.ui.agregarpunto;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;

@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 
 import Modelo.ModeloVistaPunto;
 
-public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPuntoAdapter.MusicaViewHolder> {
+public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPuntoAdapter.MusicaViewHolder>  {
 
     private ArrayList<ModeloVistaPunto> data;
     private View.OnClickListener listener;
@@ -30,7 +32,7 @@ public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPun
 
     @Override
     public MusicaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MusicaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_modelopunto, parent, false));
+        return new MusicaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_modelopunto, parent, false), this.listener);
     }
 
     @Override
@@ -40,9 +42,30 @@ public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPun
         //holder.imgMusica.setImageDrawable(LoadImageFromWebOperations(musica.getFoto()));
         holder.direccion.setText(musica.getDireccion());
         holder.sector.setText(musica.getSector());
+        holder.eliminar.setText(musica.getId() + "\n" + "E");
+
+        if (musica.isIsplastico()==false) {
+            holder.imgp.setVisibility(View.INVISIBLE);
+            holder.imgp.getLayoutParams().height = 0;
+            holder.imgp.getLayoutParams().width = 0;
+            holder.imgp.requestLayout();
+        }
+        if (musica.isIslatas()==false){
+            holder.imgl.setVisibility(View.INVISIBLE);
+            holder.imgl.getLayoutParams().height = 0;
+            holder.imgl.getLayoutParams().width = 0;
+            holder.imgl.requestLayout();
+        }
+        if (musica.isIsvidrio()==false){
+            holder.imgv.setVisibility(View.INVISIBLE);
+            holder.imgv.getLayoutParams().height = 0;
+            holder.imgv.getLayoutParams().width = 0;
+            holder.imgv.requestLayout();
+        }
+
 
         // show The Image in a ImageView
-        new DownloadImageTask(holder.imgMusica).execute(musica.getFoto());
+        //new DownloadImageTask(holder.imgMusica).execute(musica.getFoto());
     }
 
     @Override
@@ -52,17 +75,25 @@ public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPun
 
     class MusicaViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView imgMusica;
+        ImageView imgp;
+        ImageView imgl;
+        ImageView imgv;
+        Button eliminar;
         TextView direccion;
         TextView sector;
 
-        public MusicaViewHolder(View itemView) {
+        public MusicaViewHolder(View itemView, View.OnClickListener lis) {
             super(itemView);
-            imgMusica = (ImageView) itemView.findViewById(R.id.img_musica);
-            imgMusica.setImageResource(R.drawable.pto);
+            imgp = (ImageView) itemView.findViewById(R.id.imgp);
+            imgl = (ImageView) itemView.findViewById(R.id.imgl);
+            imgv = (ImageView) itemView.findViewById(R.id.imgv);
+            eliminar = (Button) itemView.findViewById(R.id.eliminar);
+            eliminar.setOnClickListener(lis);
+            eliminar.setTextColor(0xFF0000);
             direccion = (TextView) itemView.findViewById(R.id.direccion);
             sector = (TextView) itemView.findViewById(R.id.sector);
         }
+
     }
 
     public static Drawable LoadImageFromWebOperations(String url) {
@@ -74,6 +105,7 @@ public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPun
             return null;
         }
     }
+
 
 
 

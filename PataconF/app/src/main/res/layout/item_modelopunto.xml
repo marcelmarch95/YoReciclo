@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:orientation="vertical"
-    android:padding="20dp"
+    android:padding="10dp"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp">
 
@@ -13,30 +13,47 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="20dp">
+        android:paddingLeft="10dp">
 
-        <ImageView
-            android:id="@+id/img_musica"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/pto" />
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgp"
+                android:layout_width="20dp"
+                android:layout_height="42dp"
+                app:srcCompat="@drawable/plasticolo" />
+
+            <ImageView
+                android:id="@+id/imgl"
+                android:layout_width="20dp"
+                android:layout_height="42dp"
+                app:srcCompat="@drawable/latalo" />
+
+            <ImageView
+                android:id="@+id/imgv"
+                android:layout_width="20dp"
+                android:layout_height="42dp"
+                app:srcCompat="@drawable/vidriolo" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingBottom="10dp">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/direccion"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:gravity="center"
                 android:text="Radioactive"
-                android:textSize="20sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -45,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Imagine Dragons"
-                android:textSize="16sp" />
+                android:textSize="11sp" />
 
         </LinearLayout>
 
@@ -54,13 +71,19 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/editar"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:background="@drawable/edit" />
+                android:background="@drawable/editl2" />
+
+            <Button
+                android:id="@+id/eliminar"
+                android:layout_width="33dp"
+                android:layout_height="35dp"
+                android:background="@drawable/deletel" />
         </LinearLayout>
 
     </LinearLayout>

@@ -19,7 +19,7 @@ import com.example.pataconf.ModeloVistaOpcionesProductoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.OptionsGestionProductosFragment;
-import com.example.pataconf.ui.agregarproducto.AgregarPuntoFragment;
+import com.example.pataconf.ui.agregarpunto.AgregarPuntoFragment;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -107,6 +107,10 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
                             pu.setRecinto(p.getRecinto());
                             pu.setArea(p.getArea());
                             pu.setFoto(p.getFoto());
+                            pu.setIslatas(p.isIslatas());
+                            pu.setIsplastico(p.isIsplastico());
+                            pu.setIsvidrio(p.isIsvidrio());
+                            pu.setId(document.getId());
                             data.add(pu);
                         }
 
