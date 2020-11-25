@@ -111,6 +111,7 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
                             pu.setIsplastico(p.isIsplastico());
                             pu.setIsvidrio(p.isIsvidrio());
                             pu.setId(document.getId());
+                            pu.setObservacion(p.getObservacion());
                             data.add(pu);
                         }
 

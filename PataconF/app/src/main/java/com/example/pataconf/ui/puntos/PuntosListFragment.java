@@ -124,6 +124,8 @@ public class PuntosListFragment extends Fragment implements View.OnClickListener
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("punto", puntoe);
 
+                System.out.println("Punto antes de entrar a eliminar ." + puntoe.getObservacion());
+
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

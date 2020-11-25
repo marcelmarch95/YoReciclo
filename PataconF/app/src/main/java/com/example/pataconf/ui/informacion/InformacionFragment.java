@@ -26,11 +26,11 @@ import java.util.ArrayList;
 
 import Modelo.ModeloVistaPunto;
 import Modelo.Producto;
+import Modelo.Punto;
 
 public class InformacionFragment extends Fragment implements View.OnClickListener {
 
     private Button finalizar;
-    private boolean productos;
     private FirebaseFirestore db;
     private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
 
@@ -46,7 +46,6 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
 
 
         String msj =  getArguments().getString("mensaje");
-        productos = getArguments().getBoolean("productos");
         boolean result =  getArguments().getBoolean("estado");
 
         if (!result){
@@ -60,27 +59,37 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        if (view == this.finalizar && productos){
-
+        if (view == this.finalizar) {
             db = FirebaseFirestore.getInstance();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            db.collection("producto")
-                    .whereEqualTo("comerciante", user.getUid())
+            db.collection("punto")
+                    .whereEqualTo("pid", user.getUid())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Producto p = document.toObject(Producto.class);
-                                    ModeloVistaPunto mo = new ModeloVistaPunto();
-                                    //ModeloVistaPunto mo = new ModeloVistaPunto(p.getNombre(),p.getCategoria(),p.getFoto(),p.getPrecio());
-                                    data.add(mo);
+                                    Punto p = document.toObject(Punto.class);
+                                    ModeloVistaPunto pu = new ModeloVistaPunto();
+                                    pu.setDireccion(p.getDireccion());
+                                    pu.setLat(p.getLat());
+                                    pu.setLng(p.getLng());
+                                    pu.setSector(p.getSector());
+                                    pu.setRecinto(p.getRecinto());
+                                    pu.setArea(p.getArea());
+                                    pu.setFoto(p.getFoto());
+                                    pu.setIslatas(p.isIslatas());
+                                    pu.setIsplastico(p.isIsplastico());
+                                    pu.setIsvidrio(p.isIsvidrio());
+                                    pu.setId(document.getId());
+                                    pu.setObservacion(p.getObservacion());
+                                    data.add(pu);
                                 }
 
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("productos", data);
+                                bundle.putSerializable("puntos", data);
 
                                 FragmentManager fragmentManager = getFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -95,8 +104,7 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
                         }
                     });
         }
-        else {
 
-        }
+
     }
 }
