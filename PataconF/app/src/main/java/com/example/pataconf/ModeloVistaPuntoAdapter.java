@@ -43,6 +43,7 @@ public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPun
         holder.direccion.setText(musica.getDireccion());
         holder.sector.setText(musica.getSector());
         holder.eliminar.setText(musica.getId() + "\n" + "E");
+        holder.editar.setText(musica.getId() + "\n" + "ED");
 
         if (musica.isIsplastico()==false) {
             holder.imgp.setVisibility(View.INVISIBLE);
@@ -79,6 +80,7 @@ public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPun
         ImageView imgl;
         ImageView imgv;
         Button eliminar;
+        Button editar;
         TextView direccion;
         TextView sector;
 
@@ -88,8 +90,11 @@ public class ModeloVistaPuntoAdapter extends RecyclerView.Adapter<ModeloVistaPun
             imgl = (ImageView) itemView.findViewById(R.id.imgl);
             imgv = (ImageView) itemView.findViewById(R.id.imgv);
             eliminar = (Button) itemView.findViewById(R.id.eliminar);
+            editar = (Button) itemView.findViewById(R.id.editar);
             eliminar.setOnClickListener(lis);
+            editar.setOnClickListener(lis);
             eliminar.setTextColor(0xFF0000);
+            editar.setTextColor(0xFF0000);
             direccion = (TextView) itemView.findViewById(R.id.direccion);
             sector = (TextView) itemView.findViewById(R.id.sector);
         }

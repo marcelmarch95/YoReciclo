@@ -89,16 +89,6 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
         foto = (ImageView) root.findViewById(R.id.imageView4);
         this.agregar.setOnClickListener(this);
 
-        //this.eliminarfoto = (Button) root.findViewById(R.id.eliminarfoto);
-        //this.eliminarfoto.setOnClickListener(this);
-
-        /*this.selectfoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });*/
-
         ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Agregar Punto");
 
         return root;
@@ -190,6 +180,7 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
         Intent intent = new Intent(getActivity(), SelectorDireccionMapaPunto.class);
         intent.putExtra("punto", p);
         intent.putExtra("uri", imageUri);
+        intent.putExtra("editar", false);
         startActivity(intent);
 
 

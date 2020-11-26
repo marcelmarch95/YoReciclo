@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.pataconf.ModeloVistaPuntoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
+import com.example.pataconf.ui.editarpunto.EditarPuntoFragment;
 import com.example.pataconf.ui.eliminarpunto.EliminarPuntoFragment;
 import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
 import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
@@ -124,12 +125,32 @@ public class PuntosListFragment extends Fragment implements View.OnClickListener
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("punto", puntoe);
 
-                System.out.println("Punto antes de entrar a eliminar ." + puntoe.getObservacion());
-
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                 Fragment lp = new EliminarPuntoFragment();
+                lp.setArguments(bundle);
+                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                fragmentTransaction.commit();
+            }
+
+            if (tipo.compareTo("ED")==0){
+
+                for (ModeloVistaPunto p: puntos){
+                    if (p.getId().compareTo(idpunto)==0){
+                        puntoe = p;
+                    }
+                }
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("punto", puntoe);
+
+                System.out.println("Punto antes de entrar a editar ." + puntoe.getPid());
+
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                Fragment lp = new EditarPuntoFragment();
                 lp.setArguments(bundle);
                 fragmentTransaction.replace(R.id.nav_host_fragment, lp);
                 fragmentTransaction.commit();

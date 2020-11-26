@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -95,6 +97,7 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
     private boolean posModificada = false;
     private Punto punto;
     private ProgressBar progressBar;
+    private boolean editar;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -137,7 +140,33 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
 
         Intent i = getIntent();
         punto = (Punto) i.getExtras().get("punto");
+        editar = (boolean) i.getExtras().get("editar");
         uri = (Uri) i.getExtras().get("uri");
+
+        if (editar){
+            this.lat = Double.valueOf(this.punto.getLat());
+            this.lng = Double.valueOf(this.punto.getLng());
+        }
+
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                mGoogleMap = mMap;
+
+                // For showing a move to my location button
+                mGoogleMap.setMyLocationEnabled(true);
+
+                // For dropping a marker at a point on the Map
+                LatLng sydney = new LatLng(Double.valueOf(punto.getLat()), Double.valueOf(punto.getLng()));
+                mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Punto Limpio").snippet(punto.getDireccion()));
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));//AQUI MODIFICA EL ZOOM AL MAPA SEGUN TUS NECESIDADES
+            }
+        });
+
 
         System.out.println("Punto: " + punto.toString());
     }
@@ -354,10 +383,10 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
 
         System.out.println("LAT: " + location.getLatitude());
         System.out.println("LNG: " + location.getLongitude());
-        this.lat = location.getLatitude();
-        this.lng = location.getLongitude();
 
-        if (primera){
+
+
+        if (primera && !editar){
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));//AQUI MODIFICA EL ZOOM AL MAPA SEGUN TUS NECESIDADES
             primera = false;
         }
@@ -370,19 +399,39 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
 
         }
         else {
-            try {
-                direccion = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // 1 representa la cantidad de resultados a obtener
-                String address = direccion.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                String city = direccion.get(0).getLocality();
-                String state = direccion.get(0).getAdminArea();
-                String country = direccion.get(0).getCountryName();
-                String postalCode = direccion.get(0).getPostalCode();
-                System.out.println(direccion.toArray());
-                TextView dire = findViewById(R.id.nombre);
-                dire.setText(address);
+            if (!editar) {
+                try {
+                    direccion = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // 1 representa la cantidad de resultados a obtener
+                    String address = direccion.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    String city = direccion.get(0).getLocality();
+                    String state = direccion.get(0).getAdminArea();
+                    String country = direccion.get(0).getCountryName();
+                    String postalCode = direccion.get(0).getPostalCode();
+                    System.out.println(direccion.toArray());
+                    TextView dire = findViewById(R.id.nombre);
+                    dire.setText(address);
+                    this.lat = location.getLatitude();
+                    this.lng = location.getLongitude();
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    direccion = geocoder.getFromLocation(Double.valueOf(this.punto.getLat()), Double.valueOf(this.punto.getLng()), 1); // 1 representa la cantidad de resultados a obtener
+                    String address = direccion.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    String city = direccion.get(0).getLocality();
+                    String state = direccion.get(0).getAdminArea();
+                    String country = direccion.get(0).getCountryName();
+                    String postalCode = direccion.get(0).getPostalCode();
+                    System.out.println(direccion.toArray());
+                    TextView dire = findViewById(R.id.nombre);
+                    dire.setText(address);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -391,7 +440,8 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
 
 
         if (posModificada==false){
-            mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
+            if (!editar)
+                mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
         }
     }
 
@@ -475,36 +525,65 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
 
             mAuth = FirebaseAuth.getInstance();
 
-
             this.punto.setLat(String.valueOf(this.lat));
             this.punto.setLng(String.valueOf(this.lng));
             this.progressBar.setVisibility(View.VISIBLE);
             this.punto.setPid(mAuth.getUid());
 
-            db.collection("punto")
-                    .add(punto)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                            System.out.println("Punto creado correctamente con ID: " + documentReference.getId());
-                            Intent i = new Intent(getBaseContext(), Informacion.class);
-                            i.putExtra("result", true);
-                            i.putExtra("mensaje", "Punto creado correctamente");
-                            startActivity(i);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                            System.out.println("Error al crear el punto");
-                            Intent i = new Intent(getBaseContext(), Informacion.class);
-                            i.putExtra("result", false);
-                            i.putExtra("mensaje", "Error al crear el punto");
-                            startActivity(i);
-                        }
-                    });
+            if (editar){
+                db = FirebaseFirestore.getInstance();
+                db.collection("punto").document(this.punto.getId())
+                        .set(this.punto)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                System.out.println("Punto editado correctamente");
+                                Intent i = new Intent(getBaseContext(), Informacion.class);
+                                i.putExtra("result", true);
+                                i.putExtra("mensaje", "Punto editado correctamente");
+                                startActivity(i);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                                System.out.println("Error al editar el punto");
+                                Intent i = new Intent(getBaseContext(), Informacion.class);
+                                i.putExtra("result", false);
+                                i.putExtra("mensaje", "Error al editar el punto");
+                                startActivity(i);
+                            }
+                        });
+            }
+            else {
+                db.collection("punto")
+                        .add(punto)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                System.out.println("Punto creado correctamente con ID: " + documentReference.getId());
+                                Intent i = new Intent(getBaseContext(), Informacion.class);
+                                i.putExtra("result", true);
+                                i.putExtra("mensaje", "Punto creado correctamente");
+                                startActivity(i);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                System.out.println("Error al crear el punto");
+                                Intent i = new Intent(getBaseContext(), Informacion.class);
+                                i.putExtra("result", false);
+                                i.putExtra("mensaje", "Error al crear el punto");
+                                startActivity(i);
+                            }
+                        });
+            }
+
+
 
 
 
