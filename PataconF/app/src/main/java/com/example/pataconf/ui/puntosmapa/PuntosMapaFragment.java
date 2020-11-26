@@ -45,16 +45,10 @@ import java.util.ArrayList;
 import Modelo.ModeloVistaPunto;
 import Modelo.Punto;
 
-public class EliminarPuntoFragment extends Fragment implements View.OnClickListener{
+public class PuntosMapaFragment extends Fragment implements View.OnClickListener{
 
     private OptionsPuntosListViewModel homeViewModel;
-    private TextView title;
-    private TextView tvdireccion;
-    private TextView tvarea;
-    private TextView tvrecinto;
-    private TextView tvsector;
-    private EditText tvobservacion;
-    private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
+    private ArrayList<Punto> puntos = new ArrayList<>();
     ImageView imgp;
     ImageView imgl;
     ImageView imgv;
@@ -70,32 +64,19 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
     private Uri imageUri;
     private View root;
     private static final int PICK_IMAGE = 100;
-    private ModeloVistaPunto punto;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)  {
         homeViewModel =
                 ViewModelProviders.of(this).get(OptionsPuntosListViewModel.class);
-        root = inflater.inflate(R.layout.fragment_eliminarpunto, container, false);
+        root = inflater.inflate(R.layout.fragment_puntosmapa, container, false);
 
-        this.punto = (ModeloVistaPunto) getArguments().getSerializable("punto");
-        title = (TextView) root.findViewById(R.id.title);
+        this.puntos = (ArrayList<Punto>) getArguments().getSerializable("puntos");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userid = user.getUid();
 
-        this.tvdireccion = root.findViewById(R.id.tvdireccion);
-        this.tvarea = root.findViewById(R.id.tvarea);
-        this.tvrecinto = root.findViewById(R.id.tvrecinto);
-        this.tvsector = root.findViewById(R.id.tvsector);
-        this.tvobservacion = root.findViewById(R.id.tvobservacion);
-
-        this.tvdireccion.setText(punto.getDireccion());
-        this.tvarea.setText(punto.getArea());
-        this.tvrecinto.setText(punto.getRecinto());
-        this.tvsector.setText(punto.getSector());
-        this.tvobservacion.setText(punto.getObservacion());
 
         this.volver = root.findViewById(R.id.volver);
         this.eliminar = root.findViewById(R.id.eliminar);
@@ -103,12 +84,8 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
         this.volver.setOnClickListener(this);
         this.eliminar.setOnClickListener(this);
 
-        System.out.println("Observ: " + punto.getObservacion());
-        System.out.println("id: "  +punto.getId());
 
-        this.disableEditText(tvobservacion);
-
-        this.imgp = root.findViewById(R.id.imgp);
+        /*this.imgp = root.findViewById(R.id.imgp);
         this.imgl = root.findViewById(R.id.imgl);
         this.imgv = root.findViewById(R.id.imgv);
 
@@ -130,7 +107,7 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
             imgv.getLayoutParams().width = 0;
             imgv.requestLayout();
         }
-
+        */
 
 
         mMapView = (MapView) root.findViewById(R.id.mapView);
@@ -152,12 +129,17 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
                 // For showing a move to my location button
                 googleMap.setMyLocationEnabled(true);
 
+                for(Punto p: puntos){
+                    LatLng sydney = new LatLng(Double.valueOf(p.getLat()),Double.valueOf(p.getLng()));
+                    googleMap.addMarker(new MarkerOptions().position(sydney).title(p.getDireccion()).snippet(p.getArea()));
+                }
+
                 // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(Double.valueOf(punto.getLat()), Double.valueOf(punto.getLng()));
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Punto Limpio").snippet(punto.getDireccion()));
+
+                LatLng curico = new LatLng(Double.valueOf("-34.979923"),Double.valueOf("-71.225535"));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(curico).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
@@ -173,7 +155,7 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
             }
         });*/
 
-        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Eliminar Punto");
+        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Puntos Limpios");
 
         return root;
     }
@@ -182,100 +164,7 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if (view == this.volver){
-            db = FirebaseFirestore.getInstance();
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            db.collection("punto")
-            .whereEqualTo("pid", user.getUid())
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Punto p = document.toObject(Punto.class);
-                            ModeloVistaPunto pu = new ModeloVistaPunto();
-                            pu.setDireccion(p.getDireccion());
-                            pu.setLat(p.getLat());
-                            pu.setLng(p.getLng());
-                            pu.setSector(p.getSector());
-                            pu.setRecinto(p.getRecinto());
-                            pu.setArea(p.getArea());
-                            pu.setFoto(p.getFoto());
-                            pu.setIslatas(p.isIslatas());
-                            pu.setIsplastico(p.isIsplastico());
-                            pu.setIsvidrio(p.isIsvidrio());
-                            pu.setId(document.getId());
-                            pu.setObservacion(p.getObservacion());
-                            data.add(pu);
-                        }
-
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("puntos", data);
-
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                        Fragment lp = new PuntosListFragment();
-                        lp.setArguments(bundle);
-                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                        fragmentTransaction.commit();
-                    } else {
-
-                    }
-                }
-            });
-        }
-
-        if (view==this.eliminar){
-            db = FirebaseFirestore.getInstance();
-            System.out.println("Eliminar el punto con id:  " + punto.getId());
-
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            Fragment lp = new CargandoFragment();
-            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-            fragmentTransaction.commit();
-
-            db.collection("punto").document(punto.getId())
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            System.out.println("Eliminado");
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("mensaje", "Punto eliminado correctamente");
-                            bundle.putSerializable("estado", true);
-
-                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
-
-                            Fragment info = new InformacionFragment();
-                            info.setArguments(bundle);
-                            fragmentTransaction2.replace(R.id.nav_host_fragment, info);
-                            fragmentTransaction2.commit();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            System.out.println("Error al eliminar");
-
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("mensaje", "Error al eliminar el punto.");
-                            bundle.putSerializable("estado", false);
-
-                            FragmentManager fragmentManager = getFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                            Fragment info = new InformacionFragment();
-                            info.setArguments(bundle);
-                            fragmentTransaction.replace(R.id.nav_host_fragment, info);
-                            fragmentTransaction.commit();
-                        }
-                    });
-        }
     }
 
     public void validarDatos(){

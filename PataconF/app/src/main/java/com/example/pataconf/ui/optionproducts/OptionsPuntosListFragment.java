@@ -21,6 +21,7 @@ import com.example.pataconf.R;
 import com.example.pataconf.ui.OptionsGestionProductosFragment;
 import com.example.pataconf.ui.agregarpunto.AgregarPuntoFragment;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
+import com.example.pataconf.ui.puntosmapa.PuntosMapaFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +43,7 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
     private RecyclerView rvMusicas;
     private GridLayoutManager glm;
     private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
+    private ArrayList<Punto> data2 = new ArrayList<>();
     private FirebaseFirestore db;
     private ModeloVistaOpcionesProductoAdapter adapter;
 
@@ -49,6 +51,7 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         ArrayList<ModeloOpcionesProducto> data = new ArrayList<>();
         data.add(new ModeloOpcionesProducto("Agregar Punto Limpio",  R.drawable.addpunto));
         data.add(new ModeloOpcionesProducto("Gestionar Puntos",  R.drawable.listp));
+        data.add(new ModeloOpcionesProducto("Ver Puntos en Mapa",  R.drawable.puntosmapa));
         data.add(new ModeloOpcionesProducto("Ver últimos Reportes",  R.drawable.notific));
         //data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
         return data;
@@ -76,6 +79,41 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
     public void onClick(View view) {
         CardView cv = (CardView) view;
         TextView tv = (TextView) view.findViewById(R.id.accion);
+
+        if (tv.getText().toString().compareTo("Ver Puntos en Mapa")==0){
+
+
+            db = FirebaseFirestore.getInstance();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            db.collection("punto")
+                    .whereEqualTo("pid", user.getUid())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    data2.add(document.toObject(Punto.class));
+                                }
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("puntos", data2);
+
+                                FragmentManager fragmentManager = getFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                                Fragment lp = new PuntosMapaFragment();
+                                lp.setArguments(bundle);
+                                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                fragmentTransaction.commit();
+                            } else {
+                                System.out.println("Error al conectarse ");
+                            }
+                        }
+                    });
+
+
+        }
 
         if (tv.getText().toString().compareTo("Agregar Punto Limpio")==0){
             FragmentManager fragmentManager = getFragmentManager();

@@ -146,26 +146,27 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
         if (editar){
             this.lat = Double.valueOf(this.punto.getLat());
             this.lng = Double.valueOf(this.punto.getLng());
+
+            mapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap mMap) {
+                    mGoogleMap = mMap;
+
+                    // For showing a move to my location button
+                    mGoogleMap.setMyLocationEnabled(true);
+
+                    // For dropping a marker at a point on the Map
+                    LatLng sydney = new LatLng(Double.valueOf(punto.getLat()), Double.valueOf(punto.getLng()));
+                    mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Punto Limpio").snippet(punto.getDireccion()));
+
+                    // For zooming automatically to the location of the marker
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));//AQUI MODIFICA EL ZOOM AL MAPA SEGUN TUS NECESIDADES
+                }
+            });
         }
 
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                mGoogleMap = mMap;
-
-                // For showing a move to my location button
-                mGoogleMap.setMyLocationEnabled(true);
-
-                // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(Double.valueOf(punto.getLat()), Double.valueOf(punto.getLng()));
-                mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Punto Limpio").snippet(punto.getDireccion()));
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));//AQUI MODIFICA EL ZOOM AL MAPA SEGUN TUS NECESIDADES
-            }
-        });
 
 
         System.out.println("Punto: " + punto.toString());
@@ -435,10 +436,6 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
             }
         }
 
-
-
-
-
         if (posModificada==false){
             if (!editar)
                 mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
@@ -470,8 +467,6 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
         mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
             @Override
             public void onMapClick(LatLng point) {
-
-
 
                 /* This code will save your location coordinates in SharedPrefrence when you click on the map and later you use it  */
 
@@ -582,9 +577,6 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
                             }
                         });
             }
-
-
-
 
 
             /*mAuth.createUserWithEmailAndPassword(this.c.getCorreo(), this.c.getContraseña())
