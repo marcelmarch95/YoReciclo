@@ -46,7 +46,7 @@ public class PuntosListFragment extends Fragment implements View.OnClickListener
     private Spinner categoria;
     private FirebaseFirestore db;
     private ArrayList<ModeloVistaPunto> puntos;
-
+    private Button volver;
 
 
 
@@ -78,6 +78,9 @@ public class PuntosListFragment extends Fragment implements View.OnClickListener
         adapter = new ModeloVistaPuntoAdapter(data, this);
         rvMusicas.setAdapter(adapter);
 
+        this.volver = root.findViewById(R.id.volver);
+        this.volver.setOnClickListener(this);
+
         setHasOptionsMenu(true);
 
         return root;
@@ -86,7 +89,16 @@ public class PuntosListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
 
-        if (view == this.back){
+        if (view==this.volver){
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            Fragment lp = new OptionsPuntosListFragment();
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
+        }
+
+        else if (view == this.back){
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

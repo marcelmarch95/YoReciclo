@@ -20,6 +20,7 @@ import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.OptionsGestionProductosFragment;
 import com.example.pataconf.ui.agregarpunto.AgregarPuntoFragment;
+import com.example.pataconf.ui.cargando.CargandoFragment;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.example.pataconf.ui.puntosmapa.PuntosMapaFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -125,6 +126,14 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         }
 
         if (tv.getText().toString().compareTo("Gestionar Puntos")==0){
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            Fragment lp = new CargandoFragment();
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
+
             db = FirebaseFirestore.getInstance();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -157,11 +166,10 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("puntos", data);
 
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                         Fragment lp = new PuntosListFragment();
                         lp.setArguments(bundle);
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.nav_host_fragment, lp);
                         fragmentTransaction.commit();
                     } else {

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.SelectorDireccionMapaPunto;
+import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
 import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,6 +39,7 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
 
     private OptionsPuntosListViewModel homeViewModel;
     private Button selectfoto;
+    private Button volver;
     private Button eliminarfoto;
     private Button agregar;
     private Spinner sector;
@@ -81,7 +83,8 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
         this.plastico = (CheckBox) root.findViewById(R.id.plastico);
         this.recintog = (RadioGroup) root.findViewById(R.id.recintog);
         this.areag = (RadioGroup) root.findViewById(R.id.areag);
-
+        this.volver = (Button) root.findViewById(R.id.volver);
+        this.volver.setOnClickListener(this);
 
         this.selectfoto = (Button) root.findViewById(R.id.selectfoto);
         this.agregar = (Button) root.findViewById(R.id.agregar);
@@ -113,6 +116,15 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         if (view == this.agregar){
             validarDatos();
+        }
+
+        if (view==this.volver){
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            Fragment lp = new OptionsPuntosListFragment();
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
         }
 
         if (view == this.eliminarfoto){

@@ -1,13 +1,19 @@
 package com.example.pataconf.ui.puntosmapa;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +25,10 @@ import android.widget.TextView;
 
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
+import com.example.pataconf.ui.OptionsGestionProductosFragment;
 import com.example.pataconf.ui.cargando.CargandoFragment;
 import com.example.pataconf.ui.informacion.InformacionFragment;
+import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
 import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +36,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -60,6 +70,9 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
     private ImageView imgp;
     private ImageView imgl;
     private ImageView imgv;
+    private TextView tvarea;
+    private TextView tvrecinto;
+    private TextView tvsector;
 
     private Button volver;
 
@@ -88,6 +101,9 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
 
         this.volver = root.findViewById(R.id.volver);
         this.tvdireccion = root.findViewById(R.id.tvdireccion);
+        this.tvarea = root.findViewById(R.id.tvarea);
+        this.tvrecinto = root.findViewById(R.id.tvrecinto);
+        this.tvsector = root.findViewById(R.id.tvsector);
 
         this.volver.setOnClickListener(this);
 
@@ -123,8 +139,16 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
 
                 for(Punto p: puntos){
 
+                    int height = 100;
+                    int width = 125;
+                    BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.po);
+                    Bitmap b = bitmapdraw.getBitmap();
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
                     LatLng sydney = new LatLng(Double.valueOf(p.getLat()),Double.valueOf(p.getLng()));
-                    Marker m = googleMap.addMarker(new MarkerOptions().position(sydney).title(p.getDireccion()).snippet(p.getArea()));
+                    Marker m = googleMap.addMarker(new MarkerOptions().position(sydney).title(p.getDireccion()).snippet(p.getArea())
+                                //.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.po)));
+                                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
                     markers.put(m,p);
                 }
 
@@ -138,6 +162,9 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
                           lay2.setVisibility(View.VISIBLE);
 
                           tvdireccion.setText(punto.getDireccion());
+                          tvarea.setText(punto.getArea());
+                          tvrecinto.setText(punto.getRecinto());
+                          tvsector.setText(punto.getSector());
 
                           if (punto.isIsplastico()==false) {
                               imgp.setVisibility(View.INVISIBLE);
@@ -201,7 +228,14 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        if (view==this.volver){
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+            Fragment lp = new OptionsPuntosListFragment();
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
+        }
     }
 
     @Override
@@ -234,5 +268,14 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
         editText.setCursorVisible(false);
         editText.setKeyListener(null);
         editText.setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 }

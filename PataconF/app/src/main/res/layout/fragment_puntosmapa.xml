@@ -46,12 +46,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingStart="20dp"
                     android:paddingLeft="20dp"
                     android:paddingTop="5dp"
                     android:paddingEnd="20dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="5dp"
                     android:visibility="visible">
 
                     <TextView
@@ -61,7 +60,8 @@
                         android:text="Dirección"
                         android:textAlignment="center"
                         android:textAppearance="@style/stitulo"
-                        android:textSize="14sp" />
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvdireccion"
@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:text="PRAT CON PEÑA 230"
                         android:textAlignment="center"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -81,10 +81,130 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp">
 
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp">
+
+                            <TextView
+                                android:id="@+id/textView17"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Área"
+                                android:textAppearance="@style/titulo"
+                                android:textSize="12dp" />
+
+                            <RadioGroup
+                                android:id="@+id/areag"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvarea"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Area"
+                                    android:textSize="12dp" />
+                            </RadioGroup>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp">
+
+                            <TextView
+                                android:id="@+id/textView12"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Recinto"
+                                android:textAppearance="@style/titulo"
+                                android:textSize="12dp" />
+
+                            <RadioGroup
+                                android:id="@+id/recintog"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvrecinto"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Recinto"
+                                    android:textSize="12dp" />
+                            </RadioGroup>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingLeft="20dp"
+                            android:paddingEnd="20dp"
+                            android:paddingRight="20dp">
+
+                            <TextView
+                                android:id="@+id/textView17"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Sector"
+                                android:textAppearance="@style/titulo"
+                                android:textSize="12dp" />
+
+                            <RadioGroup
+                                android:id="@+id/areag"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvsector"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Sector"
+                                    android:textSize="12dp" />
+                            </RadioGroup>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="375dp"
@@ -93,7 +213,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:paddingBottom="10dp">
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp">
 
                         <TextView
                             android:id="@+id/title"
@@ -167,9 +288,10 @@
 
                     <Button
                         android:id="@+id/volver"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:background="@drawable/border2"
+                        android:layout_gravity="center"
+                        android:background="@drawable/border4"
                         android:text="VOLVER" />
                 </LinearLayout>
 
