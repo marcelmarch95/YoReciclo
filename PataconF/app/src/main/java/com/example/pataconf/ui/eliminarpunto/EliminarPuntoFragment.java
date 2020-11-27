@@ -67,9 +67,9 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
     private TextView tvsector;
     private EditText tvobservacion;
     private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
-    ImageView imgp;
-    ImageView imgl;
-    ImageView imgv;
+    private ImageView imgp;
+    private ImageView imgl;
+    private ImageView imgv;
     private String userid;
 
     private Button volver;

@@ -23,7 +23,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/lay"
+                    android:id="@+id/lay2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

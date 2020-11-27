@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pataconf.PerfilComerciante;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,7 +42,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import Modelo.ModeloVistaPunto;
 import Modelo.Punto;
@@ -49,21 +54,24 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
 
     private OptionsPuntosListViewModel homeViewModel;
     private ArrayList<Punto> puntos = new ArrayList<>();
-    ImageView imgp;
-    ImageView imgl;
-    ImageView imgv;
     private String userid;
+    private TextView tvdireccion;
+
+    private ImageView imgp;
+    private ImageView imgl;
+    private ImageView imgv;
 
     private Button volver;
-    private Button eliminar;
 
     MapView mMapView;
     private GoogleMap googleMap;
 
     private FirebaseFirestore db;
-    private Uri imageUri;
     private View root;
-    private static final int PICK_IMAGE = 100;
+    private Map<Marker, Punto> markers = new HashMap<>();
+
+    private LinearLayout lay1;
+    private LinearLayout lay2;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -79,35 +87,19 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
 
 
         this.volver = root.findViewById(R.id.volver);
-        this.eliminar = root.findViewById(R.id.eliminar);
+        this.tvdireccion = root.findViewById(R.id.tvdireccion);
 
         this.volver.setOnClickListener(this);
-        this.eliminar.setOnClickListener(this);
 
+        this.lay1 = root.findViewById(R.id.lay1);
+        this.lay2 = root.findViewById(R.id.lay2);
 
-        /*this.imgp = root.findViewById(R.id.imgp);
+        this.lay1.setVisibility(View.INVISIBLE);
+        this.lay2.setVisibility(View.INVISIBLE);
+
+        this.imgp = root.findViewById(R.id.imgp);
         this.imgl = root.findViewById(R.id.imgl);
         this.imgv = root.findViewById(R.id.imgv);
-
-        if (punto.isIsplastico()==false) {
-            imgp.setVisibility(View.INVISIBLE);
-            imgp.getLayoutParams().height = 0;
-            imgp.getLayoutParams().width = 0;
-            imgp.requestLayout();
-        }
-        if (punto.isIslatas()==false){
-            imgl.setVisibility(View.INVISIBLE);
-            imgl.getLayoutParams().height = 0;
-            imgl.getLayoutParams().width = 0;
-            imgl.requestLayout();
-        }
-        if (punto.isIsvidrio()==false){
-            imgv.setVisibility(View.INVISIBLE);
-            imgv.getLayoutParams().height = 0;
-            imgv.getLayoutParams().width = 0;
-            imgv.requestLayout();
-        }
-        */
 
 
         mMapView = (MapView) root.findViewById(R.id.mapView);
@@ -130,12 +122,65 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
                 googleMap.setMyLocationEnabled(true);
 
                 for(Punto p: puntos){
+
                     LatLng sydney = new LatLng(Double.valueOf(p.getLat()),Double.valueOf(p.getLng()));
-                    googleMap.addMarker(new MarkerOptions().position(sydney).title(p.getDireccion()).snippet(p.getArea()));
+                    Marker m = googleMap.addMarker(new MarkerOptions().position(sydney).title(p.getDireccion()).snippet(p.getArea()));
+                    markers.put(m,p);
                 }
 
-                // For dropping a marker at a point on the Map
+                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                      @Override
+                      public boolean onMarkerClick(Marker m) {
+                          Punto punto = markers.get(m);
+                          System.out.println("Punto seleccionado: " + punto.toString());
 
+                          lay1.setVisibility(View.VISIBLE);
+                          lay2.setVisibility(View.VISIBLE);
+
+                          tvdireccion.setText(punto.getDireccion());
+
+                          if (punto.isIsplastico()==false) {
+                              imgp.setVisibility(View.INVISIBLE);
+                              imgp.getLayoutParams().height = 0;
+                              imgp.getLayoutParams().width = 0;
+                              imgp.requestLayout();
+                          }
+                          else {
+                              imgp.setVisibility(View.VISIBLE);
+                              imgp.getLayoutParams().height =100;
+                              imgp.getLayoutParams().width = 75;
+                              imgp.requestLayout();
+                          }
+                          if (punto.isIslatas()==false){
+                              imgl.setVisibility(View.INVISIBLE);
+                              imgl.getLayoutParams().height = 0;
+                              imgl.getLayoutParams().width = 0;
+                              imgl.requestLayout();
+                          }
+                          else {
+                              imgl.setVisibility(View.VISIBLE);
+                              imgl.getLayoutParams().height =100;
+                              imgl.getLayoutParams().width = 75;
+                              imgl.requestLayout();
+                          }
+                          if (punto.isIsvidrio()==false){
+                              imgv.setVisibility(View.INVISIBLE);
+                              imgv.getLayoutParams().height = 0;
+                              imgv.getLayoutParams().width = 0;
+                              imgv.requestLayout();
+                          }
+                          else {
+                              imgv.setVisibility(View.VISIBLE);
+                              imgv.getLayoutParams().height =100;
+                              imgv.getLayoutParams().width = 75;
+                              imgv.requestLayout();
+                          }
+
+                          return false;
+                      }
+                });
+
+                // For dropping a marker at a point on the Map
                 LatLng curico = new LatLng(Double.valueOf("-34.979923"),Double.valueOf("-71.225535"));
 
                 // For zooming automatically to the location of the marker
@@ -145,16 +190,6 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
         });
 
 
-        //this.eliminarfoto = (Button) root.findViewById(R.id.eliminarfoto);
-        //this.eliminarfoto.setOnClickListener(this);
-
-        /*this.selectfoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });*/
-
         ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Puntos Limpios");
 
         return root;
@@ -162,13 +197,10 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
 
 
 
+
+
     @Override
     public void onClick(View view) {
-
-    }
-
-    public void validarDatos(){
-
 
     }
 
@@ -203,5 +235,4 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
         editText.setKeyListener(null);
         editText.setBackgroundColor(Color.TRANSPARENT);
     }
-
 }
