@@ -327,6 +327,7 @@
                         android:id="@+id/observacion"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
+                        android:contentDescription="Observaciones "
                         android:gravity="top|left"
                         android:hint=""
                         android:inputType="textMultiLine"
