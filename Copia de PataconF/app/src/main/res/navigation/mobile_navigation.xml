@@ -25,9 +25,9 @@
 
     <fragment
         android:id="@+id/nav_micomercio"
-        android:name="com.example.patacon.ui.MiComercioFragment"
+        android:name="com.example.patacon.ui.MiPerfilGeneradorFragment"
         android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_micomercio" />
+        tools:layout="@layout/fragment_miperfilgenerador" />
 
     <fragment
         android:id="@+id/nav_share"

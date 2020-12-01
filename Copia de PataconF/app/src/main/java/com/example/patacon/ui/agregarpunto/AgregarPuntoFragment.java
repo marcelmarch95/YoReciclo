@@ -86,7 +86,7 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
         this.volver = (Button) root.findViewById(R.id.volver);
         this.volver.setOnClickListener(this);
 
-        this.selectfoto = (Button) root.findViewById(R.id.selectfoto);
+        //this.selectfoto = (Button) root.findViewById(R.id.selectfoto);
         this.agregar = (Button) root.findViewById(R.id.agregar);
 
         foto = (ImageView) root.findViewById(R.id.imageView4);

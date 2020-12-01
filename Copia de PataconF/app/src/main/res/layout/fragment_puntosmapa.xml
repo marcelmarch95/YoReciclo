@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,7 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
 
 
                 <LinearLayout
@@ -274,26 +274,32 @@
                 android:layout_gravity="bottom|center"
                 android:layout_weight="1"
                 android:gravity="bottom|center"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="10dp">
+                android:paddingRight="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingRight="5dp">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <Button
-                        android:id="@+id/volver"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:id="@+id/verpunto"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/border4"
-                        android:text="VOLVER" />
+                        android:background="@drawable/border2"
+                        android:text="VER PUNTO"
+                        tools:visibility="visible" />
+
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"/>
 
             </LinearLayout>
 
@@ -301,8 +307,6 @@
 
 
     </ScrollView>
-
-
 
 
 </LinearLayout>

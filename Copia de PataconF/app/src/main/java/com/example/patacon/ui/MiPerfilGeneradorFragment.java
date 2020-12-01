@@ -40,49 +40,45 @@ import com.google.firebase.storage.UploadTask;
 import java.io.InputStream;
 import java.net.URL;
 
+import Modelo.Generador;
 import Modelo.Recicladora;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MiComercioFragment extends Fragment implements View.OnClickListener {
+public class MiPerfilGeneradorFragment extends Fragment implements View.OnClickListener {
 
 
-    private Button selectfoto;
+    //private Button selectfoto;
     private Button guardar;
-    private Button eliminarfoto;
+    //private Button eliminarfoto;
     private Button exit;
     private FirebaseFirestore db;
-    private ImageView foto;
+    //private ImageView foto;
     private FirebaseAuth mAuth;
-    private Uri imageUri;
+    //private Uri imageUri;
     private static final int PICK_IMAGE = 100;
-    private Recicladora comerciante;
+    private Generador generador;
 
-    private TextView nombreComercio;
-    private TextView correo;
+    private TextView nombreApellido;
     private ProgressBar progressBar;
 
-    private EditText direccion;
-    private EditText localidad;
-    private EditText nombreEncargado;
-    private EditText telefono;
+    private EditText numeroTelefono;
+    private EditText correo;
+    private EditText contraseña;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_micomercio, container, false);
+        View root = inflater.inflate(R.layout.fragment_miperfilgenerador, container, false);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
 
-        this.nombreComercio = (TextView) root.findViewById(R.id.nombreComercio);
-        this.correo = (TextView) root.findViewById(R.id.correo);
-
-        this.direccion = (EditText) root.findViewById(R.id.direccion);
-        this.localidad = (EditText) root.findViewById(R.id.localidad);
-        this.nombreEncargado = (EditText) root.findViewById(R.id.nombreDeEncargado);
-        this.telefono = (EditText) root.findViewById(R.id.telefono);
-        this.foto = (ImageView) root.findViewById(R.id.imageView4);
+        this.nombreApellido = (TextView) root.findViewById(R.id.nombreApellido);
+        this.correo = (EditText) root.findViewById(R.id.correo);
+        this.numeroTelefono = (EditText) root.findViewById(R.id.numeroTelefono);
+        this.contraseña = (EditText) root.findViewById(R.id.contraseña);
+        //this.foto = (ImageView) root.findViewById(R.id.imageView4);
 
         this.progressBar = root.findViewById(R.id.progressBar);
         this.progressBar.setVisibility(View.INVISIBLE);
@@ -92,7 +88,7 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
         guardar.setOnClickListener(this);
 
 
-        DocumentReference docRef = db.collection("recicladora").document(mAuth.getUid().toString());
+        DocumentReference docRef = db.collection("generador").document(mAuth.getUid().toString());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -100,22 +96,20 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         System.out.println("documento encontrado: " + document.getData());
-                        Recicladora c =  document.toObject(Recicladora.class);
-                        nombreComercio.setText(c.getNombreEmpresa());
-                        correo.setText(c.getCorreo());
-                        direccion.setText(c.getDireccion());
-                        localidad.setText(c.getLocalidad());
-                        nombreEncargado.setText(c.getNombreEncargado());
-                        telefono.setText(c.getNumeroTelefono());
-                        comerciante = c;
+                        Generador g =  document.toObject(Generador.class);
+                        nombreApellido.setText(g.getNombre()+ " " + g.getApellido());
+                        correo.setText(g.getCorreo());
+                        numeroTelefono.setText(g.getNumeroTelefono());
+                        contraseña.setText(g.getContraseña());
+                        generador = g;
 
-                        try {
-                            new DownloadImageTask(foto).execute(c.getFoto());
+                        /*try {
+                            new DownloadImageTask(foto).execute(g.getFoto());
                         }
                         catch (Exception e){
                             foto.setImageResource(R.drawable.recicon);
                             System.out.println("Error al cargar foto: " + c.getFoto());
-                        }
+                        }*/
 
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
@@ -128,12 +122,12 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
         });
 
 
-        this.selectfoto = (Button) root.findViewById(R.id.selectfoto);
+        //this.selectfoto = (Button) root.findViewById(R.id.selectfoto);
 
         this.exit = (Button) root.findViewById(R.id.exit);
         this.exit.setOnClickListener(this);
 
-        this.eliminarfoto = (Button) root.findViewById(R.id.eliminarfoto);
+        /*this.eliminarfoto = (Button) root.findViewById(R.id.eliminarfoto);
         this.eliminarfoto.setOnClickListener(this);
 
         this.selectfoto.setOnClickListener(new View.OnClickListener() {
@@ -142,9 +136,9 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
                 openGallery();
 
             }
-        });
+        });*/
 
-        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Mi Recicladora");
+        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Mi Perfil");
 
         return root;
     }
@@ -154,79 +148,9 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
         startActivityForResult(gallery, PICK_IMAGE);
     }
 
-    private void saveFoto(){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
 
-        StorageReference riversRef = storageRef.child("images/"+mAuth.getUid()+"/" + imageUri.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(imageUri);
 
-        this.progressBar.setVisibility(View.VISIBLE);
 
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                System.out.println("error al subir : " + exception.toString());
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
-                {
-                    @Override
-                    public void onSuccess(Uri downloadUrl)
-                    {
-                        comerciante.setFoto(downloadUrl.toString());
-                        System.out.println("subida correctamente link: " + comerciante.getFoto());
-
-                        db.collection("comerciante").document(comerciante.getUid()).set(comerciante).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
-                                Toast.makeText(getContext(),"Actualizado correctamente!",Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.INVISIBLE);
-                                guardar.setEnabled(true);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                                Toast.makeText(getContext(),"Error al actualizar!",Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.INVISIBLE);
-                                guardar.setEnabled(true);
-
-                            }
-                        });
-                    }
-                });
-
-            }
-
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                System.out.println("Upload is " + progress + "% done");
-            }
-        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                System.out.println("Upload is paused");
-            }
-        });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
-            imageUri = data.getData();
-            foto.setImageURI(imageUri);
-            eliminarfoto.setEnabled(true);
-        }
-    }
 
     public void updateViewPerfil(){
 
@@ -239,15 +163,15 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
         if(view == this.guardar){
             this.guardar.setEnabled(false);
             this.progressBar.setVisibility(View.VISIBLE);
-            saveFoto();
+            //saveFoto();
             updateViewPerfil();
         }
 
 
-        if (view == this.eliminarfoto){
+        /*if (view == this.eliminarfoto){
             this.foto.setImageResource(R.drawable.imagen2);
             this.eliminarfoto.setEnabled(false);
-        }
+        }*/
 
         if (view == this.exit){
             mAuth = FirebaseAuth.getInstance();

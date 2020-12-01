@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.patacon.ui.editarpunto.EditarPuntoFragment;
+import com.example.patacon.ui.eliminarpunto.EliminarPuntoFragment;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListFragment;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListViewModel;
 import com.example.patacon.PerfilComerciante;
@@ -45,6 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import Modelo.ModeloVistaPunto;
 import Modelo.Punto;
 
 public class PuntosMapaFragment extends Fragment implements View.OnClickListener{
@@ -62,6 +65,8 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
     private TextView tvsector;
 
     private Button volver;
+    private Button verpunto;
+    private Punto puntosel;
 
     MapView mMapView;
     private GoogleMap googleMap;
@@ -86,13 +91,17 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
         userid = user.getUid();
 
 
-        this.volver = root.findViewById(R.id.volver);
+
+        //this.volver = root.findViewById(R.id.volver);
         this.tvdireccion = root.findViewById(R.id.tvdireccion);
         this.tvarea = root.findViewById(R.id.tvarea);
         this.tvrecinto = root.findViewById(R.id.tvrecinto);
         this.tvsector = root.findViewById(R.id.tvsector);
 
-        this.volver.setOnClickListener(this);
+        //this.volver.setOnClickListener(this);
+        this.verpunto = root.findViewById(R.id.verpunto);
+        this.verpunto.setOnClickListener(this);
+        this.verpunto.setVisibility(View.INVISIBLE);
 
         this.lay1 = root.findViewById(R.id.lay1);
         this.lay2 = root.findViewById(R.id.lay2);
@@ -152,6 +161,7 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
                           tvarea.setText(punto.getArea());
                           tvrecinto.setText(punto.getRecinto());
                           tvsector.setText(punto.getSector());
+                          verpunto.setVisibility(View.VISIBLE);
 
                           if (punto.isIsplastico()==false) {
                               imgp.setVisibility(View.INVISIBLE);
@@ -190,6 +200,9 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
                               imgv.requestLayout();
                           }
 
+                          puntosel = punto;
+
+
                           return false;
                       }
                 });
@@ -222,6 +235,38 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
             Fragment lp = new OptionsPuntosListFragment();
             fragmentTransaction.replace(R.id.nav_host_fragment, lp);
             fragmentTransaction.commit();
+        }
+
+        if (view == this.verpunto){
+            if (puntosel!=null){
+                System.out.println("punto != null");
+                ModeloVistaPunto mvp = new ModeloVistaPunto();
+                mvp.setPid(puntosel.getPid());
+                mvp.setObservacion(puntosel.getObservacion());
+                mvp.setId(puntosel.getId());
+                mvp.setIsvidrio(puntosel.isIsvidrio());
+                mvp.setIsplastico(puntosel.isIsplastico());
+                mvp.setIslatas(puntosel.isIslatas());
+                mvp.setLng(puntosel.getLng());
+                mvp.setLat(puntosel.getLat());
+                mvp.setArea(puntosel.getArea());
+                mvp.setRecinto(puntosel.getRecinto());
+                mvp.setSector(puntosel.getSector());
+                mvp.setDireccion(puntosel.getDireccion());
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("punto", mvp);
+
+                System.out.println("Punto antes de entrar a eliminar ." + puntosel.getPid());
+
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                Fragment lp = new EliminarPuntoFragment();
+                lp.setArguments(bundle);
+                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                fragmentTransaction.commit();
+            }
         }
     }
 

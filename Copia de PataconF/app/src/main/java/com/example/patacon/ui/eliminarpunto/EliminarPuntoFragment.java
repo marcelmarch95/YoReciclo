@@ -22,6 +22,7 @@ import com.example.patacon.ui.puntos.PuntosListFragment;
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.patacon.ui.puntosmapa.PuntosMapaFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -53,15 +54,14 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
     private TextView tvarea;
     private TextView tvrecinto;
     private TextView tvsector;
-    private EditText tvobservacion;
     private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
     private ImageView imgp;
     private ImageView imgl;
     private ImageView imgv;
     private String userid;
+    private ArrayList<Punto> data2 = new ArrayList<>();
 
     private Button volver;
-    private Button eliminar;
 
     MapView mMapView;
     private GoogleMap googleMap;
@@ -89,24 +89,21 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
         this.tvarea = root.findViewById(R.id.tvarea);
         this.tvrecinto = root.findViewById(R.id.tvrecinto);
         this.tvsector = root.findViewById(R.id.tvsector);
-        this.tvobservacion = root.findViewById(R.id.tvobservacion);
 
+
+        System.out.println("Direccion en ver punto: " + punto.getDireccion());
         this.tvdireccion.setText(punto.getDireccion());
         this.tvarea.setText(punto.getArea());
         this.tvrecinto.setText(punto.getRecinto());
         this.tvsector.setText(punto.getSector());
-        this.tvobservacion.setText(punto.getObservacion());
 
         this.volver = root.findViewById(R.id.volver);
-        this.eliminar = root.findViewById(R.id.eliminar);
 
         this.volver.setOnClickListener(this);
-        this.eliminar.setOnClickListener(this);
 
         System.out.println("Observ: " + punto.getObservacion());
         System.out.println("id: "  +punto.getId());
 
-        this.disableEditText(tvobservacion);
 
         this.imgp = root.findViewById(R.id.imgp);
         this.imgl = root.findViewById(R.id.imgl);
@@ -173,7 +170,7 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
             }
         });*/
 
-        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Eliminar Punto");
+        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Detalle Punto");
 
         return root;
     }
@@ -187,48 +184,33 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             db.collection("punto")
-            .whereEqualTo("pid", user.getUid())
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Punto p = document.toObject(Punto.class);
-                            ModeloVistaPunto pu = new ModeloVistaPunto();
-                            pu.setDireccion(p.getDireccion());
-                            pu.setLat(p.getLat());
-                            pu.setLng(p.getLng());
-                            pu.setSector(p.getSector());
-                            pu.setRecinto(p.getRecinto());
-                            pu.setArea(p.getArea());
-                            pu.setFoto(p.getFoto());
-                            pu.setIslatas(p.isIslatas());
-                            pu.setIsplastico(p.isIsplastico());
-                            pu.setIsvidrio(p.isIsvidrio());
-                            pu.setId(document.getId());
-                            pu.setObservacion(p.getObservacion());
-                            data.add(pu);
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    data2.add(document.toObject(Punto.class));
+                                }
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("puntos", data2);
+
+                                FragmentManager fragmentManager = getFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                                Fragment lp = new PuntosMapaFragment();
+                                lp.setArguments(bundle);
+                                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                fragmentTransaction.commit();
+                            } else {
+                                System.out.println("Error al conectarse ");
+                            }
                         }
+                    });
 
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("puntos", data);
-
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                        Fragment lp = new PuntosListFragment();
-                        lp.setArguments(bundle);
-                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                        fragmentTransaction.commit();
-                    } else {
-
-                    }
-                }
-            });
         }
 
-        if (view==this.eliminar){
+        /*if (view==this.eliminar){
             db = FirebaseFirestore.getInstance();
             System.out.println("Eliminar el punto con id:  " + punto.getId());
 
@@ -275,7 +257,7 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
                             fragmentTransaction.commit();
                         }
                     });
-        }
+        }*/
     }
 
     public void validarDatos(){

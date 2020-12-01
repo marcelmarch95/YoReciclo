@@ -50,10 +50,8 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
 
     private ArrayList<ModeloOpcionesProducto> dataSet() {
         ArrayList<ModeloOpcionesProducto> data = new ArrayList<>();
-        data.add(new ModeloOpcionesProducto("Agregar Punto Limpio",  R.drawable.addpunto));
-        data.add(new ModeloOpcionesProducto("Gestionar Puntos",  R.drawable.listp));
         data.add(new ModeloOpcionesProducto("Ver Puntos en Mapa",  R.drawable.puntosmapa));
-        data.add(new ModeloOpcionesProducto("Ver últimos Reportes",  R.drawable.notific));
+        data.add(new ModeloOpcionesProducto("Reportes",  R.drawable.notific));
         //data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
         return data;
     }
@@ -81,6 +79,10 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         CardView cv = (CardView) view;
         TextView tv = (TextView) view.findViewById(R.id.accion);
 
+        if (tv.getText().toString().compareTo("Reportes")==0){
+
+        }
+
         if (tv.getText().toString().compareTo("Ver Puntos en Mapa")==0){
 
 
@@ -88,7 +90,6 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             db.collection("punto")
-                    .whereEqualTo("pid", user.getUid())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override

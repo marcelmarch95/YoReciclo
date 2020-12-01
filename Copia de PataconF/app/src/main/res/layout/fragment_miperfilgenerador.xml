@@ -36,32 +36,7 @@
                         android:layout_height="96dp"
                         app:srcCompat="@drawable/recicon" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal">
 
-                        <Button
-                            android:id="@+id/selectfoto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="CAMBIAR FOTO"
-                            android:textSize="10sp" />
-
-                        <Button
-                            android:id="@+id/eliminarfoto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:enabled="false"
-                            android:gravity="center"
-                            android:text="Eliminar Foto"
-                            android:textSize="10sp" />
-                    </LinearLayout>
 
 
                     <LinearLayout
@@ -72,7 +47,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/nombreComercio"
+                            android:id="@+id/nombreApellido"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -80,13 +55,6 @@
                             android:text="Ciclo Verde"
                             android:textAppearance="@style/titulo"
                             android:textSize="20dp" />
-
-                        <TextView
-                            android:id="@+id/correo"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="prueba@peya.cl" />
 
                         <Button
                             android:id="@+id/exit"
@@ -115,7 +83,7 @@
                         android:id="@+id/textView18"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Datos Recicladora"
+                        android:text="Datos Generador"
                         android:textAppearance="@style/titulo"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -134,17 +102,17 @@
                         android:id="@+id/textView16"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dirección"
+                        android:text="Número de teléfono"
                         android:textAppearance="@style/stitulo" />
 
                     <EditText
-                        android:id="@+id/direccion"
+                        android:id="@+id/numeroTelefono"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
                         android:ems="10"
                         android:focusable="false"
-                        android:hint="Av. 5 de Julio #134"
+                        android:hint="+569 34555552"
                         android:inputType="textPersonName"
                         android:textAppearance="@style/stitulo"
                         android:textSize="14sp" />
@@ -165,44 +133,24 @@
                         android:id="@+id/textView16"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Localidad"
+                        android:text="Correo"
                         android:textAppearance="@style/stitulo" />
 
                     <EditText
-                        android:id="@+id/localidad"
+                        android:id="@+id/correo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
                         android:ems="10"
                         android:focusable="false"
-                        android:hint="Curicó"
+                        android:hint="prueba@prueba.com"
                         android:inputType="textPersonName"
                         android:textAppearance="@style/stitulo"
                         android:textSize="14sp" />
 
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/divider2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider"
-                    android:padding="20dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <TextView
-                        android:id="@+id/textView18"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Datos Encargado"
-                        android:textAppearance="@style/titulo"
-                        android:textSize="16sp" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -218,17 +166,17 @@
                         android:id="@+id/textView16"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Nombre Encargado"
+                        android:text="Contraseña"
                         android:textAppearance="@style/stitulo" />
 
                     <EditText
-                        android:id="@+id/nombreDeEncargado"
+                        android:id="@+id/contraseña"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
                         android:ems="10"
                         android:focusable="false"
-                        android:hint="Av. 5 de Julio #134"
+                        android:hint="*********"
                         android:inputType="textPersonName"
                         android:textAppearance="@style/stitulo"
                         android:textSize="14sp" />
@@ -243,28 +191,7 @@
                     android:paddingLeft="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:paddingRight="20dp">
-
-                    <TextView
-                        android:id="@+id/textView16"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Teléfono"
-                        android:textAppearance="@style/stitulo" />
-
-                    <EditText
-                        android:id="@+id/telefono"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:ems="10"
-                        android:focusable="false"
-                        android:hint="Curicó"
-                        android:inputType="textPersonName"
-                        android:textAppearance="@style/stitulo"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
+                    android:paddingRight="20dp"/>
 
             </LinearLayout>
 
