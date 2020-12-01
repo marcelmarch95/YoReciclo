@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         emailT = (EditText) findViewById(R.id.contraseña);
         passT = (EditText) findViewById(R.id.pass);
 
-        emailT.setText("jucarmarch70@gmail.com");
+        emailT.setText("marcelmarch95@gmail.com");
         passT.setText("123456");
 
         tvError = (TextView) findViewById(R.id.tvError);

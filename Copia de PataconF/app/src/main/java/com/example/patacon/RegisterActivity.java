@@ -1,6 +1,9 @@
 package com.example.patacon;
 
 import android.content.Intent;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
@@ -9,67 +12,63 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import Modelo.Generador;
 import Modelo.Recicladora;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button btnRegistrarme;
-    private EditText enombrecomercio;
-    private Spinner slocalidad;
-    private EditText edireccion;
+    private EditText enombre;
+    private EditText eapellidos;
+    private EditText etelefono;
+    private EditText ecorreo;
+    private EditText econtraseña;
+    private Generador g;
+    private ProgressBar progressBar;
 
-
-    private String uid;
-    private String nombreComercio;
-    private String categoria;
-    private String localidad;
-    private String direccion;
-
-
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
 
-        Spinner spinner = (Spinner) findViewById(R.id.localidad);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.localidades, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Registro de Empresa Recicladora");
+        getSupportActionBar().setTitle("Registro");
 
+        db = FirebaseFirestore.getInstance();
 
-        this.enombrecomercio = (EditText) findViewById(R.id.nombrecomercio);
-        this.slocalidad = (Spinner) findViewById(R.id.localidad);
-        this.edireccion = (EditText) findViewById(R.id.direccion);
+        this.enombre = (EditText) findViewById(R.id.nombre);
+        this.eapellidos = (EditText) findViewById(R.id.apellidos);
+        this.etelefono = (EditText) findViewById(R.id.telefono);
+        this.ecorreo = (EditText) findViewById(R.id.correo);
+        this.econtraseña = (EditText) findViewById(R.id.contraseña);
+        this.progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        this.progressBar.setVisibility(View.INVISIBLE);
+        this.progressBar.setIndeterminate(true);
 
 
         btnRegistrarme = (Button) findViewById(R.id.btnRegistrarme);
-        btnRegistrarme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //barra.setVisibility(View.VISIBLE);
-                if (validar()==false){
-                    btnRegistrarme.setEnabled(false);
-                    Recicladora  r = new Recicladora();
-                    r.setNombreEmpresa(enombrecomercio.getText().toString());
-                    //c.setCategoria(scategoria.getSelectedItem().toString());
-                    r.setLocalidad(slocalidad.getSelectedItem().toString());
-                    r.setDireccion(edireccion.getText().toString());
-
-                    Intent i = new Intent(getBaseContext(), Register2Activity.class);
-                    i.putExtra("recicladora",r);
-                    startActivity(i);
-                }
-            }
-        });
+        btnRegistrarme.setOnClickListener(this);
         btnRegistrarme.requestFocus();
     }
 
@@ -92,19 +91,94 @@ public class RegisterActivity extends AppCompatActivity {
 
         boolean error = false;
 
-        if (this.enombrecomercio.getText().toString().isEmpty()){
-            this.enombrecomercio.requestFocus();
-            this.enombrecomercio.setError("Ingrese nombre comercio");
+        if (this.enombre.getText().toString().isEmpty()){
+            this.enombre.requestFocus();
+            this.enombre.setError("Ingrese nombre");
             error = true;
         }
-        if (this.edireccion.getText().toString().isEmpty()){
-            this.edireccion.requestFocus();
-            this.edireccion.setError("Ingrese dirección");
+        if (this.eapellidos.getText().toString().isEmpty()){
+            this.eapellidos.requestFocus();
+            this.eapellidos.setError("Ingrese apellidos");
+            error = true;
+        }
+        if (this.etelefono.getText().toString().isEmpty()){
+            this.etelefono.requestFocus();
+            this.etelefono.setError("Ingrese teléfono");
+            error = true;
+        }
+        if (this.ecorreo.getText().toString().isEmpty()){
+            this.ecorreo.requestFocus();
+            this.ecorreo.setError("Ingrese correo");
+            error = true;
+        }
+        if (this.econtraseña.getText().toString().isEmpty()){
+            this.econtraseña.requestFocus();
+            this.econtraseña.setError("Ingrese contraseña");
             error = true;
         }
         return error;
     }
 
+
+    @Override
+    public void onClick(View view) {
+
+        if (view == this.btnRegistrarme){
+            if (validar() == false) {
+                this.progressBar.setVisibility(View.VISIBLE);
+                btnRegistrarme.setEnabled(false);
+                this.g = new Generador();
+                g.setNombre(enombre.getText().toString());
+                g.setApellido(eapellidos.getText().toString());
+                g.setNumeroTelefono(etelefono.getText().toString());
+                g.setCorreo(ecorreo.getText().toString());
+                g.setContraseña(econtraseña.getText().toString());
+
+                mAuth = FirebaseAuth.getInstance();
+
+                mAuth.createUserWithEmailAndPassword(g.getCorreo(), g.getContraseña())
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+
+                                    g.setUid(task.getResult().getUser().getUid());
+                                    g.setKeyNot("");
+
+                                    db.collection("generador").document(task.getResult().getUser().
+                                            getUid()).set(g).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            System.out.println("Usuario creado correctamente");
+                                            Intent i = new Intent(getBaseContext(), Informacion.class);
+                                            i.putExtra("result", true);
+                                            i.putExtra("mensaje", "Usuario creado correctamente");
+                                            startActivity(i);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            System.out.println("Error al agregar empresa");
+                                            Intent i = new Intent(getBaseContext(), Informacion.class);
+                                            i.putExtra("result", false);
+                                            i.putExtra("mensaje", "Error al crear usuario");
+                                            startActivity(i);
+                                        }
+                                    });
+                                } else {
+                                    Intent i = new Intent(getBaseContext(), Informacion.class);
+                                    i.putExtra("result", false);
+                                    i.putExtra("mensaje", "Error al crear usuario");
+                                    startActivity(i);
+                                }
+                            }
+                        });
+            }
+
+
+        }
+
+    }
 
 
 }

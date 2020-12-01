@@ -39,6 +39,7 @@ import com.google.firebase.iid.InstanceIdResult;
 import java.io.InputStream;
 import java.net.URL;
 
+import Modelo.Generador;
 import Modelo.Recicladora;
 
 public class PerfilComerciante extends AppCompatActivity {
@@ -49,7 +50,7 @@ public class PerfilComerciante extends AppCompatActivity {
     private TextView encargado;
     private TextView comercio;
     private ImageView logoComercio;
-    private Recicladora usuario;
+    private Generador usuario;
 
 
 
@@ -93,7 +94,7 @@ public class PerfilComerciante extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection("recicladora").document(user.getUid().toString());
+        final DocumentReference docRef = db.collection("generador").document(user.getUid().toString());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -164,23 +165,19 @@ public class PerfilComerciante extends AppCompatActivity {
 
     private void cargarVista(DocumentSnapshot document) {
         System.out.println("cargarvista metodo");
-        this.usuario = (Recicladora) document.toObject(Recicladora.class);
+        this.usuario = (Generador) document.toObject(Generador.class);
 
-        System.out.println("usuario comerciante: " + this.usuario.toString());
+        System.out.println("usuario generador: " + this.usuario.toString());
 
         try {
-            new PerfilComerciante.DownloadImageTask(this.logoComercio).execute(this.usuario.getFoto());
+            this.logoComercio.setImageResource(R.drawable.recicon);
         }
         catch (Exception e){
-            this.logoComercio.setImageResource(R.drawable.recicon);
-            System.out.println("Error al cargar foto: " + this.usuario.getFoto());
         }
 
-        System.out.println(this.usuario.getNombreEncargado());
-        System.out.println();
 
-        encargado.setText(this.usuario.getNombreEncargado());
-        comercio.setText(this.usuario.getNombreEmpresa());
+        encargado.setText(this.usuario.getNombre() +  " " + this.usuario.getApellido());
+        comercio.setText("Generador");
 
     }
 
