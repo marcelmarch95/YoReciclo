@@ -1,0 +1,161 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true"><![CDATA[
+    android:id="@+id/card_view1"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    app:contentPadding="4dp">
+
+    ]]>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/layoutFecha"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:id="@+id/textFecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="Hoy"
+                android:textAppearance="@style/titulo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <LinearLayout
+                android:id="@+id/layoutHora"
+                android:layout_width="58dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:id="@+id/textHora"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:text="15:30"
+                    android:textAppearance="@style/titulo"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/limagen"
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="10dp">
+
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:foregroundGravity="left"
+                    card_view:srcCompat="@drawable/patacon" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|left"
+                android:orientation="horizontal"
+                android:paddingRight="5dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:id="@+id/keyy"
+                        style="@style/titulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Destino: Patacon"
+                        android:textColor="#000"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/stitle"
+                        style="@style/stitulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Patente: BPZC-68"
+                        android:textColor="#000"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/sacar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center|right"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/mapButton"
+                            android:layout_width="45dp"
+                            android:layout_height="35dp"
+                            android:background="@drawable/maplomo20" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="right"
+                        android:orientation="horizontal"
+                        android:paddingLeft="5dp">
+
+                        <Button
+                            android:id="@+id/detalleButton"
+                            android:layout_width="45dp"
+                            android:layout_height="42dp"
+                            android:background="@drawable/documentf"
+                            android:paddingLeft="5dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
+
+

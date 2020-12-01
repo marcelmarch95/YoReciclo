@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_noti"
+        android:enabled="true"
+        android:icon="@drawable/notifi"
+        android:title="Notificaciones"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_curso"
+        android:enabled="true"
+        android:icon="@drawable/encurso"
+        android:title="Mis Despachos"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_report"
+        android:enabled="true"
+        android:icon="@drawable/report"
+        android:title="Reporte"
+        app:showAsAction="ifRoom" />
+</menu>
