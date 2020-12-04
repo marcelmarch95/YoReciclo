@@ -38,6 +38,7 @@ import com.example.patacon.SelectorDireccionMapaPunto;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListFragment;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListViewModel;
 import com.example.patacon.ui.puntosmapa.PuntosMapaFragment;
+import com.example.patacon.ui.reportepunto.ReportePuntoFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
@@ -53,6 +54,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import Modelo.ModeloVistaPunto;
 import Modelo.Punto;
 
 import static android.app.Activity.RESULT_OK;
@@ -95,7 +97,9 @@ public class EscanearPuntoFragment extends Fragment implements View.OnClickListe
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                puntos.add(document.toObject(Punto.class));
+                                Punto p = document.toObject(Punto.class);
+                                p.setId(document.getId());
+                                puntos.add(p);
                             }
                         } else {
                             System.out.println("Error al conectarse ");
@@ -204,6 +208,7 @@ public class EscanearPuntoFragment extends Fragment implements View.OnClickListe
                             //VERIFICAR SI ES VÁLIDO COMO ID DE PUNTO LIMPIO
 
                             Punto reportar = null;
+                            System.out.println("el token en else es : " + token);
 
                             for (Punto p: puntos){
                                 if (p.getId().compareTo(token)==0){
@@ -212,7 +217,33 @@ public class EscanearPuntoFragment extends Fragment implements View.OnClickListe
                             }
 
                             if (reportar!=null){
-                                
+                                System.out.println("Punto encontrado: " + reportar.toString());
+                                Bundle bundle = new Bundle();
+
+
+                                FragmentManager fragmentManager = getFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                                ModeloVistaPunto mvp = new ModeloVistaPunto();
+                                mvp.setPid(reportar.getPid());
+                                mvp.setObservacion(reportar.getObservacion());
+                                mvp.setId(reportar.getId());
+                                mvp.setIsvidrio(reportar.isIsvidrio());
+                                mvp.setIsplastico(reportar.isIsplastico());
+                                mvp.setIslatas(reportar.isIslatas());
+                                mvp.setLng(reportar.getLng());
+                                mvp.setLat(reportar.getLat());
+                                mvp.setArea(reportar.getArea());
+                                mvp.setRecinto(reportar.getRecinto());
+                                mvp.setSector(reportar.getSector());
+                                mvp.setDireccion(reportar.getDireccion());
+
+
+                                bundle.putSerializable("punto", mvp);
+                                Fragment lp = new ReportePuntoFragment();
+                                lp.setArguments(bundle);
+                                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                fragmentTransaction.commit();
                             }
                         }
 
@@ -222,6 +253,7 @@ public class EscanearPuntoFragment extends Fragment implements View.OnClickListe
                                     synchronized (this) {
                                         wait(5000);
                                         // limpiamos el token
+                                        System.out.println("limpiando token");
                                         tokenanterior = "";
                                     }
                                 } catch (InterruptedException e) {
