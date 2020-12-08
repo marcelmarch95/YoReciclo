@@ -1,7 +1,6 @@
-package com.example.patacon.ui.escanearpunto.agregarpunto;
+package com.example.patacon.ui.escanearpunto2;
 
 import android.Manifest;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -22,22 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.example.patacon.MainActivity;
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
-import com.example.patacon.SelectorDireccionMapaPunto;
-import com.example.patacon.ui.optionproducts.OptionsPuntosListFragment;
-import com.example.patacon.ui.optionproducts.OptionsPuntosListViewModel;
-import com.example.patacon.ui.puntosmapa.PuntosMapaFragment;
 import com.example.patacon.ui.reportepunto.ReportePuntoFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -56,8 +43,6 @@ import java.util.ArrayList;
 
 import Modelo.ModeloVistaPunto;
 import Modelo.Punto;
-
-import static android.app.Activity.RESULT_OK;
 
 public class EscanearPuntoFragment extends Fragment implements View.OnClickListener {
 

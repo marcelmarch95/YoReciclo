@@ -1,4 +1,4 @@
-package com.example.patacon.ui.escanearpunto.agregarpunto;
+package com.example.patacon.ui.escanearpunto2;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;

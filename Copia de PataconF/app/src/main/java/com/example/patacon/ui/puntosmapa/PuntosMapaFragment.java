@@ -67,6 +67,7 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
     private Button volver;
     private Button verpunto;
     private Punto puntosel;
+    private LinearLayout la1;
 
     MapView mMapView;
     private GoogleMap googleMap;
@@ -90,6 +91,8 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userid = user.getUid();
 
+        this.la1 = root.findViewById(R.id.la1);
+        this.la1.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
 
 
         //this.volver = root.findViewById(R.id.volver);
@@ -115,7 +118,11 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
 
 
         mMapView = (MapView) root.findViewById(R.id.mapView);
+        mMapView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         mMapView.onCreate(savedInstanceState);
+
+        la1.requestLayout();
+        mMapView.requestLayout();
 
         mMapView.onResume(); // needed to get the map to display immediately
 
@@ -156,6 +163,16 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
 
                           lay1.setVisibility(View.VISIBLE);
                           lay2.setVisibility(View.VISIBLE);
+
+                          la1.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+                          float density = getContext().getResources().getDisplayMetrics().density;
+                          int dp = Math.round((float) 300 * density);
+
+                          mMapView.getLayoutParams().height = dp;
+
+                          la1.requestLayout();
+                          mMapView.requestLayout();
 
                           tvdireccion.setText(punto.getDireccion());
                           tvarea.setText(punto.getArea());
@@ -310,4 +327,6 @@ public class PuntosMapaFragment extends Fragment implements View.OnClickListener
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
+
+
 }

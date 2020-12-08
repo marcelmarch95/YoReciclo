@@ -17,24 +17,38 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.patacon.Informacion;
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
+import com.example.patacon.ui.cargando.CargandoFragment;
 import com.example.patacon.ui.informacion.InformacionFragment;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListViewModel;
 import com.example.patacon.ui.puntosmapa.PuntosMapaFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
 import Modelo.ModeloVistaPunto;
 import Modelo.Punto;
+import Modelo.Reporte;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ReportePunto2Fragment extends Fragment implements View.OnClickListener {
 
@@ -66,6 +80,8 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
     private ModeloVistaPunto punto;
     private String motivoreporte;
 
+    private Reporte reporte;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)  {
@@ -77,7 +93,7 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
         this.motivoreporte = getArguments().getString("motivo");
         title = (TextView) root.findViewById(R.id.title);
 
-
+        mAuth = FirebaseAuth.getInstance();
 
         this.motivo = root.findViewById(R.id.motivo);
         this.motivo.setText(this.motivoreporte);
@@ -105,6 +121,10 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
 
             }
         });
+
+        db = FirebaseFirestore.getInstance();
+
+        this.reporte = new Reporte();
 
         if (this.motivoreporte.compareTo("otro")==0) {
 
@@ -155,17 +175,6 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
         this.continuar.setOnClickListener(this);
 
 
-
-        //this.eliminarfoto = (Button) root.findViewById(R.id.eliminarfoto);
-        //this.eliminarfoto.setOnClickListener(this);
-
-        /*this.selectfoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });*/
-
         ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Reporte Punto");
 
         return root;
@@ -177,27 +186,36 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
         startActivityForResult(gallery, PICK_IMAGE);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
+            imageUri = data.getData();
+            foto.setImageURI(imageUri);
+            eliminarfoto.setEnabled(true);
+        }
+    }
 
 
     @Override
     public void onClick(View view) {
         if (view == this.eliminarfoto){
-            this.foto.setImageResource(R.drawable.imagen2);
+            if (this.motivoreporte.compareTo("otro")==0) {
+                this.foto.setImageResource(R.drawable.otro);
+            }
+            else if (this.motivoreporte.compareTo("inexistente")==0) {
+                this.foto.setImageResource(R.drawable.inexistente);
+            }
+            else if (this.motivoreporte.compareTo("lleno")==0) {
+                this.foto.setImageResource(R.drawable.full);
+            }
+            else if (this.motivoreporte.compareTo("deteriorado")==0){
+                this.foto.setImageResource(R.drawable.roto);
+            }
             this.eliminarfoto.setEnabled(false);
         }
 
         if (view==this.continuar){
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            InformacionFragment fi = new InformacionFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("mensaje", "Reporte enviado correctamente");
-            bundle.putBoolean("estado", true);
-            fi.setArguments(bundle);
-
-            fragmentTransaction.replace(R.id.nav_host_fragment, fi);
-            fragmentTransaction.commit();
+            this.crearReporte();
         }
 
         if (view == this.volver){
@@ -233,6 +251,148 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
     }
 
 
+    private void crearReporte(){
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+        CargandoFragment cf = new CargandoFragment();
+        fragmentTransaction.replace(R.id.nav_host_fragment, cf);
+        fragmentTransaction.commit();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        if (imageUri.getLastPathSegment()==null){
+            db.collection("reporte")
+                    .add(reporte)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                            System.out.println("Reporte creado correctamente con ID: " + documentReference.getId());
+                            Toast.makeText(getContext(),"Reporte creado correctamente con ID: " + documentReference.getId(),Toast.LENGTH_SHORT).show();
+
+                            InformacionFragment fi = new InformacionFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("mensaje", "Reporte enviado correctamente");
+                            bundle.putBoolean("estado", true);
+                            fi.setArguments(bundle);
+
+                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+
+                            fragmentTransaction2.replace(R.id.nav_host_fragment, fi);
+                            fragmentTransaction2.commit();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                            System.out.println("Error al crear el reporte");
+                            Toast.makeText(getContext(),"Error al crear reporte!",Toast.LENGTH_SHORT).show();
+
+                            InformacionFragment fi = new InformacionFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("mensaje", "Error al enviar reporte");
+                            bundle.putBoolean("estado", false);
+                            fi.setArguments(bundle);
+
+                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+
+                            fragmentTransaction2.replace(R.id.nav_host_fragment, fi);
+                            fragmentTransaction2.commit();
+                        }
+                    });
+        }
+
+        else {
+            StorageReference riversRef = storageRef.child("images/"+mAuth.getUid()+"/" + imageUri.getLastPathSegment());
+            UploadTask uploadTask = riversRef.putFile(imageUri);
+
+            //this.progressBar.setVisibility(View.VISIBLE);
+
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    System.out.println("error al subir : " + exception.toString());
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                    {
+                        @Override
+                        public void onSuccess(Uri downloadUrl)
+                        {
+                            reporte.setFoto(downloadUrl.toString());
+                            System.out.println("subida correctamente link: " + reporte.getFoto());
+
+                            db.collection("reporte")
+                                    .add(reporte)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                            System.out.println("Reporte creado correctamente con ID: " + documentReference.getId());
+                                            //Toast.makeText(getContext(),"Reporte creado correctamente con ID: " + documentReference.getId(),Toast.LENGTH_SHORT).show();
+
+
+                                            InformacionFragment fi = new InformacionFragment();
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("mensaje", "Reporte enviado correctamente");
+                                            bundle.putBoolean("estado", true);
+                                            fi.setArguments(bundle);
+
+                                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+
+                                            fragmentTransaction2.replace(R.id.nav_host_fragment, fi);
+                                            fragmentTransaction2.commit();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                            System.out.println("Error al crear el reporte");
+                                            //Toast.makeText(getContext(),"Error al crear reporte!",Toast.LENGTH_SHORT).show();
+
+
+                                            InformacionFragment fi = new InformacionFragment();
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("mensaje", "Error al enviar reporte");
+                                            bundle.putBoolean("estado", false);
+                                            fi.setArguments(bundle);
+
+                                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+
+                                            fragmentTransaction2.replace(R.id.nav_host_fragment, fi);
+                                            fragmentTransaction2.commit();
+                                        }
+                                    });
+
+                        }
+                    });
+
+                }
+
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    System.out.println("Upload is " + progress + "% done");
+                }
+            }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                    System.out.println("Upload is paused");
+                }
+            });
+        }
+
+
+    }
 
 }
