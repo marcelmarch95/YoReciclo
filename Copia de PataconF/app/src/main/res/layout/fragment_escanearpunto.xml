@@ -13,7 +13,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
         <SurfaceView
             android:id="@+id/camera_view"

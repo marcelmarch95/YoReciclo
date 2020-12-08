@@ -149,12 +149,12 @@
                         android:padding="10dp">
 
                         <TextView
-                            android:id="@+id/textView27"
+                            android:id="@+id/motivo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="Seleccionar motivo de reporte"
+                            android:text="Motivo de reporte"
                             android:textAlignment="center"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -162,111 +162,76 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="150dp"
+                            android:layout_height="96dp"
+                            app:srcCompat="@drawable/market" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_gravity="center"
                             android:gravity="center"
                             android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="150dp"
-                                android:layout_height="wrap_content"
+                            <Button
+                                android:id="@+id/selectfoto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:orientation="vertical">
+                                android:text="SELECCIONAR FOTO"
+                                android:textSize="10sp" />
 
-                                <Button
-                                    android:id="@+id/button2"
-                                    android:layout_width="70dp"
-                                    android:layout_height="80dp"
-                                    android:layout_gravity="center"
-                                    android:background="@drawable/full"
-                                    android:gravity="center" />
-
-                                <RadioButton
-                                    android:id="@+id/lleno"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="Punto Lleno"
-                                    android:textAlignment="center" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="150dp"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <Button
-                                    android:id="@+id/button3"
-                                    android:layout_width="70dp"
-                                    android:layout_height="80dp"
-                                    android:layout_gravity="center"
-                                    android:background="@drawable/roto" />
-
-                                <RadioButton
-                                    android:id="@+id/deteriorado"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Punto Deteriorado"
-                                    android:textAlignment="center" />
-
-                            </LinearLayout>
+                            <Button
+                                android:id="@+id/eliminarfoto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:enabled="false"
+                                android:gravity="center"
+                                android:text="Eliminar Foto"
+                                android:textSize="10sp" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:paddingTop="20dp">
+                            android:orientation="vertical"
+                            android:paddingTop="10dp">
 
-                            <LinearLayout
-                                android:layout_width="150dp"
+                            <TextView
+                                android:id="@+id/textView28"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:text="Comentarios adicionales"
+                                android:textAlignment="center"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
 
-                                <Button
-                                    android:id="@+id/button4"
-                                    android:layout_width="70dp"
-                                    android:layout_height="80dp"
-                                    android:layout_gravity="center"
-                                    android:background="@drawable/inexistente"
-                                    android:gravity="center" />
-
-                                <RadioButton
-                                    android:id="@+id/inexistente"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Punto Inexistente" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="150dp"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <Button
-                                    android:id="@+id/button5"
-                                    android:layout_width="80dp"
-                                    android:layout_height="80dp"
-                                    android:layout_gravity="center"
-                                    android:background="@drawable/otro" />
-
-                                <RadioButton
-                                    android:id="@+id/otro"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="Otro" />
-                            </LinearLayout>
+                            <EditText
+                                android:id="@+id/observacion"
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:gravity="top|left"
+                                android:hint=""
+                                android:inputType="textMultiLine"
+                                android:lines="3"
+                                android:maxLines="3"
+                                android:minLines="3"
+                                android:scrollbars="none"
+                                android:textAppearance="@style/stitulo"
+                                android:textSize="14sp" />
                         </LinearLayout>
+
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -312,7 +277,7 @@
                         android:layout_height="40dp"
                         android:layout_weight="1"
                         android:background="@drawable/border2"
-                        android:text="CONTINUAR" />
+                        android:text="ENVIAR" />
                 </LinearLayout>
 
             </LinearLayout>

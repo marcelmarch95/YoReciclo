@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.patacon.ui.home.HomeFragment;
 import com.example.patacon.ui.puntos.PuntosListFragment;
 import com.example.patacon.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,6 +32,7 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
 
     private Button finalizar;
     private FirebaseFirestore db;
+    private String mensaje;
     private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,6 +49,8 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
         String msj =  getArguments().getString("mensaje");
         boolean result =  getArguments().getBoolean("estado");
 
+        this.mensaje = msj;
+
         if (!result){
             imageView.setImageResource(R.drawable.error);
         }
@@ -59,49 +63,63 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         if (view == this.finalizar) {
-            db = FirebaseFirestore.getInstance();
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            db.collection("punto")
-                    .whereEqualTo("pid", user.getUid())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Punto p = document.toObject(Punto.class);
-                                    ModeloVistaPunto pu = new ModeloVistaPunto();
-                                    pu.setDireccion(p.getDireccion());
-                                    pu.setLat(p.getLat());
-                                    pu.setLng(p.getLng());
-                                    pu.setSector(p.getSector());
-                                    pu.setRecinto(p.getRecinto());
-                                    pu.setArea(p.getArea());
-                                    pu.setFoto(p.getFoto());
-                                    pu.setIslatas(p.isIslatas());
-                                    pu.setIsplastico(p.isIsplastico());
-                                    pu.setIsvidrio(p.isIsvidrio());
-                                    pu.setId(document.getId());
-                                    pu.setObservacion(p.getObservacion());
-                                    data.add(pu);
-                                }
+            if (this.mensaje.compareTo("Reporte enviado correctamente")==0){
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("puntos", data);
+                HomeFragment lp = new HomeFragment();
+                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                fragmentTransaction.commit();
+            }
 
-                                FragmentManager fragmentManager = getFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            else {
+                db = FirebaseFirestore.getInstance();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                                Fragment lp = new PuntosListFragment();
-                                lp.setArguments(bundle);
-                                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                                fragmentTransaction.commit();
-                            } else {
-
+                db.collection("punto")
+                .whereEqualTo("pid", user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Punto p = document.toObject(Punto.class);
+                                ModeloVistaPunto pu = new ModeloVistaPunto();
+                                pu.setDireccion(p.getDireccion());
+                                pu.setLat(p.getLat());
+                                pu.setLng(p.getLng());
+                                pu.setSector(p.getSector());
+                                pu.setRecinto(p.getRecinto());
+                                pu.setArea(p.getArea());
+                                pu.setFoto(p.getFoto());
+                                pu.setIslatas(p.isIslatas());
+                                pu.setIsplastico(p.isIsplastico());
+                                pu.setIsvidrio(p.isIsvidrio());
+                                pu.setId(document.getId());
+                                pu.setObservacion(p.getObservacion());
+                                data.add(pu);
                             }
+
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("puntos", data);
+
+                            FragmentManager fragmentManager = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                            Fragment lp = new PuntosListFragment();
+                            lp.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                            fragmentTransaction.commit();
+                        } else {
+
                         }
-                    });
+                    }
+                });
+            }
+
+
         }
 
 
