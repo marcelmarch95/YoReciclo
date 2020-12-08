@@ -1,4 +1,4 @@
-package com.example.patacon.ui.escanearpunto2;
+package com.example.patacon.ui.escanearpunto;
 
 import android.Manifest;
 import android.content.Intent;
