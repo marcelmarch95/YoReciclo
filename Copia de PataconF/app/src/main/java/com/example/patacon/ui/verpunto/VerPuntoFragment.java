@@ -1,7 +1,10 @@
-package com.example.patacon.ui.eliminarpunto;
+package com.example.patacon.ui.verpunto;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,13 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.patacon.ui.cargando.CargandoFragment;
-import com.example.patacon.ui.informacion.InformacionFragment;
-import com.example.patacon.ui.puntos.PuntosListFragment;
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListViewModel;
 import com.example.patacon.ui.puntosmapa.PuntosMapaFragment;
+import com.example.patacon.ui.reportepunto.ReportePuntoFragment;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -32,8 +34,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,10 +43,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import Modelo.GPSTracker;
 import Modelo.ModeloVistaPunto;
 import Modelo.Punto;
 
-public class EliminarPuntoFragment extends Fragment implements View.OnClickListener{
+public class VerPuntoFragment extends Fragment implements View.OnClickListener, LocationListener{
 
     private OptionsPuntosListViewModel homeViewModel;
     private TextView title;
@@ -62,9 +63,12 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
     private ArrayList<Punto> data2 = new ArrayList<>();
 
     private Button volver;
+    private Button reportar;
 
     MapView mMapView;
     private GoogleMap googleMap;
+    private TextView distancia;
+    private Location location;
 
     private FirebaseFirestore db;
     private Uri imageUri;
@@ -77,7 +81,7 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
                              ViewGroup container, Bundle savedInstanceState)  {
         homeViewModel =
                 ViewModelProviders.of(this).get(OptionsPuntosListViewModel.class);
-        root = inflater.inflate(R.layout.fragment_eliminarpunto, container, false);
+        root = inflater.inflate(R.layout.fragment_verpunto, container, false);
 
         this.punto = (ModeloVistaPunto) getArguments().getSerializable("punto");
         title = (TextView) root.findViewById(R.id.title);
@@ -90,6 +94,49 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
         this.tvrecinto = root.findViewById(R.id.tvrecinto);
         this.tvsector = root.findViewById(R.id.tvsector);
 
+        this.distancia = root.findViewById(R.id.distancia);
+
+        this.reportar = root.findViewById(R.id.reportar);
+        this.reportar.setOnClickListener(this);
+
+        // check if GPS enabled
+        GPSTracker gpsTracker = new GPSTracker(getContext());
+
+        if (gpsTracker.getIsGPSTrackingEnabled())
+        {
+            Location locationA = new Location("point A");
+
+            locationA.setLatitude(gpsTracker.latitude);
+            locationA.setLongitude(gpsTracker.longitude);
+
+            Location locationB = new Location("point B");
+
+            locationB.setLatitude(Double.valueOf(this.punto.getLat()));
+            locationB.setLongitude(Double.valueOf(this.punto.getLng()));
+
+            System.out.println("Location A: " + locationA.getLatitude() + " " + locationA.getLongitude());
+            System.out.println("Location B: " + locationB.getLatitude() + " " + locationB.getLongitude());
+
+            float distance = locationA.distanceTo(locationB);
+            int dis = math(distance);
+
+            if (dis>1000){
+                int km = dis/1000;
+                int dif = dis-(km*1000);
+                this.distancia.setText("A " + km + "km " + dif + "m de tu ubicacion");
+            }
+            else {
+                this.distancia.setText("A " + dis + " metros de tu ubicación");
+            }
+
+        }
+        else
+        {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gpsTracker.showSettingsAlert();
+        }
 
         System.out.println("Direccion en ver punto: " + punto.getDireccion());
         this.tvdireccion.setText(punto.getDireccion());
@@ -172,9 +219,16 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
 
         ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Detalle Punto");
 
+
+
         return root;
     }
 
+    public static int math(float f) {
+        int c = (int) ((f) + 0.5f);
+        float n = f + 0.5f;
+        return (n - c) % 2 == 0 ? (int) f : c;
+    }
 
 
     @Override
@@ -208,6 +262,34 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
                         }
                     });
 
+        }
+
+        if (view == this.reportar){
+            Bundle bundle = new Bundle();
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            ModeloVistaPunto mvp = new ModeloVistaPunto();
+            mvp.setPid(punto.getPid());
+            mvp.setObservacion(punto.getObservacion());
+            mvp.setId(punto.getId());
+            mvp.setIsvidrio(punto.isIsvidrio());
+            mvp.setIsplastico(punto.isIsplastico());
+            mvp.setIslatas(punto.isIslatas());
+            mvp.setLng(punto.getLng());
+            mvp.setLat(punto.getLat());
+            mvp.setArea(punto.getArea());
+            mvp.setRecinto(punto.getRecinto());
+            mvp.setSector(punto.getSector());
+            mvp.setDireccion(punto.getDireccion());
+
+
+            bundle.putSerializable("punto", mvp);
+            Fragment lp = new ReportePuntoFragment();
+            lp.setArguments(bundle);
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
         }
 
         /*if (view==this.eliminar){
@@ -297,4 +379,8 @@ public class EliminarPuntoFragment extends Fragment implements View.OnClickListe
         editText.setBackgroundColor(Color.TRANSPARENT);
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
 }
