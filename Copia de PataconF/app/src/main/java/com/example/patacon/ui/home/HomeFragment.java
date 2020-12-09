@@ -123,7 +123,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    data2.add(document.toObject(Punto.class));
+                                    Punto p = document.toObject(Punto.class);
+                                    p.setId(document.getId());
+                                    data2.add(p);
                                 }
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("puntos", data2);
