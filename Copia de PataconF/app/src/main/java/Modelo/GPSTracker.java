@@ -1,6 +1,7 @@
 package Modelo;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,7 +33,7 @@ import com.example.patacon.R;
  *
  */
 
-public class GPSTracker extends Service implements LocationListener {
+public class GPSTracker extends Service implements LocationListener, Serializable {
 
     // Get Class Name
     private static String TAG = GPSTracker.class.getName();

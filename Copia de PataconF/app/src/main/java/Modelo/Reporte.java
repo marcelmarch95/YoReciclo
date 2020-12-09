@@ -1,8 +1,9 @@
 package Modelo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Reporte {
+public class Reporte implements Serializable {
 
     private String foto;
     private String idPunto;

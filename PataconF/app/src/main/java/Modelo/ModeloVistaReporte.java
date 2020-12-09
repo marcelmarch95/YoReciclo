@@ -1,6 +1,8 @@
 package Modelo;
 
-public class ModeloVistaReporte {
+import java.io.Serializable;
+
+public class ModeloVistaReporte implements Serializable {
 
     private Reporte reporte;
     private Punto punto;
