@@ -18,7 +18,7 @@ import com.example.patacon.ModeloVistaPuntoAdapter;
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
 import com.example.patacon.ui.editarpunto.EditarPuntoFragment;
-import com.example.patacon.ui.eliminarpunto.EliminarPuntoFragment;
+import com.example.patacon.ui.verpunto.VerPuntoFragment;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListFragment;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -136,7 +136,7 @@ public class PuntosListFragment extends Fragment implements View.OnClickListener
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                Fragment lp = new EliminarPuntoFragment();
+                Fragment lp = new VerPuntoFragment();
                 lp.setArguments(bundle);
                 fragmentTransaction.replace(R.id.nav_host_fragment, lp);
                 fragmentTransaction.commit();

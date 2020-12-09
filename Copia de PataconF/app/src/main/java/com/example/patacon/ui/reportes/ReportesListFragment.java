@@ -14,23 +14,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import com.example.patacon.ModeloVistaPuntoAdapter;
 import com.example.patacon.ModeloVistaReporteAdapter;
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
-import com.example.patacon.ui.editarpunto.EditarPuntoFragment;
-import com.example.patacon.ui.eliminarpunto.EliminarPuntoFragment;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListFragment;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
-import Modelo.ModeloVistaPunto;
 import Modelo.ModeloVistaReporte;
-import Modelo.Reporte;
 
 
 public class ReportesListFragment extends Fragment implements View.OnClickListener {

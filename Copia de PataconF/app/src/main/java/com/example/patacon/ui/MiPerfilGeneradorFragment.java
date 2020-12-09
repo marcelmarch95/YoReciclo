@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.patacon.MainActivity;
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
+import com.example.patacon.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -88,6 +89,7 @@ public class MiPerfilGeneradorFragment extends Fragment implements View.OnClickL
 
         this.estadocorreo = root.findViewById(R.id.estadocorreo);
         this.imgestadocorreo = root.findViewById(R.id.imgestadocorreo);
+        this.imgestadocorreo.setOnClickListener(this);
 
         if (mAuth.getCurrentUser().isEmailVerified()){
             this.estadocorreo.setText("Correo verificado");
@@ -173,6 +175,21 @@ public class MiPerfilGeneradorFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+
+        if (view == this.imgestadocorreo){
+            mAuth = FirebaseAuth.getInstance();
+            if (!mAuth.getCurrentUser().isEmailVerified()){
+                mAuth.getCurrentUser().sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Email de verificacion enviado correctamente", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        }
 
         if(view == this.guardar){
             this.guardar.setEnabled(false);

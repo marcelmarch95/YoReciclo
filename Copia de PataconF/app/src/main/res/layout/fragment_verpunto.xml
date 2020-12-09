@@ -268,12 +268,12 @@
                             android:orientation="vertical"
                             android:paddingTop="5dp">
 
-                            <ImageView
-                                android:id="@+id/imageView5"
+                            <TextView
+                                android:id="@+id/distancia"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:srcCompat="@drawable/mediosviaje" />
-
+                                android:text="A 300mts de tu ubicación"
+                                android:textAlignment="center" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -284,11 +284,11 @@
                             android:orientation="vertical"
                             android:paddingTop="5dp">
 
-                            <ImageView
-                                android:id="@+id/imageView6"
+                            <Button
+                                android:id="@+id/reportar"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
-                                app:srcCompat="@drawable/rep" />
+                                android:background="@drawable/reportar" />
 
                             <TextView
                                 android:id="@+id/textView11"

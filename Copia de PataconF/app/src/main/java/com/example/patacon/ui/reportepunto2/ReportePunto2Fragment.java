@@ -281,13 +281,28 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        this.fecha = String.valueOf(Calendar.getInstance().getTime().getDate()) + "/"+
-                String.valueOf((Calendar.getInstance().getTime().getMonth()+1)) + "/" +
-                String.valueOf(Calendar.getInstance().getTime().getYear()+1900);
+        String dia = String.valueOf(Calendar.getInstance().getTime().getDate());
+        String mes = String.valueOf((Calendar.getInstance().getTime().getMonth()+1));
+        String año = String.valueOf(Calendar.getInstance().getTime().getYear()+1900);
 
-        this.hora = String.valueOf(Calendar.getInstance().getTime().getHours()) + ":" +
-                String.valueOf(Calendar.getInstance().getTime().getMinutes()) + ":" +
-                String.valueOf(Calendar.getInstance().getTime().getSeconds());
+        String horaa = String.valueOf(Calendar.getInstance().getTime().getHours());
+        String minuto = String.valueOf(Calendar.getInstance().getTime().getMinutes());
+        String segundo = String.valueOf(Calendar.getInstance().getTime().getSeconds());
+
+        if (Integer.valueOf(dia)<10)
+            dia = "0"+dia;
+        if (Integer.valueOf(mes)<10)
+            mes = "0"+mes;
+
+        if (Integer.valueOf(horaa)<10)
+            horaa = "0"+horaa;
+        if (Integer.valueOf(minuto)<10)
+            minuto = "0" + minuto;
+        if (Integer.valueOf(segundo)<10)
+            segundo = "0" + segundo;
+
+        this.fecha = dia + "/"+ mes + "/" + año;
+        this.hora = horaa + ":" + minuto + ":" + segundo;
 
 
         System.out.println("Finalmente fecha y hora: " + fecha + " " + hora);
