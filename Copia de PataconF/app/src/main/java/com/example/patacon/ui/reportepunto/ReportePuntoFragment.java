@@ -84,6 +84,7 @@ public class ReportePuntoFragment extends Fragment implements View.OnClickListen
     private Button volver;
     private Button continuar;
     private boolean stateMap;
+    private TextView error;
 
     private RadioButton lleno;
     private RadioButton deteriorado;
@@ -111,6 +112,8 @@ public class ReportePuntoFragment extends Fragment implements View.OnClickListen
         userid = user.getUid();
 
         this.tvdireccion = root.findViewById(R.id.tvdireccion);
+        this.error = root.findViewById(R.id.error);
+        this.error.setVisibility(View.INVISIBLE);
 
         this.otro = root.findViewById(R.id.otro);
         this.inexistente = root.findViewById(R.id.inexistente);
@@ -123,6 +126,7 @@ public class ReportePuntoFragment extends Fragment implements View.OnClickListen
                 inexistente.setChecked(false);
                 lleno.setChecked(false);
                 deteriorado.setChecked(false);
+                error.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -132,6 +136,7 @@ public class ReportePuntoFragment extends Fragment implements View.OnClickListen
                 otro.setChecked(false);
                 lleno.setChecked(false);
                 deteriorado.setChecked(false);
+                error.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -141,6 +146,7 @@ public class ReportePuntoFragment extends Fragment implements View.OnClickListen
                 otro.setChecked(false);
                 lleno.setChecked(false);
                 deteriorado.setChecked(true);
+                error.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -150,6 +156,7 @@ public class ReportePuntoFragment extends Fragment implements View.OnClickListen
                 otro.setChecked(false);
                 lleno.setChecked(true);
                 deteriorado.setChecked(false);
+                error.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -248,23 +255,28 @@ public class ReportePuntoFragment extends Fragment implements View.OnClickListen
         if (view==this.continuar){
             Bundle bundle = new Bundle();
 
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            if (this.deteriorado.isChecked() || this.inexistente.isChecked() || this.otro.isChecked() || this.lleno.isChecked()) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            bundle.putSerializable("punto", this.punto);
-            if (this.deteriorado.isChecked())
-                bundle.putSerializable("motivo", "deteriorado");
-            else if (this.inexistente.isChecked())
-                bundle.putSerializable("motivo", "inexistente");
-            else if (this.otro.isChecked())
-                bundle.putSerializable("motivo", "otro");
-            else if (this.lleno.isChecked())
-                bundle.putSerializable("motivo", "lleno");
+                bundle.putSerializable("punto", this.punto);
+                if (this.deteriorado.isChecked())
+                    bundle.putSerializable("motivo", "deteriorado");
+                else if (this.inexistente.isChecked())
+                    bundle.putSerializable("motivo", "inexistente");
+                else if (this.otro.isChecked())
+                    bundle.putSerializable("motivo", "otro");
+                else if (this.lleno.isChecked())
+                    bundle.putSerializable("motivo", "lleno");
 
-            Fragment lp = new ReportePunto2Fragment();
-            lp.setArguments(bundle);
-            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-            fragmentTransaction.commit();
+                Fragment lp = new ReportePunto2Fragment();
+                lp.setArguments(bundle);
+                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                fragmentTransaction.commit();
+            }
+            else {
+                this.error.setVisibility(View.VISIBLE);
+            }
         }
     }
 

@@ -73,6 +73,8 @@ public class PerfilComerciante extends AppCompatActivity {
                 .build();
 
 
+        //Navigation.findNavController(view).navigate(R.id.confirmationAction, bundle);
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -166,6 +168,7 @@ public class PerfilComerciante extends AppCompatActivity {
     private void cargarVista(DocumentSnapshot document) {
         System.out.println("cargarvista metodo");
         this.usuario = (Generador) document.toObject(Generador.class);
+
 
         System.out.println("usuario generador: " + this.usuario.toString());
 

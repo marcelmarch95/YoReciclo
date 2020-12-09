@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -43,6 +44,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import Modelo.ModeloVistaPunto;
 import Modelo.Punto;
@@ -62,6 +65,9 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
     private String userid;
     private TextView motivo;
     private ArrayList<Punto> data2 = new ArrayList<>();
+    private String fecha;
+    private String hora;
+    private EditText comentarios;
 
     private Button volver;
     private boolean stateMap;
@@ -98,6 +104,8 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
         this.motivo = root.findViewById(R.id.motivo);
         this.motivo.setText(this.motivoreporte);
 
+        this.comentarios = root.findViewById(R.id.comentarios);
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userid = user.getUid();
 
@@ -109,6 +117,17 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
         this.volver = root.findViewById(R.id.volver);
 
         this.volver.setOnClickListener(this);
+
+        this.fecha = String.valueOf(Calendar.getInstance().getTime().getDate()) + "/"+
+                String.valueOf((Calendar.getInstance().getTime().getMonth()+1)) + "/" +
+                String.valueOf(Calendar.getInstance().getTime().getYear()+1900);
+
+        this.hora = String.valueOf(Calendar.getInstance().getTime().getHours()) + ":" +
+                String.valueOf(Calendar.getInstance().getTime().getMinutes()) + ":" +
+                String.valueOf(Calendar.getInstance().getTime().getSeconds());
+
+
+        System.out.println("Finalmente fecha y hora: " + fecha + " " + hora);
 
         System.out.println("Observ: " + punto.getObservacion());
         System.out.println("id: "  +punto.getId());
@@ -262,7 +281,26 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        if (imageUri.getLastPathSegment()==null){
+        this.fecha = String.valueOf(Calendar.getInstance().getTime().getDate()) + "/"+
+                String.valueOf((Calendar.getInstance().getTime().getMonth()+1)) + "/" +
+                String.valueOf(Calendar.getInstance().getTime().getYear()+1900);
+
+        this.hora = String.valueOf(Calendar.getInstance().getTime().getHours()) + ":" +
+                String.valueOf(Calendar.getInstance().getTime().getMinutes()) + ":" +
+                String.valueOf(Calendar.getInstance().getTime().getSeconds());
+
+
+        System.out.println("Finalmente fecha y hora: " + fecha + " " + hora);
+
+        reporte.setFecha(this.fecha);
+        reporte.setHora(this.hora);
+        reporte.setIdPunto(this.punto.getId());
+        reporte.setMotivo(this.motivoreporte);
+        reporte.setComentarios(this.comentarios.getText().toString());
+        reporte.setIdGenerador(this.mAuth.getUid());
+
+        if (imageUri==null){
+            reporte.setFoto("null");
             db.collection("reporte")
                     .add(reporte)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -270,7 +308,6 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
                         public void onSuccess(DocumentReference documentReference) {
                             //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                             System.out.println("Reporte creado correctamente con ID: " + documentReference.getId());
-                            Toast.makeText(getContext(),"Reporte creado correctamente con ID: " + documentReference.getId(),Toast.LENGTH_SHORT).show();
 
                             InformacionFragment fi = new InformacionFragment();
                             Bundle bundle = new Bundle();
@@ -289,7 +326,6 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
                         public void onFailure(@NonNull Exception e) {
                             //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                             System.out.println("Error al crear el reporte");
-                            Toast.makeText(getContext(),"Error al crear reporte!",Toast.LENGTH_SHORT).show();
 
                             InformacionFragment fi = new InformacionFragment();
                             Bundle bundle = new Bundle();
@@ -382,6 +418,8 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    int intValue = (int) progress;
+                    cf.actualizarCarga(intValue);
                     System.out.println("Upload is " + progress + "% done");
                 }
             }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {

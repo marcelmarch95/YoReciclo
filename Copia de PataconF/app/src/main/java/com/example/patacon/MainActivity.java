@@ -13,6 +13,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean resultado;
     private ProgressBar barra;
     private TextView myTextClick;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

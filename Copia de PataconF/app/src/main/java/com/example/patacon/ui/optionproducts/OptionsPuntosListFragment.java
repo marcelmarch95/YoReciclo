@@ -17,12 +17,14 @@ import android.arch.lifecycle.ViewModelProviders;
 
 import com.example.patacon.ui.agregarpunto.AgregarPuntoFragment;
 import com.example.patacon.ui.cargando.CargandoFragment;
+import com.example.patacon.ui.escanearpunto.EscanearPuntoFragment;
 import com.example.patacon.ui.puntos.PuntosListFragment;
 import com.example.patacon.ModeloVistaOpcionesProductoAdapter;
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
 import com.example.patacon.ui.OptionsGestionProductosFragment;
 import com.example.patacon.ui.puntosmapa.PuntosMapaFragment;
+import com.example.patacon.ui.reportes.ReportesListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +37,9 @@ import java.util.ArrayList;
 
 import Modelo.ModeloOpcionesProducto;
 import Modelo.ModeloVistaPunto;
+import Modelo.ModeloVistaReporte;
 import Modelo.Punto;
+import Modelo.Reporte;
 
 public class OptionsPuntosListFragment extends Fragment implements View.OnClickListener {
 
@@ -50,8 +54,9 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
 
     private ArrayList<ModeloOpcionesProducto> dataSet() {
         ArrayList<ModeloOpcionesProducto> data = new ArrayList<>();
-        data.add(new ModeloOpcionesProducto("Ver Puntos en Mapa",  R.drawable.puntosmapa));
-        data.add(new ModeloOpcionesProducto("Reportes",  R.drawable.notific));
+        data.add(new ModeloOpcionesProducto("Crear Reporte",  R.drawable.agregareporte));
+        data.add(new ModeloOpcionesProducto("Reportes Pendientes",  R.drawable.reportarpendiente));
+        data.add(new ModeloOpcionesProducto("Reportes Finalizados",  R.drawable.reportarok));
         //data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
         return data;
     }
@@ -63,7 +68,7 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         View root = inflater.inflate(R.layout.fragment_optionsproduct, container, false);
 
 
-        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Menú Puntos Limpios");
+        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Menú Reportes");
 
 
         rvMusicas = (RecyclerView) root.findViewById(R.id.rv_musicas);
@@ -79,7 +84,82 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         CardView cv = (CardView) view;
         TextView tv = (TextView) view.findViewById(R.id.accion);
 
-        if (tv.getText().toString().compareTo("Reportes")==0){
+        if (tv.getText().toString().compareTo("Crear Reporte")==0){
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            Fragment lp = new EscanearPuntoFragment();
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
+        }
+
+        if (tv.getText().toString().compareTo("Reportes Pendientes")==0){
+            db = FirebaseFirestore.getInstance();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            ArrayList<Reporte> reportes = new ArrayList<>();
+            ArrayList<Punto> puntos = new ArrayList<>();
+            ArrayList<ModeloVistaReporte> data = new ArrayList<>();
+
+            db.collection("reporte")
+            .whereEqualTo("idGenerador", user.getUid())
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Reporte p = document.toObject(Reporte.class);
+                            p.setIdReporte(document.getId());
+                            reportes.add(p);
+                        }
+
+                        db.collection("punto")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Punto p = document.toObject(Punto.class);
+                                        p.setId(document.getId());
+                                        puntos.add(p);
+                                    }
+
+                                    for (Reporte r: reportes){
+                                        for (Punto p: puntos){
+                                            if (r.getIdPunto().compareTo(p.getId())==0){
+                                                ModeloVistaReporte mvr = new ModeloVistaReporte();
+                                                mvr.setPunto(p);
+                                                mvr.setReporte(r);
+                                                data.add(mvr);
+                                            }
+                                        }
+                                    }
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("reportes", data);
+
+                                    FragmentManager fragmentManager = getFragmentManager();
+                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                                    Fragment lp = new ReportesListFragment();
+                                    lp.setArguments(bundle);
+                                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                    fragmentTransaction.commit();
+
+                                } else {
+
+                                }
+                            }
+                        });
+
+                    } else {
+
+                    }
+                }
+            });
+        }
+
+        if (tv.getText().toString().compareTo("Reportes Finalizados")==0){
 
         }
 

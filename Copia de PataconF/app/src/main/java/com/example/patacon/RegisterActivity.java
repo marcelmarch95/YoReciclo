@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -141,6 +142,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+
+                                    mAuth.getCurrentUser().sendEmailVerification()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(RegisterActivity.this, "Email de verificacion enviado correctamente", Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            });
 
                                     g.setUid(task.getResult().getUser().getUid());
                                     g.setKeyNot("");

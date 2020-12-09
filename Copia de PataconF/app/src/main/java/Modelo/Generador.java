@@ -1,6 +1,8 @@
 package Modelo;
 
-public class Generador {
+import java.io.Serializable;
+
+public class Generador implements Serializable {
     private String uid;
     private String nombre;
     private String apellido;

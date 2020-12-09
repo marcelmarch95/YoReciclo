@@ -10,8 +10,8 @@
             android:title="Inicio" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/plim"
-            android:title="Puntos Limpios" />
+            android:icon="@drawable/reportar"
+            android:title="Mis Reportes" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/orders"

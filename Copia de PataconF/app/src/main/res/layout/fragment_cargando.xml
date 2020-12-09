@@ -22,13 +22,28 @@
             android:color="#830006"
             android:indeterminate="true" />
 
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="300dp"
+            android:layout_height="30dp" />
+
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/porcentaje"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="%..."
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/texto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Cargando..."
             android:textSize="18sp" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

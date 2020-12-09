@@ -66,6 +66,9 @@ public class MiPerfilGeneradorFragment extends Fragment implements View.OnClickL
     private EditText correo;
     private EditText contraseña;
 
+    private TextView estadocorreo;
+    private ImageView imgestadocorreo;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -83,6 +86,17 @@ public class MiPerfilGeneradorFragment extends Fragment implements View.OnClickL
         this.progressBar = root.findViewById(R.id.progressBar);
         this.progressBar.setVisibility(View.INVISIBLE);
 
+        this.estadocorreo = root.findViewById(R.id.estadocorreo);
+        this.imgestadocorreo = root.findViewById(R.id.imgestadocorreo);
+
+        if (mAuth.getCurrentUser().isEmailVerified()){
+            this.estadocorreo.setText("Correo verificado");
+            this.imgestadocorreo.setImageResource(R.drawable.correok);
+        }
+        else {
+            this.estadocorreo.setText("Correo no verificado");
+            this.imgestadocorreo.setImageResource(R.drawable.correno);
+        }
 
         this.guardar = (Button) root.findViewById(R.id.guardar);
         guardar.setOnClickListener(this);

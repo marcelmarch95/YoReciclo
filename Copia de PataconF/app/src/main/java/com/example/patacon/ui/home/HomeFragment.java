@@ -49,20 +49,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private Button reportar;
     private ArrayList<Punto> data2 = new ArrayList<>();
 
-    private ArrayList<ModeloVistaDashboard> dataSet() {
-        ArrayList<ModeloVistaDashboard> data = new ArrayList<>();
-        data.add(new ModeloVistaDashboard("Retiros", "Pendientes", R.drawable.pending, 7));
-        data.add(new ModeloVistaDashboard("Retiros", "En curso", R.drawable.preparing, 1));
-        data.add(new ModeloVistaDashboard("Retiros", "Finalizados", R.drawable.delivered, 12));
-        //data.add(new ModeloVistaDashboard("Pedidos", "Finalizados", R.drawable.orders, 5));
-        return data;
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
         name = (TextView) root.findViewById(R.id.name);
 
         mAuth = FirebaseAuth.getInstance();
@@ -75,6 +67,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mapa.setOnClickListener(this);
         agendar.setOnClickListener(this);
         reportar.setOnClickListener(this);
+
+        //Generador prueba = getArguments().getSerializable("generador");
+        //System.out.println("Prueba: " + prueba.toString());
 
         db = FirebaseFirestore.getInstance();
         final DocumentReference docRef = db.collection("generador").document(currentUser.getUid().toString());
@@ -103,7 +98,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });*/
 
-        getActivity().setTitle("Your title");
+        getActivity().setTitle("f title");
 
 
 

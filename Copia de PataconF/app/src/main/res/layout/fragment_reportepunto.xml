@@ -271,6 +271,15 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Debes seleccionar un motivo de reporte"
+                    android:textAlignment="center"
+                    android:textColor="#FF0000"
+                    android:textStyle="bold" />
+
 
             </LinearLayout>
 
