@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pataconf.R;
+import com.example.pataconf.ui.optionreports.OptionsReportesListFragment;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
+import com.example.pataconf.ui.reportes.ReportesListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +34,7 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
     private Button finalizar;
     private FirebaseFirestore db;
     private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
+    private boolean isreporte;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +50,14 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
         String msj =  getArguments().getString("mensaje");
         boolean result =  getArguments().getBoolean("estado");
 
+        if (msj.compareTo("Reporte aprobado")==0){
+            System.out.println();
+            isreporte = true;
+        }
+        if (msj.compareTo("Reporte rechazado")==0){
+            isreporte = true;
+        }
+
         if (!result){
             imageView.setImageResource(R.drawable.error);
         }
@@ -56,9 +67,19 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
         return root;
     }
 
+
     @Override
     public void onClick(View view) {
-        if (view == this.finalizar) {
+        if (this.isreporte){
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            Fragment lp = new OptionsReportesListFragment();
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
+        }
+
+        if (view == this.finalizar && this.isreporte==false) {
             db = FirebaseFirestore.getInstance();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -103,7 +124,6 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
                         }
                     });
         }
-
 
     }
 }

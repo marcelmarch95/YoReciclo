@@ -12,6 +12,7 @@ public class Reporte implements Serializable {
     private String hora;
     private String idReporte;
     private String idGenerador;
+    private String estado;
 
     public Reporte(){
 
@@ -79,5 +80,13 @@ public class Reporte implements Serializable {
 
     public void setIdGenerador(String idGenerador) {
         this.idGenerador = idGenerador;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

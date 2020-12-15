@@ -19,6 +19,7 @@ import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListFragment;
 import com.example.patacon.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.patacon.ui.vistareportepunto.VistaReportePuntoFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -95,6 +96,20 @@ public class ReportesListFragment extends Fragment implements View.OnClickListen
             System.out.println("Click en el punto con id: " + bt.getText());
 
 
+            for (ModeloVistaReporte mvr: this.reportes) {
+                if (mvr.getReporte().getIdReporte().compareTo(bt.getText().toString())==0){
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("mvr", mvr);
+
+                    Fragment lp = new VistaReportePuntoFragment();
+                    lp.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                    fragmentTransaction.commit();
+                }
+            }
         }
 
         /*else {

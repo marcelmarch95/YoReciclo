@@ -13,6 +13,10 @@
             android:icon="@drawable/plim"
             android:title="Puntos Limpios" />
         <item
+            android:id="@+id/nav_reports"
+            android:icon="@drawable/otro"
+            android:title="Reportes" />
+        <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/orders"
             android:title="Retiros" />

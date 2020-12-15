@@ -19,6 +19,8 @@ import com.example.pataconf.R;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
 import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.pataconf.ui.optionreports.OptionsReportesListFragment;
+import com.example.pataconf.ui.vistareportepunto.VistaReportePuntoFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -76,7 +78,7 @@ public class ReportesListFragment extends Fragment implements View.OnClickListen
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            Fragment lp = new OptionsPuntosListFragment();
+            Fragment lp = new OptionsReportesListFragment();
             fragmentTransaction.replace(R.id.nav_host_fragment, lp);
             fragmentTransaction.commit();
         }
@@ -92,18 +94,23 @@ public class ReportesListFragment extends Fragment implements View.OnClickListen
 
         else {
             Button bt = (Button) view;
-            System.out.println("Click en el punto con id: " + bt.getText());
+            System.out.println("Click en el reporte con id: " + bt.getText());
 
+            for (ModeloVistaReporte mvr: this.reportes) {
+                if (mvr.getReporte().getIdReporte().compareTo(bt.getText().toString())==0){
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        }
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("mvr", mvr);
 
-        /*else {
-            CardView cv = (CardView) view;
-            TextView tv = (TextView) view.findViewById(R.id.accion);
-            if (tv.getText().toString().compareTo("Ver Puntos")==0){
-
+                    Fragment lp = new VistaReportePuntoFragment();
+                    lp.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                    fragmentTransaction.commit();
+                }
             }
-        }*/
+        }
 
 
 

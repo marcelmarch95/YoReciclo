@@ -56,7 +56,7 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         ArrayList<ModeloOpcionesProducto> data = new ArrayList<>();
         data.add(new ModeloOpcionesProducto("Crear Reporte",  R.drawable.agregareporte));
         data.add(new ModeloOpcionesProducto("Reportes Pendientes",  R.drawable.reportarpendiente));
-        data.add(new ModeloOpcionesProducto("Reportes Finalizados",  R.drawable.reportarok));
+        data.add(new ModeloOpcionesProducto("Reportes Aprobados",  R.drawable.reportarok));
         //data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
         return data;
     }
@@ -94,73 +94,15 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         }
 
         if (tv.getText().toString().compareTo("Reportes Pendientes")==0){
-            db = FirebaseFirestore.getInstance();
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            ArrayList<Reporte> reportes = new ArrayList<>();
-            ArrayList<Punto> puntos = new ArrayList<>();
-            ArrayList<ModeloVistaReporte> data = new ArrayList<>();
-
-            db.collection("reporte")
-            .whereEqualTo("idGenerador", user.getUid())
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Reporte p = document.toObject(Reporte.class);
-                            p.setIdReporte(document.getId());
-                            reportes.add(p);
-                        }
-
-                        db.collection("punto")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Punto p = document.toObject(Punto.class);
-                                        p.setId(document.getId());
-                                        puntos.add(p);
-                                    }
-
-                                    for (Reporte r: reportes){
-                                        for (Punto p: puntos){
-                                            if (r.getIdPunto().compareTo(p.getId())==0){
-                                                ModeloVistaReporte mvr = new ModeloVistaReporte();
-                                                mvr.setPunto(p);
-                                                mvr.setReporte(r);
-                                                data.add(mvr);
-                                            }
-                                        }
-                                    }
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable("reportes", data);
-
-                                    FragmentManager fragmentManager = getFragmentManager();
-                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                                    Fragment lp = new ReportesListFragment();
-                                    lp.setArguments(bundle);
-                                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                                    fragmentTransaction.commit();
-
-                                } else {
-
-                                }
-                            }
-                        });
-
-                    } else {
-
-                    }
-                }
-            });
+            this.cargarReportes("pendiente");
         }
 
-        if (tv.getText().toString().compareTo("Reportes Finalizados")==0){
+        if (tv.getText().toString().compareTo("Reportes Aprobados")==0){
+            this.cargarReportes("aprobado");
+        }
 
+        if (tv.getText().toString().compareTo("Reportes Rechazados")==0){
+            this.cargarReportes("rechazado");
         }
 
         if (tv.getText().toString().compareTo("Ver Puntos en Mapa")==0){
@@ -268,5 +210,73 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
             fragmentTransaction.replace(R.id.nav_host_fragment, lp);
             fragmentTransaction.commit();
         }
+    }
+
+    private void cargarReportes(String estado) {
+        db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        ArrayList<Reporte> reportes = new ArrayList<>();
+        ArrayList<Punto> puntos = new ArrayList<>();
+        ArrayList<ModeloVistaReporte> data = new ArrayList<>();
+
+        db.collection("reporte")
+                .whereEqualTo("idGenerador", user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Reporte p = document.toObject(Reporte.class);
+                                if (p.getEstado().compareTo(estado)==0){
+                                    p.setIdReporte(document.getId());
+                                    reportes.add(p);
+                                }
+                            }
+
+                            db.collection("punto")
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    Punto p = document.toObject(Punto.class);
+                                                    p.setId(document.getId());
+                                                    puntos.add(p);
+                                                }
+
+                                                for (Reporte r: reportes){
+                                                    for (Punto p: puntos){
+                                                        if (r.getIdPunto().compareTo(p.getId())==0){
+                                                            ModeloVistaReporte mvr = new ModeloVistaReporte();
+                                                            mvr.setPunto(p);
+                                                            mvr.setReporte(r);
+                                                            data.add(mvr);
+                                                        }
+                                                    }
+                                                }
+                                                Bundle bundle = new Bundle();
+                                                bundle.putSerializable("reportes", data);
+
+                                                FragmentManager fragmentManager = getFragmentManager();
+                                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                                                Fragment lp = new ReportesListFragment();
+                                                lp.setArguments(bundle);
+                                                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                                fragmentTransaction.commit();
+
+                                            } else {
+
+                                            }
+                                        }
+                                    });
+
+                        } else {
+
+                        }
+                    }
+                });
     }
 }

@@ -56,7 +56,6 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         data.add(new ModeloOpcionesProducto("Agregar Punto Limpio",  R.drawable.addpunto));
         data.add(new ModeloOpcionesProducto("Gestionar Puntos",  R.drawable.listp));
         data.add(new ModeloOpcionesProducto("Ver Puntos en Mapa",  R.drawable.puntosmapa));
-        data.add(new ModeloOpcionesProducto("Ver últimos Reportes",  R.drawable.notific));
         //data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
         return data;
     }
@@ -84,75 +83,8 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         CardView cv = (CardView) view;
         TextView tv = (TextView) view.findViewById(R.id.accion);
 
-        if (tv.getText().toString().compareTo("Ver últimos Reportes")==0){
-            db = FirebaseFirestore.getInstance();
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            ArrayList<Reporte> reportes = new ArrayList<>();
-            ArrayList<Punto> puntos = new ArrayList<>();
-            ArrayList<ModeloVistaReporte> data = new ArrayList<>();
-
-            db.collection("punto")
-                    .whereEqualTo("pid", user.getUid())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Punto p = document.toObject(Punto.class);
-                                    p.setId(document.getId());
-                                    puntos.add(p);
-                                }
-
-                                db.collection("reporte")
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        Reporte r = document.toObject(Reporte.class);
-                                                        r.setIdReporte(document.getId());
-                                                        reportes.add(r);
-                                                    }
-
-                                                    for (Punto p: puntos){
-                                                        for (Reporte r: reportes){
-                                                            if (p.getId().compareTo(r.getIdPunto())==0){
-                                                                ModeloVistaReporte mvr = new ModeloVistaReporte();
-                                                                mvr.setPunto(p);
-                                                                mvr.setReporte(r);
-                                                                data.add(mvr);
-                                                            }
-                                                        }
-                                                    }
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putSerializable("reportes", data);
-
-                                                    FragmentManager fragmentManager = getFragmentManager();
-                                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                                                    Fragment lp = new ReportesListFragment();
-                                                    lp.setArguments(bundle);
-                                                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                                                    fragmentTransaction.commit();
-
-                                                } else {
-
-                                                }
-                                            }
-                                        });
-
-                            } else {
-
-                            }
-                        }
-                    });
-        }
 
         if (tv.getText().toString().compareTo("Ver Puntos en Mapa")==0){
-
-
             db = FirebaseFirestore.getInstance();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
