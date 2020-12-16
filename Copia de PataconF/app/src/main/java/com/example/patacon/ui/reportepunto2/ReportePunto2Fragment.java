@@ -313,6 +313,7 @@ public class ReportePunto2Fragment extends Fragment implements View.OnClickListe
         reporte.setMotivo(this.motivoreporte);
         reporte.setComentarios(this.comentarios.getText().toString());
         reporte.setIdGenerador(this.mAuth.getUid());
+        reporte.setEstado("pendiente");
 
         if (imageUri==null){
             reporte.setFoto("null");

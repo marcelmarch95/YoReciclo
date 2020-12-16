@@ -54,7 +54,9 @@ public class PuntosListFragment extends Fragment implements View.OnClickListener
 
         padre = (PerfilComerciante) getActivity();
         //padre.getSupportActionBar().hide();
-        padre.getSupportActionBar().setTitle("Listado Puntos");
+
+
+
 
         //this.back = root.findViewById(R.id.back);
         //this.back.setOnClickListener(this);
@@ -67,6 +69,8 @@ public class PuntosListFragment extends Fragment implements View.OnClickListener
 
         ArrayList<ModeloVistaPunto> data = (ArrayList<ModeloVistaPunto>) getArguments().getSerializable("puntos");
         this.puntos = data;
+
+        padre.getSupportActionBar().setTitle("Listado Puntos");
 
         rvMusicas = (RecyclerView) root.findViewById(R.id.rv_musicas);
         glm = new GridLayoutManager(getActivity(), 1);

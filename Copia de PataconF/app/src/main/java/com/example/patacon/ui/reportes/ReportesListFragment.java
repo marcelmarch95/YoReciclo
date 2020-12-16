@@ -51,10 +51,19 @@ public class ReportesListFragment extends Fragment implements View.OnClickListen
 
         padre = (PerfilComerciante) getActivity();
         //padre.getSupportActionBar().hide();
-        padre.getSupportActionBar().setTitle("Listado Reportes");
+
 
         ArrayList<ModeloVistaReporte> data = (ArrayList<ModeloVistaReporte>) getArguments().getSerializable("reportes");
         this.reportes = data;
+
+        if (this.reportes.size()>0){
+            if (this.reportes.get(0).getReporte().getEstado().compareTo("pendiente")==0)
+                padre.getSupportActionBar().setTitle("Reportes Pendientes");
+            if (this.reportes.get(0).getReporte().getEstado().compareTo("aprobado")==0)
+                padre.getSupportActionBar().setTitle("Reportes Aprobados");
+            if (this.reportes.get(0).getReporte().getEstado().compareTo("rechazado")==0)
+                padre.getSupportActionBar().setTitle("Reportes Rechazados");
+        }
 
         rvMusicas = (RecyclerView) root.findViewById(R.id.rv_musicas);
         glm = new GridLayoutManager(getActivity(), 1);

@@ -57,6 +57,7 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
         data.add(new ModeloOpcionesProducto("Crear Reporte",  R.drawable.agregareporte));
         data.add(new ModeloOpcionesProducto("Reportes Pendientes",  R.drawable.reportarpendiente));
         data.add(new ModeloOpcionesProducto("Reportes Aprobados",  R.drawable.reportarok));
+        data.add(new ModeloOpcionesProducto("Reportes Rechazados",  R.drawable.reportarok));
         //data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
         return data;
     }
