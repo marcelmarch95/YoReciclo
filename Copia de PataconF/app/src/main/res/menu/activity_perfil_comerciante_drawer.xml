@@ -9,8 +9,12 @@
             android:icon="@drawable/rec"
             android:title="Inicio" />
         <item
+            android:id="@+id/nav_directions"
+            android:icon="@drawable/ads"
+            android:title="Mis Direcciones" />
+        <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/reportar"
+            android:icon="@drawable/reportss"
             android:title="Mis Reportes" />
         <item
             android:id="@+id/nav_slideshow"

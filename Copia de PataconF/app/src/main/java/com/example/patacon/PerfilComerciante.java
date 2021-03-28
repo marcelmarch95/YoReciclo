@@ -6,7 +6,10 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.navigation.NavController;
@@ -68,7 +71,7 @@ public class PerfilComerciante extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_micomercio)
+                R.id.nav_micomercio,R.id.nav_directions)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -88,7 +91,8 @@ public class PerfilComerciante extends AppCompatActivity {
         System.out.println(this.encargado.toString());
         System.out.println(this.comercio.toString());
 
-        getSupportActionBar().setTitle("Inicio");
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle("Inicio");
 
 
 
@@ -97,58 +101,16 @@ public class PerfilComerciante extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final DocumentReference docRef = db.collection("generador").document(user.getUid().toString());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    final DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        FirebaseInstanceId.getInstance().getInstanceId()
-                                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                        if (!task.isSuccessful()) {
-                                            Log.w("tag", "getInstanceId failed", task.getException());
-                                            return;
-                                        }
-
-                                        // Get new Instance ID token
-                                        String token = task.getResult().getToken();
-
-                                        String antigua = document.get("keyNot").toString();
-                                        System.out.println("token antiguo : " + antigua);
-
-                                        //Token cambió
-                                        if (token.compareTo(antigua)!=0){
-                                            docRef.update("keyNot", token)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            Log.d("actualizado", "DocumentSnapshot successfully updated!");
-                                                            Toast.makeText(PerfilComerciante.this, "key user updated successfully", Toast.LENGTH_LONG).show();
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(PerfilComerciante.this, "key user updated error", Toast.LENGTH_LONG).show();
-                                                            Log.w("no actualizado", "Error updating document", e);
-                                                        }
-                                                    });
-                                        }
-                                    }
-                                });
-                        cargarVista(document);
-                    } else {
-                        System.out.println("error1");
-
-                    }
-                } else {
-                    System.out.println("error2");
-                }
-            }
-        });
+        cargarVista();
     }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action).setVisible(false);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -165,9 +127,9 @@ public class PerfilComerciante extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void cargarVista(DocumentSnapshot document) {
+    private void cargarVista() {
         System.out.println("cargarvista metodo");
-        this.usuario = (Generador) document.toObject(Generador.class);
+        this.usuario = SocketSingleton.getInstance().getGenerador();
 
 
         System.out.println("usuario generador: " + this.usuario.toString());

@@ -93,4 +93,5 @@ public class Generador implements Serializable {
     public void setKeyNot(String keyNot) {
         this.keyNot = keyNot;
     }
+
 }

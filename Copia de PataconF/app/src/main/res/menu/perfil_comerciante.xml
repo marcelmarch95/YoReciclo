@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/app_bar_switch"
-        android:title="Switch"
-        app:actionLayout="@layout/switch_item"
+        android:id="@+id/action"
+        android:orderInCategory="100"
+        android:text="Editar"
+        android:title="Editar"
         app:showAsAction="always" />
 </menu>
