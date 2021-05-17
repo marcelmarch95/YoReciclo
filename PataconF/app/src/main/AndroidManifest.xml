@@ -60,6 +60,9 @@
             android:name=".SelectorDireccionMapaPunto"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".SelectorDireccionMapaCobertura"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ActivityPrincipal"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

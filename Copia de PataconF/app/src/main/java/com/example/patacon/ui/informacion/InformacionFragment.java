@@ -64,6 +64,16 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
         if (view == this.finalizar) {
 
+            if (this.mensaje.compareTo("Direccion editada correctamente")==0){
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                HomeFragment lp = new HomeFragment();
+                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                fragmentTransaction.commit();
+                return;
+            }
+
             if (this.mensaje.compareTo("Reporte enviado correctamente")==0){
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

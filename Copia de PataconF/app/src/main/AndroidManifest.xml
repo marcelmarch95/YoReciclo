@@ -63,6 +63,9 @@
             android:name="com.example.patacon.SelectorDireccionMapaPunto"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name="com.example.patacon.SelectorDireccionMapaDireccion"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name="com.example.patacon.ActivityPrincipal"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

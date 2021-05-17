@@ -1,14 +1,26 @@
 package Modelo;
 
-public class Direccion {
+import java.io.Serializable;
+
+public class Direccion implements Serializable {
     private String id;
+    private String pid;
     private String calle;
     private String ciudad;
-    private String comuna;
     private String region;
+    private String sector;
     private String numero;
+    private String indicaciones;
     private String lat;
     private String lng;
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
 
     public String getId() {
         return id;
@@ -34,12 +46,12 @@ public class Direccion {
         this.ciudad = ciudad;
     }
 
-    public String getComuna() {
-        return comuna;
+    public String getSector() {
+        return sector;
     }
 
-    public void setComuna(String comuna) {
-        this.comuna = comuna;
+    public void setSector(String sector) {
+        this.sector = sector;
     }
 
     public String getRegion() {
@@ -72,5 +84,13 @@ public class Direccion {
 
     public void setLng(String lng) {
         this.lng = lng;
+    }
+
+    public String getIndicaciones() {
+        return indicaciones;
+    }
+
+    public void setIndicaciones(String indicaciones) {
+        this.indicaciones = indicaciones;
     }
 }

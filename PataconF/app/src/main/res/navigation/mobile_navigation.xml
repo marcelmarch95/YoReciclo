@@ -30,6 +30,18 @@
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
+        android:id="@+id/nav_calendario"
+        android:name="com.example.pataconf.ui.MiCalendarioFragment"
+        android:label="Calendario"
+        tools:layout="@layout/fragment_calendario" />
+
+    <fragment
+        android:id="@+id/nav_cobertura"
+        android:name="com.example.pataconf.MisCoberturasFragment"
+        android:label="Cobertura"
+        tools:layout="@layout/fragment_listcobertura" />
+
+    <fragment
         android:id="@+id/nav_micomercio"
         android:name="com.example.pataconf.ui.MiComercioFragment"
         android:label="@string/menu_tools"

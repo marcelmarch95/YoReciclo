@@ -49,6 +49,15 @@
         <item>Av. España</item>
     </string-array>
 
+    <string-array name="region">
+        <item>7ª región del Maule</item>
+    </string-array>
+
+    <string-array name="ciudad">
+        <item>Curicó</item>
+        <item>Molina</item>
+    </string-array>
+
     <string name="title_activity_location">Map</string>
 
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyACpC0VGaRemSNefrVGloDIr5r9hCWnG84</string>

@@ -42,8 +42,6 @@ import Modelo.Reporte;
 
 public class OptionsPuntosListFragment extends Fragment implements View.OnClickListener {
 
-    private Spinner scategoria;
-    private OptionsPuntosListViewModel homeViewModel;
     private RecyclerView rvMusicas;
     private GridLayoutManager glm;
     private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
@@ -62,8 +60,6 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(OptionsPuntosListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_optionsproduct, container, false);
 
 

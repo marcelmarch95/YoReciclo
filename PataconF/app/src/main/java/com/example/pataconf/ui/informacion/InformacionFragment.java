@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pataconf.R;
+import com.example.pataconf.ui.TramoRetiroListFragment;
 import com.example.pataconf.ui.optionreports.OptionsReportesListFragment;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.example.pataconf.ui.reportes.ReportesListFragment;
@@ -26,15 +27,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import Modelo.Cobertura;
 import Modelo.ModeloVistaPunto;
+import Modelo.ModeloVistaTramo;
 import Modelo.Punto;
+import Modelo.TramoRetiro;
 
 public class InformacionFragment extends Fragment implements View.OnClickListener {
 
     private Button finalizar;
     private FirebaseFirestore db;
     private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
-    private boolean isreporte;
+    private boolean isreporte = false;
+    private String mensa;
+    private ArrayList<ModeloVistaTramo> data2 = new ArrayList<>();
+    private String dia, mes, ano;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -45,9 +52,15 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
         finalizar = (Button) root.findViewById(R.id.finalizar);
         finalizar.setOnClickListener(this);
 
-
-
         String msj =  getArguments().getString("mensaje");
+        mensa = msj;
+
+        if (this.mensa.compareTo("Tramo creado correctamente")==0){
+            dia = getArguments().getString("dia");
+            mes = getArguments().getString("mes");
+            ano = getArguments().getString("ano");
+        }
+
         boolean result =  getArguments().getBoolean("estado");
 
         if (msj.compareTo("Reporte aprobado")==0){
@@ -61,7 +74,6 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
         if (!result){
             imageView.setImageResource(R.drawable.error);
         }
-
         texto.setText(msj);
 
         return root;
@@ -70,16 +82,103 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
+
+        if (this.mensa.compareTo("Tramo creado correctamente")==0){
+
+            FragmentManager fragmentManager = getFragmentManager();
+            db = FirebaseFirestore.getInstance();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            db.collection("tramoretiro")
+                    .whereEqualTo("uid", user.getUid())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    TramoRetiro p = document.toObject(TramoRetiro.class);
+                                    ModeloVistaTramo pu = new ModeloVistaTramo();
+                                    pu.setTramoRetiro(p);
+                                    data2.add(pu);
+                                }
+
+                                String f = String.valueOf(dia)+"/"+String.valueOf(Integer.valueOf(mes)+1)+"/"+String.valueOf(ano);
+                                System.out.println("ff: " + f);
+
+                                ArrayList<ModeloVistaTramo> fin = new ArrayList<>();
+                                for (ModeloVistaTramo mv: data2){
+                                    if (mv.getTramoRetiro().getFecha().compareTo(f)==0){
+                                        fin.add(mv);
+                                    }
+                                }
+
+                                ArrayList<Cobertura> coberturas = new ArrayList<>();
+
+
+                                db.collection("cobertura")
+                                        .whereEqualTo("uid", user.getUid())
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document2 : task.getResult()) {
+                                                        Cobertura cb = document2.toObject(Cobertura.class);
+                                                        cb.setId(document2.getId());
+                                                        coberturas.add(cb);
+                                                    }
+
+                                                    for (ModeloVistaTramo p: fin){
+                                                        for (Cobertura r: coberturas){
+                                                            if (p.getTramoRetiro().getIdCobertura().compareTo(r.getId())==0){
+                                                                p.setCobertura(r);
+                                                            }
+                                                        }
+                                                    }
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putSerializable("dia", String.valueOf(dia));
+                                                    bundle.putSerializable("mes", String.valueOf(mes));
+                                                    bundle.putSerializable("ano", String.valueOf(ano));
+                                                    bundle.putSerializable("tramos", fin);
+
+
+                                                    Fragment lp = new TramoRetiroListFragment();
+                                                    lp.setArguments(bundle);
+                                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                                    fragmentTransaction.commit();
+
+                                                } else {
+
+                                                }
+                                            }
+                                        });
+
+
+
+
+                            } else {
+
+                            }
+                        }
+                    });
+            return;
+        }
+
         if (this.isreporte){
+            System.out.println("if 1 ");
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             Fragment lp = new OptionsReportesListFragment();
             fragmentTransaction.replace(R.id.nav_host_fragment, lp);
             fragmentTransaction.commit();
+            return;
         }
 
         if (view == this.finalizar && this.isreporte==false) {
+            System.out.println("if 3");
             db = FirebaseFirestore.getInstance();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 

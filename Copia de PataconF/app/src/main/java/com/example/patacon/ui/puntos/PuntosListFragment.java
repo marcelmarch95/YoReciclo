@@ -53,19 +53,6 @@ public class PuntosListFragment extends Fragment implements View.OnClickListener
         View root = inflater.inflate(R.layout.fragment_listpuntos, container, false);
 
         padre = (PerfilComerciante) getActivity();
-        //padre.getSupportActionBar().hide();
-
-
-
-
-        //this.back = root.findViewById(R.id.back);
-        //this.back.setOnClickListener(this);
-
-        /*categoria = (Spinner) root.findViewById(R.id.sector);
-
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.macrosector, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoria.setAdapter(adapter2);*/
 
         ArrayList<ModeloVistaPunto> data = (ArrayList<ModeloVistaPunto>) getArguments().getSerializable("puntos");
         this.puntos = data;

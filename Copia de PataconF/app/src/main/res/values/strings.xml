@@ -38,13 +38,23 @@
         <item>Privado</item>
     </string-array>
 
+    <string-array name="region">
+        <item>7ª región del Maule</item>
+    </string-array>
+
+    <string-array name="ciudad">
+        <item>Curicó</item>
+        <item>Molina</item>
+    </string-array>
+
+
     <string-array name="macrosector">
         <item>Rauquen</item>
         <item>Boldo</item>
         <item>Centro</item>
         <item>Sol de Septiembre</item>
         <item>Bombero Garrido</item>
-        <item>Colon</item>
+        <item>Colón</item>
         <item>Carretera</item>
         <item>Av. España</item>
     </string-array>
@@ -62,9 +72,9 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_slideshow">Mis Retiros</string>
     <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_share">Mis Direcciones</string>
     <string name="menu_send">Send</string>
 
 </resources>

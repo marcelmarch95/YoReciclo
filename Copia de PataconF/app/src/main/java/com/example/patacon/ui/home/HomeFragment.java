@@ -15,7 +15,12 @@ import android.support.v4.app.Fragment;
 import android.arch.lifecycle.ViewModelProviders;
 
 import com.example.patacon.ModeloVistaDashboardAdapter;
+import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
+import com.example.patacon.ui.SeleccionarDireccionFragment;
+import com.example.patacon.ui.SeleccionarRecicladoraFragment;
+import com.example.patacon.ui.cargando.CargandoFragment;
+import com.example.patacon.ui.editardireccion.EditarDireccionFragment;
 import com.example.patacon.ui.escanearpunto.EscanearPuntoFragment;
 import com.example.patacon.ui.puntosmapa.PuntosMapaFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,8 +35,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import Modelo.Direccion;
 import Modelo.Generador;
 import Modelo.ModeloVistaDashboard;
+import Modelo.ModeloVistaDireccion;
 import Modelo.Punto;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -48,6 +55,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private Button agendar;
     private Button reportar;
     private ArrayList<Punto> data2 = new ArrayList<>();
+    private ArrayList<ModeloVistaDireccion> data = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -152,6 +160,48 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             Fragment lp = new EscanearPuntoFragment();
             fragmentTransaction.replace(R.id.nav_host_fragment, lp);
             fragmentTransaction.commit();
+        }
+
+        if (view == this.agendar){
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            Fragment lp = new CargandoFragment();
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
+
+            db = FirebaseFirestore.getInstance();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            db.collection("direccion")
+            .whereEqualTo("pid", user.getUid())
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Direccion d = document.toObject(Direccion.class);
+                            ModeloVistaDireccion mvd = new ModeloVistaDireccion();
+                            d.setId(document.getId());
+                            mvd.setDireccion(d);
+                            data.add(mvd);
+                        }
+
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("direcciones", data);
+
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        Fragment lp = new SeleccionarDireccionFragment();
+                        lp.setArguments(bundle);
+                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                        fragmentTransaction.commit();
+
+                    } else {
+
+                    }
+                }
+            });
         }
     }
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -30,6 +31,21 @@ public class ModeloVistaDireccionAdapter extends RecyclerView.Adapter<ModeloVist
         this.listener = ls;
     }
 
+    public ModeloVistaDireccionAdapter(){
+    }
+
+    public ModeloVistaDireccionAdapter(ArrayList<ModeloVistaDireccion> data) {
+        this.data = data;
+    }
+
+    public void setListener(View.OnClickListener ls) {
+        this.listener = ls;
+    }
+
+    public void setdata(ArrayList<ModeloVistaDireccion> data) {
+        this.data = data;
+    }
+
     @Override
     public MusicaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new MusicaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_modelodireccion, parent, false), this.listener);
@@ -40,12 +56,9 @@ public class ModeloVistaDireccionAdapter extends RecyclerView.Adapter<ModeloVist
         ModeloVistaDireccion direccion = data.get(position);
 
         holder.direccion.setText(direccion.getDireccion().getCalle()+ " #" + direccion.getDireccion().getNumero());
+        holder.imgeditar.setText("ED;"+direccion.getDireccion().getId());
+        holder.imgeliminar.setText("EL;"+direccion.getDireccion().getId());
 
-        if (direccion.isEliminar())
-            holder.imgeliminar.setImageResource(R.drawable.deletedire);
-        else {
-            holder.imgeliminar.setImageResource(R.drawable.maplomo);
-        }
     }
 
     @Override
@@ -56,12 +69,20 @@ public class ModeloVistaDireccionAdapter extends RecyclerView.Adapter<ModeloVist
     class MusicaViewHolder extends RecyclerView.ViewHolder{
 
         TextView direccion;
-        ImageView imgeliminar;
+        Button imgeditar;
+        Button imgeliminar;
 
         public MusicaViewHolder(View itemView, View.OnClickListener lis) {
             super(itemView);
             direccion = (TextView) itemView.findViewById(R.id.direccion);
-            imgeliminar = (ImageView) itemView.findViewById(R.id.imgeliminar);
+            imgeliminar = (Button) itemView.findViewById(R.id.imgeliminar);
+            imgeditar = (Button) itemView.findViewById(R.id.imgeditar);
+
+            imgeliminar.setOnClickListener(lis);
+            imgeditar.setOnClickListener(lis);
+
+            imgeliminar.setTextColor(0xFF0000);
+            imgeditar.setTextColor(0xFF0000);
         }
 
     }

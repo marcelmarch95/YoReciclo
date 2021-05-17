@@ -15,6 +15,7 @@ public class Recicladora implements Serializable {
     private String lat;
     private String keyNot;
     private String lng;
+    private String id;
     private String foto;
 
     public Recicladora(){
@@ -117,10 +118,19 @@ public class Recicladora implements Serializable {
         this.foto = foto;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Comerciante{" +
                 "uid='" + uid + '\'' +
+                "id=" + id + '\'' +
                 ", nombreEmpresa='" + nombreEmpresa + '\'' +
                 ", localidad='" + localidad + '\'' +
                 ", direccion='" + direccion + '\'' +
