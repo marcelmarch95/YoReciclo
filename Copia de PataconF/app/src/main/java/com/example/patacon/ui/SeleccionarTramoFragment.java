@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.StringTokenizer;
 
+import Modelo.Direccion;
 import Modelo.ModeloVistaDireccion;
 import Modelo.ModeloVistaFechasRetiro;
 import Modelo.TramoRetiro;
@@ -41,6 +42,7 @@ public class SeleccionarTramoFragment extends Fragment implements View.OnClickLi
     private boolean editar = false;
     private Button add;
     private TramoRetiro seleccionada;
+    private Direccion direccion;
     private ModeloVistaDireccion mvd;
     private TextView fecha;
     private FirebaseFirestore db;
@@ -62,6 +64,7 @@ public class SeleccionarTramoFragment extends Fragment implements View.OnClickLi
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         data = (ArrayList<TramoRetiro>) getArguments().getSerializable("tramos");
+        direccion = (Direccion) getArguments().getSerializable("direccion");
 
         System.out.println("total tramos encontrados: " + data.size());
         for (TramoRetiro t: data){
@@ -159,10 +162,10 @@ public class SeleccionarTramoFragment extends Fragment implements View.OnClickLi
         }
 
         else {
-            Toast.makeText(getContext(),"Seleccionada tramo id " + texto,Toast.LENGTH_SHORT).show();
 
             Bundle bundle = new Bundle();
             bundle.putSerializable("tramo", seleccionada);
+            bundle.putSerializable("direccion", direccion);
 
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

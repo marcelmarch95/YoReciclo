@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DETALLE SOLICITUD DE RETIRO"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/fecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="18 de mayo del 2021"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tramo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tramo 15:00 - 16:00"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/estado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Estado: PENDIENTE"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView9"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/house" />
+
+                        <LinearLayout
+                            android:layout_width="200dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingLeft="10dp">
+
+                            <TextView
+                                android:id="@+id/direccion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="Pje 5 #1635"
+                                android:textAlignment="center" />
+
+                            <TextView
+                                android:id="@+id/ciudad"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="Curicó"
+                                android:textAlignment="center" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView8"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                app:srcCompat="@drawable/vidriolo" />
+
+                            <TextView
+                                android:id="@+id/totvidrio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="35 unidades"
+                                android:textAlignment="center" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView8"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                app:srcCompat="@drawable/plasticolo" />
+
+                            <TextView
+                                android:id="@+id/totplastico"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="35 unidades"
+                                android:textAlignment="center" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingTop="10dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView8"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                app:srcCompat="@drawable/latalo" />
+
+                            <TextView
+                                android:id="@+id/totlata"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="35 unidades"
+                                android:textAlignment="center" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView8"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                app:srcCompat="@drawable/carton" />
+
+                            <TextView
+                                android:id="@+id/totcarton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="35 unidades"
+                                android:textAlignment="center" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/textView33"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Foto declaración residuos"
+                android:textAlignment="center" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/nofoto" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:background="#00FFFFFF"
+            android:foregroundGravity="bottom"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:id="@+id/layoup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btncancelar"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/border3"
+                    android:text="CANCELAR" />
+
+                <Button
+                    android:id="@+id/btnresolver"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/border5"
+                    android:text="RESOLVER" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:gravity="bottom|center"
+                android:paddingTop="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnvolver"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_gravity="bottom|center"
+                        android:background="@drawable/border4"
+                        android:clickable="true"
+                        android:text="VOLVER"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

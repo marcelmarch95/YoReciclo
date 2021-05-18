@@ -49,6 +49,7 @@ public class SeleccionarRecicladoraFragment extends Fragment implements View.OnC
     private ArrayList<ModeloVistaRecicladora> data = new ArrayList<>();
     private ArrayList<TramoRetiro> tramos = new ArrayList<>();
     private boolean editar = false;
+    private Direccion direccion;
     private Button add;
     private ModeloVistaRecicladora d;
     private ModeloVistaDireccion mvd;
@@ -69,6 +70,7 @@ public class SeleccionarRecicladoraFragment extends Fragment implements View.OnC
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         data = (ArrayList<ModeloVistaRecicladora>) getArguments().getSerializable("recicladoras");
+        direccion = (Direccion) getArguments().getSerializable("direccion");
 
 
         ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Seleccionar Recicladora");
@@ -140,8 +142,6 @@ public class SeleccionarRecicladoraFragment extends Fragment implements View.OnC
 
         else {
 
-            Toast.makeText(getContext(),"Seleccionada recicladora id " + texto,Toast.LENGTH_SHORT).show();
-
 
             Date date = new Date(System.currentTimeMillis());
 
@@ -178,6 +178,7 @@ public class SeleccionarRecicladoraFragment extends Fragment implements View.OnC
                                 }
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("tramos", tramos);
+                                bundle.putSerializable("direccion", direccion);
 
                                 FragmentManager fragmentManager = getFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

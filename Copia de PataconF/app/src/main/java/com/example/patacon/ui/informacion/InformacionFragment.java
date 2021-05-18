@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.patacon.ui.RetirosListFragment;
+import com.example.patacon.ui.cargando.CargandoFragment;
 import com.example.patacon.ui.home.HomeFragment;
 import com.example.patacon.ui.puntos.PuntosListFragment;
 import com.example.patacon.R;
@@ -25,8 +27,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import Modelo.Direccion;
 import Modelo.ModeloVistaPunto;
+import Modelo.ModeloVistaRetiro;
 import Modelo.Punto;
+import Modelo.Retiro;
+import Modelo.TramoRetiro;
 
 public class InformacionFragment extends Fragment implements View.OnClickListener {
 
@@ -34,6 +40,7 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
     private FirebaseFirestore db;
     private String mensaje;
     private ArrayList<ModeloVistaPunto> data = new ArrayList<>();
+    private ArrayList<ModeloVistaRetiro> retiros = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +81,103 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
                 return;
             }
 
-            if (this.mensaje.compareTo("Reporte enviado correctamente")==0){
+            else if (this.mensaje.compareTo("Retiro creado correctamente")==0 || this.mensaje.compareTo("Retiro actualizado correctamente")==0){
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                Fragment lp = new CargandoFragment();
+                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                fragmentTransaction.commit();
+
+                db = FirebaseFirestore.getInstance();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                db.collection("retiro")
+                .whereEqualTo("uid", user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Retiro r = document.toObject(Retiro.class);
+                                r.setId(document.getId());
+                                ModeloVistaRetiro pu = new ModeloVistaRetiro();
+                                pu.setRetiro(r);
+                                retiros.add(pu);
+                            }
+
+                            ArrayList<Direccion> direcciones = new ArrayList<>();
+
+                            db.collection("direccion")
+                                    .whereEqualTo("pid", user.getUid())
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    Direccion r = document.toObject(Direccion.class);
+                                                    r.setId(document.getId());
+                                                    direcciones.add(r);
+                                                }
+
+                                                for (ModeloVistaRetiro r: retiros){
+                                                    for (Direccion d: direcciones){
+                                                        if (r.getRetiro().getIdDireccion().compareTo(d.getId())==0)
+                                                            r.setDireccion(d);
+                                                    }
+                                                }
+
+
+                                                db.collection("tramoretiro")
+                                                        .get()
+                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                        TramoRetiro tr = (TramoRetiro) document.toObject(TramoRetiro.class);
+                                                                        tr.setId(document.getId());
+                                                                        for (ModeloVistaRetiro mr: retiros){
+                                                                            if (mr.getRetiro().getIdTramo().compareTo(tr.getId())==0)
+                                                                                mr.setTramo(tr);
+                                                                        }
+                                                                    }
+
+                                                                    Bundle bundle = new Bundle();
+                                                                    bundle.putBoolean("tiene",true);
+                                                                    bundle.putSerializable("retiros", retiros);
+
+
+                                                                    Fragment lp = new RetirosListFragment();
+                                                                    lp.setArguments(bundle);
+                                                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                                                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                                                    fragmentTransaction.commit();
+
+                                                                } else {
+
+                                                                }
+                                                            }
+                                                        });
+
+
+                                            } else {
+
+                                            }
+                                        }
+                                    });
+
+                        } else {
+
+                        }
+                    }
+                });
+            }
+
+            else if (this.mensaje.compareTo("Reporte enviado correctamente")==0){
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

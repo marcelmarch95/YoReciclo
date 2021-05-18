@@ -22,6 +22,22 @@ public class Direccion implements Serializable {
         this.pid = pid;
     }
 
+    @Override
+    public String toString() {
+        return "Direccion{" +
+                "id='" + id + '\'' +
+                ", pid='" + pid + '\'' +
+                ", calle='" + calle + '\'' +
+                ", ciudad='" + ciudad + '\'' +
+                ", region='" + region + '\'' +
+                ", sector='" + sector + '\'' +
+                ", numero='" + numero + '\'' +
+                ", indicaciones='" + indicaciones + '\'' +
+                ", lat='" + lat + '\'' +
+                ", lng='" + lng + '\'' +
+                '}';
+    }
+
     public String getId() {
         return id;
     }

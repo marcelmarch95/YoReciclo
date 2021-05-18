@@ -235,6 +235,7 @@ public class SeleccionarDireccionFragment extends Fragment implements View.OnCli
 
                                     Bundle bundle = new Bundle();
                                     bundle.putSerializable("recicladoras", finales);
+                                    bundle.putSerializable("direccion",d.getDireccion());
 
                                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

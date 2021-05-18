@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingTop="5dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView29"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="DETALLE SOLICITUD DE RETIRO"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/fecha2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="18 de mayo del 2021"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tramo2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tramo 15:00 - 16:00"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/house" />
+
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/direccion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Pje 5 #1635"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:id="@+id/ciudad"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Curicó"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/textView31"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="¡TOMA UNA FOTO DE TUS RESIDUOS!"
+                            android:textAlignment="center"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView32"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="DE ESA MANERA PODRÁS ENTREGAR DE MANERA CORRECTA TUS RESIDUOS AL COLABORADOR QUE TE VISITARÁ"
+                            android:textAlignment="center"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="130dp"
+                            android:layout_height="130dp"
+                            app:srcCompat="@drawable/nofoto" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/selectfoto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="TOMAR FOTO"
+                                android:textSize="10sp" />
+
+                            <Button
+                                android:id="@+id/eliminarfoto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:enabled="false"
+                                android:gravity="center"
+                                android:text="Eliminar Foto"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingTop="10dp">
+
+                            <TextView
+                                android:id="@+id/textView28"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Comentarios adicionales"
+                                android:textAlignment="center"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/comentarios"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:gravity="top|left"
+                                android:hint=""
+                                android:inputType="textMultiLine"
+                                android:lines="3"
+                                android:maxLines="3"
+                                android:minLines="3"
+                                android:scrollbars="none"
+                                android:textAppearance="@style/stitulo"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_weight="1"
+                android:gravity="bottom|center"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingRight="5dp">
+
+                    <Button
+                        android:id="@+id/volver"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/border4"
+                        android:text="VOLVER" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/continuar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border2"
+                        android:text="CONTINUAR" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+
+
+</LinearLayout>

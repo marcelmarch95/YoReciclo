@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import Modelo.Direccion;
 import Modelo.ModeloVistaDireccion;
 import Modelo.ModeloVistaFechasRetiro;
 import Modelo.ModeloVistaRecicladora;
@@ -41,6 +42,7 @@ public class SeleccionarFechaFragment extends Fragment implements View.OnClickLi
     private boolean editar = false;
     private Button add;
     private ModeloVistaFechasRetiro seleccionada;
+    private Direccion direccion;
     private ModeloVistaDireccion mvd;
     private FirebaseFirestore db;
 
@@ -59,6 +61,7 @@ public class SeleccionarFechaFragment extends Fragment implements View.OnClickLi
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         data = (ArrayList<TramoRetiro>) getArguments().getSerializable("tramos");
+        direccion = (Direccion) getArguments().getSerializable("direccion");
 
         System.out.println("total tramos encontrados: " + data.size());
         for (TramoRetiro t: data){
@@ -153,11 +156,11 @@ public class SeleccionarFechaFragment extends Fragment implements View.OnClickLi
         }
 
         else {
-            Toast.makeText(getContext(),"Seleccionada fecha id " + texto,Toast.LENGTH_SHORT).show();
 
 
             Bundle bundle = new Bundle();
             bundle.putSerializable("tramos", seleccionada.getTramos());
+            bundle.putSerializable("direccion", direccion);
 
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
