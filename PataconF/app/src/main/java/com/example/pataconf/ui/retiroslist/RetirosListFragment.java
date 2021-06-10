@@ -1,4 +1,4 @@
-package com.example.pataconf.ui.reportes;
+package com.example.pataconf.ui.retiroslist;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -15,52 +15,51 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.example.pataconf.ModeloVistaReporteAdapter;
-import com.example.pataconf.R;
+import com.example.pataconf.ModeloVistaRetiroAdapter;
 import com.example.pataconf.PerfilComerciante;
+import com.example.pataconf.R;
 import com.example.pataconf.ui.optionpuntos.OptionsPuntosListFragment;
 import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.example.pataconf.ui.optionreports.OptionsReportesListFragment;
+import com.example.pataconf.ui.optionretiros.OptionsRetirosListFragment;
 import com.example.pataconf.ui.vistareportepunto.VistaReportePuntoFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 import Modelo.ModeloVistaReporte;
+import Modelo.ModeloVistaRetiro;
 
 
-public class ReportesListFragment extends Fragment implements View.OnClickListener {
+public class RetirosListFragment extends Fragment implements View.OnClickListener {
 
-    private Spinner scategoria;
-    private OptionsPuntosListViewModel homeViewModel;
     private RecyclerView rvMusicas;
     private GridLayoutManager glm;
-    private ModeloVistaReporteAdapter adapter;
+    private ModeloVistaRetiroAdapter adapter;
     private Button back;
     private PerfilComerciante padre;
     private Spinner categoria;
     private FirebaseFirestore db;
-    private ArrayList<ModeloVistaReporte> reportes;
+    private ArrayList<ModeloVistaRetiro> reportes;
     private Button volver;
 
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(OptionsPuntosListViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_listreport, container, false);
+        View root = inflater.inflate(R.layout.fragment_listretiro, container, false);
 
         padre = (PerfilComerciante) getActivity();
         //padre.getSupportActionBar().hide();
-        padre.getSupportActionBar().setTitle("Listado Reportes");
+        padre.getSupportActionBar().setTitle("Listado Retiros");
 
-        ArrayList<ModeloVistaReporte> data = (ArrayList<ModeloVistaReporte>) getArguments().getSerializable("reportes");
+        ArrayList<ModeloVistaRetiro> data = (ArrayList<ModeloVistaRetiro>) getArguments().getSerializable("retiros");
         this.reportes = data;
 
         rvMusicas = (RecyclerView) root.findViewById(R.id.rv_musicas);
         glm = new GridLayoutManager(getActivity(), 1);
         rvMusicas.setLayoutManager(glm);
-        adapter = new ModeloVistaReporteAdapter(data, this);
+        adapter = new ModeloVistaRetiroAdapter(data, this);
         rvMusicas.setAdapter(adapter);
 
         this.volver = root.findViewById(R.id.volver);
@@ -78,7 +77,7 @@ public class ReportesListFragment extends Fragment implements View.OnClickListen
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            Fragment lp = new OptionsReportesListFragment();
+            Fragment lp = new OptionsRetirosListFragment();
             fragmentTransaction.replace(R.id.nav_host_fragment, lp);
             fragmentTransaction.commit();
         }
@@ -96,8 +95,8 @@ public class ReportesListFragment extends Fragment implements View.OnClickListen
             Button bt = (Button) view;
             System.out.println("Click en el reporte con id: " + bt.getText());
 
-            for (ModeloVistaReporte mvr: this.reportes) {
-                if (mvr.getReporte().getIdReporte().compareTo(bt.getText().toString())==0){
+            for (ModeloVistaRetiro mvr: this.reportes) {
+                if (mvr.getRetiro().getId().compareTo(bt.getText().toString())==0){
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

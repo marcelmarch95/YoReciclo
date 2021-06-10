@@ -1,4 +1,4 @@
-package com.example.pataconf.ui.optionreports;
+package com.example.pataconf.ui.optionretiros;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.DragAndDropPermissions;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,9 @@ import android.widget.TextView;
 import com.example.pataconf.ModeloVistaOpcionesProductoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
-import com.example.pataconf.ui.OptionsGestionProductosFragment;
-import com.example.pataconf.ui.agregarpunto.AgregarPuntoFragment;
-import com.example.pataconf.ui.cargando.CargandoFragment;
-import com.example.pataconf.ui.puntos.PuntosListFragment;
-import com.example.pataconf.ui.puntosmapa.PuntosMapaFragment;
+import com.example.pataconf.ui.optionreports.OptionsReportesListViewModel;
 import com.example.pataconf.ui.reportes.ReportesListFragment;
+import com.example.pataconf.ui.retiroslist.RetirosListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,13 +32,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import Modelo.Direccion;
+import Modelo.Generador;
 import Modelo.ModeloOpcionesProducto;
 import Modelo.ModeloVistaPunto;
 import Modelo.ModeloVistaReporte;
+import Modelo.ModeloVistaRetiro;
 import Modelo.Punto;
 import Modelo.Reporte;
+import Modelo.Retiro;
+import Modelo.TramoRetiro;
 
-public class OptionsReportesListFragment extends Fragment implements View.OnClickListener {
+public class OptionsRetirosListFragment extends Fragment implements View.OnClickListener {
 
     private Spinner scategoria;
     private OptionsReportesListViewModel homeViewModel;
@@ -53,9 +56,9 @@ public class OptionsReportesListFragment extends Fragment implements View.OnClic
 
     private ArrayList<ModeloOpcionesProducto> dataSet() {
         ArrayList<ModeloOpcionesProducto> data = new ArrayList<>();
-        data.add(new ModeloOpcionesProducto("Reportes Pendientes",  R.drawable.reportarpendiente));
-        data.add(new ModeloOpcionesProducto("Reportes Aprobados",  R.drawable.reportarok));
-        data.add(new ModeloOpcionesProducto("Reportes Rechazados",  R.drawable.reportarok));
+        data.add(new ModeloOpcionesProducto("Retiros Pendientes",  R.drawable.reportarpendiente));
+        data.add(new ModeloOpcionesProducto("Retiros Aprobados",  R.drawable.reportarok));
+        data.add(new ModeloOpcionesProducto("Retiros Rechazados",  R.drawable.reportarok));
         //data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
         return data;
     }
@@ -64,10 +67,10 @@ public class OptionsReportesListFragment extends Fragment implements View.OnClic
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(OptionsReportesListViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_optionsreports, container, false);
+        View root = inflater.inflate(R.layout.fragment_optionsretiros, container, false);
 
 
-        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Menú Reportes");
+        ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Menú Retiros");
 
 
         rvMusicas = (RecyclerView) root.findViewById(R.id.rv_musicas);
@@ -83,76 +86,132 @@ public class OptionsReportesListFragment extends Fragment implements View.OnClic
         CardView cv = (CardView) view;
         TextView tv = (TextView) view.findViewById(R.id.accion);
 
-        if (tv.getText().toString().compareTo("Reportes Pendientes")==0){
-            cargarReportes("pendiente");
+        if (tv.getText().toString().compareTo("Retiros Pendientes")==0){
+            cargarRetiros("pendiente");
         }
-        if (tv.getText().toString().compareTo("Reportes Rechazados")==0){
-            cargarReportes("rechazado");
+        if (tv.getText().toString().compareTo("Retiros Rechazados")==0){
+            cargarRetiros("rechazado");
         }
-        if (tv.getText().toString().compareTo("Reportes Aprobados")==0){
-            cargarReportes("aprobado");
+        if (tv.getText().toString().compareTo("Retiros Aprobados")==0){
+            cargarRetiros("aprobado");
         }
     }
 
-    public void cargarReportes(String estado){
+    public void cargarRetiros(String estado){
         db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        ArrayList<Reporte> reportes = new ArrayList<>();
-        ArrayList<Punto> puntos = new ArrayList<>();
-        ArrayList<ModeloVistaReporte> data = new ArrayList<>();
+        ArrayList<Retiro> retiros = new ArrayList<>();
+        ArrayList<TramoRetiro> tramos = new ArrayList<>();
+        ArrayList<Direccion> direccions = new ArrayList<>();
+        ArrayList<ModeloVistaRetiro> data = new ArrayList<>();
+        ArrayList<Generador> generadores = new ArrayList<>();
 
-        db.collection("punto")
-        .whereEqualTo("pid", user.getUid())
+        db.collection("retiro")
         .get()
         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Punto p = document.toObject(Punto.class);
-                        p.setId(document.getId());
-                        puntos.add(p);
+                        Retiro r = document.toObject(Retiro.class);
+                        if (r.getIdrecicladora().compareTo(user.getUid())==0){
+                            r.setId(document.getId());
+                            retiros.add(r);
+                        }
                     }
 
-                    db.collection("reporte")
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document2 : task.getResult()) {
-                                            Reporte r = document2.toObject(Reporte.class);
-                                            r.setIdReporte(document2.getId());
-                                            reportes.add(r);
-                                        }
+                    db.collection("tramoretiro")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document2 : task.getResult()) {
+                                    TramoRetiro r = document2.toObject(TramoRetiro.class);
+                                    r.setId(document2.getId());
+                                    tramos.add(r);
+                                }
 
-                                        for (Punto p: puntos){
-                                            for (Reporte r: reportes){
-                                                if (p.getId().compareTo(r.getIdPunto())==0){
-                                                    if (r.getEstado().compareTo(estado)==0) {
-                                                        ModeloVistaReporte mvr = new ModeloVistaReporte();
-                                                        mvr.setPunto(p);
-                                                        mvr.setReporte(r);
-                                                        data.add(mvr);
+                                db.collection("direccion")
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document2 : task.getResult()) {
+                                                Direccion d = document2.toObject(Direccion.class);
+                                                d.setId(document2.getId());
+                                                direccions.add(d);
+                                            }
+
+                                            db.collection("generador")
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot document2 : task.getResult()) {
+                                                            Generador d = document2.toObject(Generador.class);
+                                                            d.setUid(document2.getId());
+                                                            generadores.add(d);
+                                                        }
+
+                                                        for (Retiro p: retiros){
+                                                            for (TramoRetiro r: tramos){
+                                                                if (p.getIdTramo().compareTo(r.getId())==0){
+                                                                    if (p.getEstado().compareTo("solicitado")==0) {
+                                                                        ModeloVistaRetiro mvr = new ModeloVistaRetiro();
+                                                                        mvr.setRetiro(p);
+                                                                        mvr.setTramo(r);
+                                                                        data.add(mvr);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+
+                                                        for (ModeloVistaRetiro mv: data){
+                                                            for (Direccion di: direccions){
+                                                                if (mv.getRetiro().getIdDireccion().compareTo(di.getId())==0){
+                                                                    mv.setDireccion(di);
+                                                                }
+                                                            }
+                                                            for (Generador g: generadores){
+                                                                if (mv.getRetiro().getUid().compareTo(g.getUid())==0){
+                                                                    mv.setGenerador(g);
+                                                                }
+                                                            }
+                                                        }
+
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putSerializable("retiros", data);
+
+                                                        FragmentManager fragmentManager = getFragmentManager();
+                                                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                                                        Fragment lp = new RetirosListFragment();
+                                                        lp.setArguments(bundle);
+                                                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                                                        fragmentTransaction.addToBackStack(null);
+                                                        fragmentTransaction.commit();
+
+                                                    } else {
+
                                                     }
                                                 }
-                                            }
+                                            });
+
+
+
+                                        } else {
+
                                         }
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable("reportes", data);
-
-                                        FragmentManager fragmentManager = getFragmentManager();
-                                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                                        Fragment lp = new ReportesListFragment();
-                                        lp.setArguments(bundle);
-                                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                                        fragmentTransaction.addToBackStack(null);
-                                        fragmentTransaction.commit();
-
-                                    } else {
-
                                     }
+                                });
+
+
+                            } else {
+
+                            }
                                 }
                             });
 

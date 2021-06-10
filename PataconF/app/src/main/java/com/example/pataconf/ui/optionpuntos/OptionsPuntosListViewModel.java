@@ -1,4 +1,4 @@
-package com.example.pataconf.ui.optionproducts;
+package com.example.pataconf.ui.optionpuntos;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;

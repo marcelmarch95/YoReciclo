@@ -1,4 +1,4 @@
-package com.example.pataconf.ui.optionproducts;
+package com.example.pataconf.ui.optionpuntos;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -9,18 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.arch.lifecycle.ViewModelProviders;
 
 import com.example.pataconf.ModeloVistaOpcionesProductoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.ui.OptionsGestionProductosFragment;
 import com.example.pataconf.ui.agregarpunto.AgregarPuntoFragment;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
-import com.example.pataconf.ui.reportes.ReportesListFragment;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.cargando.CargandoFragment;
 import com.example.pataconf.ui.puntosmapa.PuntosMapaFragment;
@@ -36,9 +33,7 @@ import java.util.ArrayList;
 
 import Modelo.ModeloOpcionesProducto;
 import Modelo.ModeloVistaPunto;
-import Modelo.ModeloVistaReporte;
 import Modelo.Punto;
-import Modelo.Reporte;
 
 public class OptionsPuntosListFragment extends Fragment implements View.OnClickListener {
 

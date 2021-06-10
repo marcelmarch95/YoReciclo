@@ -17,49 +17,38 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import Modelo.ModeloVistaReporte;
+import Modelo.ModeloVistaRetiro;
 
-public class ModeloVistaReporteAdapter extends RecyclerView.Adapter<ModeloVistaReporteAdapter.MusicaViewHolder>  {
+public class ModeloVistaRetiroAdapter extends RecyclerView.Adapter<ModeloVistaRetiroAdapter.MusicaViewHolder>  {
 
-    private ArrayList<ModeloVistaReporte> data;
+    private ArrayList<ModeloVistaRetiro> data;
     private View.OnClickListener listener;
 
 
-    public ModeloVistaReporteAdapter(ArrayList<ModeloVistaReporte> data, View.OnClickListener ls) {
+    public ModeloVistaRetiroAdapter(ArrayList<ModeloVistaRetiro> data, View.OnClickListener ls) {
         this.data = data;
         this.listener = ls;
     }
 
     @Override
     public MusicaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MusicaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_modeloreporte, parent, false), this.listener);
+        return new MusicaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_modeloretiro, parent, false), this.listener);
     }
 
     @Override
     public void onBindViewHolder(MusicaViewHolder holder, int position) {
-        ModeloVistaReporte reporte = data.get(position);
+        ModeloVistaRetiro retiro = data.get(position);
 
         //holder.imgMusica.setImageDrawable(LoadImageFromWebOperations(musica.getFoto()));
-        holder.direccion.setText(reporte.getPunto().getDireccion());
+        holder.direccion.setText(retiro.getDireccion().getCalle() + " - " + retiro.getDireccion().getCiudad() );
 
-        holder.fecha.setText("Reporte creado el " + reporte.getReporte().getFecha() + " a las " + reporte.getReporte().getHora());
-        holder.ver.setText(reporte.getReporte().getIdReporte().toString());
+        System.out.println("retiro tramo: " + retiro.getTramo().toString());
+        holder.fecha.setText(retiro.getTramo().getFecha() + "  " + retiro.getTramo().getHorainicio() + " - " +  retiro.getTramo().getHorafinal());
+        holder.generador.setText(retiro.getGenerador().getNombre() +  " " + retiro.getGenerador().getApellido());
+        holder.ver.setText(retiro.getRetiro().getId());
 
-        if (reporte.getReporte().getMotivo().compareTo("inexistente")==0) {
-            holder.motivo.setText("Punto Inexistente");
-            holder.imgmotivo.setImageResource(R.drawable.inexistente);
-        }
-        if (reporte.getReporte().getMotivo().compareTo("lleno")==0) {
-            holder.motivo.setText("Punto Lleno");
-            holder.imgmotivo.setImageResource(R.drawable.full);
-        }
-        if (reporte.getReporte().getMotivo().compareTo("otro")==0) {
-            holder.motivo.setText("Otro Motivo");
-            holder.imgmotivo.setImageResource(R.drawable.otro);
-        }
-        if (reporte.getReporte().getMotivo().compareTo("deteriorado")==0) {
-            holder.motivo.setText("Punto Deteriorado");
-            holder.imgmotivo.setImageResource(R.drawable.roto);
-        }
+        holder.imgmotivo.setImageResource(R.drawable.inexistente);
+
 
     }
 
@@ -73,7 +62,7 @@ public class ModeloVistaReporteAdapter extends RecyclerView.Adapter<ModeloVistaR
         ImageView imgmotivo;
         Button ver;
         TextView direccion;
-        TextView motivo;
+        TextView generador;
         TextView fecha;
 
         public MusicaViewHolder(View itemView, View.OnClickListener lis) {
@@ -83,7 +72,7 @@ public class ModeloVistaReporteAdapter extends RecyclerView.Adapter<ModeloVistaR
             ver.setOnClickListener(lis);
             ver.setTextColor(0xFF0000);
             direccion = (TextView) itemView.findViewById(R.id.direccion);
-            motivo = (TextView) itemView.findViewById(R.id.motivo);
+            generador = (TextView) itemView.findViewById(R.id.generador);
             fecha = (TextView) itemView.findViewById(R.id.fecha);
         }
 
