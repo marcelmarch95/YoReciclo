@@ -25,8 +25,8 @@ import android.widget.TextView;
 import com.example.pataconf.SelectorDireccionMapaPunto;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListFragment;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -86,7 +86,6 @@ public class AgregarPuntoFragment extends Fragment implements View.OnClickListen
         this.volver = (Button) root.findViewById(R.id.volver);
         this.volver.setOnClickListener(this);
 
-        this.selectfoto = (Button) root.findViewById(R.id.selectfoto);
         this.agregar = (Button) root.findViewById(R.id.agregar);
 
         foto = (ImageView) root.findViewById(R.id.imageView4);

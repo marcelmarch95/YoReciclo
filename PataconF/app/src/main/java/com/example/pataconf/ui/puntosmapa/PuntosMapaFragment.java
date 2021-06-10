@@ -24,8 +24,8 @@ import android.widget.TextView;
 
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListFragment;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;

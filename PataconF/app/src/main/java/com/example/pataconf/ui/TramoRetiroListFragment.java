@@ -1,6 +1,5 @@
 package com.example.pataconf.ui;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -18,14 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.pataconf.ModeloVistaPuntoAdapter;
 import com.example.pataconf.ModeloVistaTramoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.editarpunto.EditarPuntoFragment;
 import com.example.pataconf.ui.eliminarpunto.EliminarPuntoFragment;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListFragment;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +38,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import Modelo.Cobertura;
-import Modelo.ModeloVistaPunto;
 import Modelo.ModeloVistaTramo;
 
 

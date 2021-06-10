@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment"
+        android:name="com.example.pataconf.ui.optionpuntos.OptionsPuntosListFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_optionsproduct" />
 
@@ -25,9 +25,9 @@
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.example.pataconf.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:name="com.example.pataconf.ui.optionretiros.OptionsRetirosListFragment"
+        android:label="Retiros"
+        tools:layout="@layout/fragment_optionsretiros" />
 
     <fragment
         android:id="@+id/nav_calendario"

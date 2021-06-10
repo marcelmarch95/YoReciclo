@@ -141,6 +141,7 @@ public class SolicitarRetiroFragment extends Fragment implements View.OnClickLis
                         retiro.setTotlata(String.valueOf(totlatas));
                         retiro.setTotvidrio(String.valueOf(totvidrio));
                         retiro.setTotplastico(String.valueOf(totplastico));
+                        retiro.setIdrecicladora(tramoseleccionado.getUid());
                         retiro.setComentarios(comentarios);
 
                         FragmentManager fragmentManager = getFragmentManager();

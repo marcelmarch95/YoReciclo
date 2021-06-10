@@ -19,8 +19,8 @@ import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.editarpunto.EditarPuntoFragment;
 import com.example.pataconf.ui.eliminarpunto.EliminarPuntoFragment;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListFragment;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListFragment;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;

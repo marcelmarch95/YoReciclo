@@ -28,7 +28,7 @@ import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.cargando.CargandoFragment;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -254,6 +254,7 @@ public class EditarPuntoFragment extends Fragment implements View.OnClickListene
         RadioButton recinto = (RadioButton) root.findViewById(idrecinto);
         RadioButton area = (RadioButton) root.findViewById(idarea);
 
+
         Punto p = new Punto();
         p.setSector(this.sector.getSelectedItem().toString());
         p.setDireccion(this.edireccion.getText().toString());
@@ -264,7 +265,7 @@ public class EditarPuntoFragment extends Fragment implements View.OnClickListene
         p.setIslatas(this.lata.isChecked());
         p.setIsplastico(this.plastico.isChecked());
         p.setIsvidrio(this.vidrio.isChecked());
-        p.setPid(this.punto.getPid());
+        p.setPid(user.getUid());
         p.setLat(this.punto.getLat());
         p.setLng(this.punto.getLng());
         p.setId(this.punto.getId());

@@ -18,7 +18,7 @@ import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.cargando.CargandoFragment;
 import com.example.pataconf.ui.informacion.InformacionFragment;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.example.pataconf.ui.optionreports.OptionsReportesListFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

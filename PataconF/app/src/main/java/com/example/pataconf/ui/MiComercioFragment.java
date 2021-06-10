@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,13 @@ import android.widget.Toast;
 import com.example.pataconf.MainActivity;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
+import com.example.pataconf.ui.informacion.InformacionFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,9 +50,7 @@ import static android.app.Activity.RESULT_OK;
 public class MiComercioFragment extends Fragment implements View.OnClickListener {
 
 
-    private Button selectfoto;
     private Button guardar;
-    private Button eliminarfoto;
     private Button exit;
     private FirebaseFirestore db;
     private ImageView foto;
@@ -108,15 +109,6 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
                         nombreEncargado.setText(c.getNombreEncargado());
                         telefono.setText(c.getNumeroTelefono());
                         comerciante = c;
-
-                        try {
-                            new DownloadImageTask(foto).execute(c.getFoto());
-                        }
-                        catch (Exception e){
-                            foto.setImageResource(R.drawable.recicon);
-                            System.out.println("Error al cargar foto: " + c.getFoto());
-                        }
-
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
                         //Log.d(TAG, "No such document");
@@ -128,21 +120,8 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
         });
 
 
-        this.selectfoto = (Button) root.findViewById(R.id.selectfoto);
-
         this.exit = (Button) root.findViewById(R.id.exit);
         this.exit.setOnClickListener(this);
-
-        this.eliminarfoto = (Button) root.findViewById(R.id.eliminarfoto);
-        this.eliminarfoto.setOnClickListener(this);
-
-        this.selectfoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-
-            }
-        });
 
         ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Mi Recicladora");
 
@@ -154,81 +133,39 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
         startActivityForResult(gallery, PICK_IMAGE);
     }
 
-    private void saveFoto(){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
 
-        StorageReference riversRef = storageRef.child("images/"+mAuth.getUid()+"/" + imageUri.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(imageUri);
 
-        this.progressBar.setVisibility(View.VISIBLE);
-
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                System.out.println("error al subir : " + exception.toString());
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
-                {
-                    @Override
-                    public void onSuccess(Uri downloadUrl)
-                    {
-                        comerciante.setFoto(downloadUrl.toString());
-                        System.out.println("subida correctamente link: " + comerciante.getFoto());
-
-                        db.collection("comerciante").document(comerciante.getUid()).set(comerciante).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
-                                Toast.makeText(getContext(),"Actualizado correctamente!",Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.INVISIBLE);
-                                guardar.setEnabled(true);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                                Toast.makeText(getContext(),"Error al actualizar!",Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.INVISIBLE);
-                                guardar.setEnabled(true);
-
-                            }
-                        });
-                    }
-                });
-
-            }
-
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                System.out.println("Upload is " + progress + "% done");
-            }
-        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                System.out.println("Upload is paused");
-            }
-        });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
-            imageUri = data.getData();
-            foto.setImageURI(imageUri);
-            eliminarfoto.setEnabled(true);
-        }
-    }
 
     public void updateViewPerfil(){
+        this.progressBar.setVisibility(View.VISIBLE);
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        comerciante.setDireccion(direccion.getText().toString());
+        comerciante.setNombreEncargado(nombreEncargado.getText().toString());
+        comerciante.setNumeroTelefono(telefono.getText().toString());
+
+        db = FirebaseFirestore.getInstance();
+        db.collection("recicladora").document(currentUser.getUid())
+        .set(comerciante)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getContext(),"Actualizado correctamente!",Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                guardar.setEnabled(true);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(),"Error al actualizar",Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                guardar.setEnabled(true);
+            }
+        });
+
 
     }
 
@@ -239,15 +176,11 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
         if(view == this.guardar){
             this.guardar.setEnabled(false);
             this.progressBar.setVisibility(View.VISIBLE);
-            saveFoto();
             updateViewPerfil();
         }
 
 
-        if (view == this.eliminarfoto){
-            this.foto.setImageResource(R.drawable.imagen2);
-            this.eliminarfoto.setEnabled(false);
-        }
+
 
         if (view == this.exit){
             mAuth = FirebaseAuth.getInstance();
@@ -258,45 +191,8 @@ public class MiComercioFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    public static Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                //Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            if (result==null){
-                bmImage.setImageResource(R.drawable.market);
-            }
-            else {
-                bmImage.setImageBitmap(result);
-            }
-        }
-    }
 
 
 

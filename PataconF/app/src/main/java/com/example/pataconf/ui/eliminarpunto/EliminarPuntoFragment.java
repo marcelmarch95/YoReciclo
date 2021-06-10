@@ -21,7 +21,7 @@ import com.example.pataconf.ui.informacion.InformacionFragment;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.cargando.CargandoFragment;
-import com.example.pataconf.ui.optionproducts.OptionsPuntosListViewModel;
+import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;

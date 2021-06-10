@@ -30,38 +30,12 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="150dp"
-                        android:layout_height="96dp"
-                        app:srcCompat="@drawable/recicon" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/selectfoto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="CAMBIAR FOTO"
-                            android:textSize="10sp" />
-
-                        <Button
-                            android:id="@+id/eliminarfoto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:enabled="false"
-                            android:gravity="center"
-                            android:text="Eliminar Foto"
-                            android:textSize="10sp" />
-                    </LinearLayout>
+                        android:orientation="horizontal"/>
 
 
                     <LinearLayout
@@ -141,9 +115,7 @@
                         android:id="@+id/direccion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
                         android:ems="10"
-                        android:focusable="false"
                         android:hint="Av. 5 de Julio #134"
                         android:inputType="textPersonName"
                         android:textAppearance="@style/stitulo"
@@ -172,10 +144,10 @@
                         android:id="@+id/localidad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
                         android:ems="10"
-                        android:focusable="false"
                         android:hint="Curicó"
+                        android:editable="false"
+                        android:focusable="false"
                         android:inputType="textPersonName"
                         android:textAppearance="@style/stitulo"
                         android:textSize="14sp" />
@@ -225,9 +197,7 @@
                         android:id="@+id/nombreDeEncargado"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
                         android:ems="10"
-                        android:focusable="false"
                         android:hint="Av. 5 de Julio #134"
                         android:inputType="textPersonName"
                         android:textAppearance="@style/stitulo"
@@ -256,9 +226,7 @@
                         android:id="@+id/telefono"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
                         android:ems="10"
-                        android:focusable="false"
                         android:hint="Curicó"
                         android:inputType="textPersonName"
                         android:textAppearance="@style/stitulo"
