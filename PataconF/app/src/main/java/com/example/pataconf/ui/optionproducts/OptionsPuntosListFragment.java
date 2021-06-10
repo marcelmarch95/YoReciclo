@@ -134,6 +134,8 @@ public class OptionsPuntosListFragment extends Fragment implements View.OnClickL
             db = FirebaseFirestore.getInstance();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+            System.out.println("userid: " + user.getUid());
+
             db.collection("punto")
             .whereEqualTo("pid", user.getUid())
             .get()

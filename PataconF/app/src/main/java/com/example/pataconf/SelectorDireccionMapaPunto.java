@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -507,10 +508,12 @@ public class SelectorDireccionMapaPunto extends AppCompatActivity implements Vie
 
             mAuth = FirebaseAuth.getInstance();
 
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
             this.punto.setLat(String.valueOf(this.lat));
             this.punto.setLng(String.valueOf(this.lng));
             this.progressBar.setVisibility(View.VISIBLE);
-            this.punto.setPid(mAuth.getUid());
+            this.punto.setPid(user.getUid());
 
             if (editar){
                 db = FirebaseFirestore.getInstance();
