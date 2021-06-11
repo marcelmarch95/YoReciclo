@@ -59,6 +59,7 @@ public class OptionsRetirosListFragment extends Fragment implements View.OnClick
         data.add(new ModeloOpcionesProducto("Retiros Pendientes",  R.drawable.reportarpendiente));
         data.add(new ModeloOpcionesProducto("Retiros Aprobados",  R.drawable.reportarok));
         data.add(new ModeloOpcionesProducto("Retiros Rechazados",  R.drawable.reportarok));
+        data.add(new ModeloOpcionesProducto("Retiros Finalizados",  R.drawable.reportarok));
         //data.add(new ModeloOpcionesProducto("Ver Productos",  R.drawable.productos));
         return data;
     }
@@ -94,6 +95,9 @@ public class OptionsRetirosListFragment extends Fragment implements View.OnClick
         }
         if (tv.getText().toString().compareTo("Retiros Aprobados")==0){
             cargarRetiros("aprobado");
+        }
+        if (tv.getText().toString().compareTo("Retiros Finalizados")==0){
+            cargarRetiros("finalizado");
         }
     }
 
@@ -159,11 +163,37 @@ public class OptionsRetirosListFragment extends Fragment implements View.OnClick
                                                         for (Retiro p: retiros){
                                                             for (TramoRetiro r: tramos){
                                                                 if (p.getIdTramo().compareTo(r.getId())==0){
-                                                                    if (p.getEstado().compareTo("solicitado")==0) {
-                                                                        ModeloVistaRetiro mvr = new ModeloVistaRetiro();
-                                                                        mvr.setRetiro(p);
-                                                                        mvr.setTramo(r);
-                                                                        data.add(mvr);
+                                                                    if (estado.compareTo("pendiente")==0){
+                                                                        if (p.getEstado().compareTo("solicitado")==0) {
+                                                                            ModeloVistaRetiro mvr = new ModeloVistaRetiro();
+                                                                            mvr.setRetiro(p);
+                                                                            mvr.setTramo(r);
+                                                                            data.add(mvr);
+                                                                        }
+                                                                    }
+                                                                    else if (estado.compareTo("aprobado")==0){
+                                                                        if (p.getEstado().compareTo("aprobado")==0) {
+                                                                            ModeloVistaRetiro mvr = new ModeloVistaRetiro();
+                                                                            mvr.setRetiro(p);
+                                                                            mvr.setTramo(r);
+                                                                            data.add(mvr);
+                                                                        }
+                                                                    }
+                                                                    else if (estado.compareTo("rechazado")==0){
+                                                                        if (p.getEstado().compareTo("rechazado")==0) {
+                                                                            ModeloVistaRetiro mvr = new ModeloVistaRetiro();
+                                                                            mvr.setRetiro(p);
+                                                                            mvr.setTramo(r);
+                                                                            data.add(mvr);
+                                                                        }
+                                                                    }
+                                                                    else if (estado.compareTo("finalizado")==0){
+                                                                        if (p.getEstado().compareTo("finalizado")==0) {
+                                                                            ModeloVistaRetiro mvr = new ModeloVistaRetiro();
+                                                                            mvr.setRetiro(p);
+                                                                            mvr.setTramo(r);
+                                                                            data.add(mvr);
+                                                                        }
                                                                     }
                                                                 }
                                                             }

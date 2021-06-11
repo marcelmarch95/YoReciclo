@@ -23,6 +23,7 @@ import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.example.pataconf.ui.optionreports.OptionsReportesListFragment;
 import com.example.pataconf.ui.optionretiros.OptionsRetirosListFragment;
 import com.example.pataconf.ui.vistareportepunto.VistaReportePuntoFragment;
+import com.example.pataconf.ui.vistaretiro.VistaRetiroFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class RetirosListFragment extends Fragment implements View.OnClickListene
     private PerfilComerciante padre;
     private Spinner categoria;
     private FirebaseFirestore db;
-    private ArrayList<ModeloVistaRetiro> reportes;
+    private ArrayList<ModeloVistaRetiro> retiros;
     private Button volver;
 
 
@@ -54,7 +55,7 @@ public class RetirosListFragment extends Fragment implements View.OnClickListene
         padre.getSupportActionBar().setTitle("Listado Retiros");
 
         ArrayList<ModeloVistaRetiro> data = (ArrayList<ModeloVistaRetiro>) getArguments().getSerializable("retiros");
-        this.reportes = data;
+        this.retiros = data;
 
         rvMusicas = (RecyclerView) root.findViewById(R.id.rv_musicas);
         glm = new GridLayoutManager(getActivity(), 1);
@@ -95,7 +96,7 @@ public class RetirosListFragment extends Fragment implements View.OnClickListene
             Button bt = (Button) view;
             System.out.println("Click en el reporte con id: " + bt.getText());
 
-            for (ModeloVistaRetiro mvr: this.reportes) {
+            for (ModeloVistaRetiro mvr: this.retiros) {
                 if (mvr.getRetiro().getId().compareTo(bt.getText().toString())==0){
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -103,7 +104,7 @@ public class RetirosListFragment extends Fragment implements View.OnClickListene
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("mvr", mvr);
 
-                    Fragment lp = new VistaReportePuntoFragment();
+                    Fragment lp = new VistaRetiroFragment();
                     lp.setArguments(bundle);
                     fragmentTransaction.replace(R.id.nav_host_fragment, lp);
                     fragmentTransaction.commit();
