@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.pataconf.R;
 import com.example.pataconf.ui.TramoRetiroListFragment;
 import com.example.pataconf.ui.optionreports.OptionsReportesListFragment;
+import com.example.pataconf.ui.optionretiros.OptionsRetirosListFragment;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.example.pataconf.ui.reportes.ReportesListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -82,6 +83,20 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
+
+        if (this.mensa.compareTo("Retiro aprobado")==0 || this.mensa.compareTo("Retiro rechazado")==0 || this.mensa.compareTo("Retiro finalizado")==0){
+
+            FragmentManager fragmentManager = getFragmentManager();
+            db = FirebaseFirestore.getInstance();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            Fragment lp = new OptionsRetirosListFragment();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction.commit();
+
+            return;
+        }
 
         if (this.mensa.compareTo("Tramo creado correctamente")==0){
 

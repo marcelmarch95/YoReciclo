@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.example.pataconf.ModeloVistaOpcionesProductoAdapter;
 import com.example.pataconf.PerfilComerciante;
 import com.example.pataconf.R;
+import com.example.pataconf.ui.cargando.CargandoFragment;
+import com.example.pataconf.ui.cargando.SinDocumentoFragment;
 import com.example.pataconf.ui.optionreports.OptionsReportesListViewModel;
 import com.example.pataconf.ui.reportes.ReportesListFragment;
 import com.example.pataconf.ui.retiroslist.RetirosListFragment;
@@ -102,6 +104,15 @@ public class OptionsRetirosListFragment extends Fragment implements View.OnClick
     }
 
     public void cargarRetiros(String estado){
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        Fragment lp = new CargandoFragment();
+        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
         db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         ArrayList<Retiro> retiros = new ArrayList<>();
@@ -212,17 +223,31 @@ public class OptionsRetirosListFragment extends Fragment implements View.OnClick
                                                             }
                                                         }
 
-                                                        Bundle bundle = new Bundle();
-                                                        bundle.putSerializable("retiros", data);
+                                                        if (data.size()==0){
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putSerializable("mensaje", "retiro");
 
-                                                        FragmentManager fragmentManager = getFragmentManager();
-                                                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+                                                            Fragment lp = new SinDocumentoFragment();
+                                                            lp.setArguments(bundle);
+                                                            fragmentTransaction2.replace(R.id.nav_host_fragment, lp);
+                                                            fragmentTransaction2.addToBackStack(null);
+                                                            fragmentTransaction2.commit();
+                                                        }
+                                                        else {
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putSerializable("retiros", data);
 
-                                                        Fragment lp = new RetirosListFragment();
-                                                        lp.setArguments(bundle);
-                                                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                                                        fragmentTransaction.addToBackStack(null);
-                                                        fragmentTransaction.commit();
+
+                                                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+
+                                                            Fragment lp = new RetirosListFragment();
+                                                            lp.setArguments(bundle);
+                                                            fragmentTransaction2.replace(R.id.nav_host_fragment, lp);
+                                                            fragmentTransaction2.addToBackStack(null);
+                                                            fragmentTransaction2.commit();
+                                                        }
+
 
                                                     } else {
 

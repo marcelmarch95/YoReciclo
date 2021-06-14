@@ -220,6 +220,7 @@ public class PerfilComerciante extends AppCompatActivity {
             }
             else {
                 bmImage.setImageBitmap(result);
+
             }
         }
     }

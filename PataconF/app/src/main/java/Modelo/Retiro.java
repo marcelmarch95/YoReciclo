@@ -1,6 +1,8 @@
 package Modelo;
 
-public class Retiro {
+import java.io.Serializable;
+
+public class Retiro implements Serializable {
     public String id;
     public String uid;
     public String idTramo;

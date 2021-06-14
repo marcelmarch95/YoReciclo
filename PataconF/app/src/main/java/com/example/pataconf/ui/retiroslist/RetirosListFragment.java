@@ -23,6 +23,8 @@ import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
 import com.example.pataconf.ui.optionreports.OptionsReportesListFragment;
 import com.example.pataconf.ui.optionretiros.OptionsRetirosListFragment;
 import com.example.pataconf.ui.vistareportepunto.VistaReportePuntoFragment;
+import com.example.pataconf.ui.vistaretiro.VistaRetiroAprobadoFragment;
+import com.example.pataconf.ui.vistaretiro.VistaRetiroFinalizadoFragment;
 import com.example.pataconf.ui.vistaretiro.VistaRetiroFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -94,7 +96,7 @@ public class RetirosListFragment extends Fragment implements View.OnClickListene
 
         else {
             Button bt = (Button) view;
-            System.out.println("Click en el reporte con id: " + bt.getText());
+            System.out.println("Click en el retiro con id: " + bt.getText());
 
             for (ModeloVistaRetiro mvr: this.retiros) {
                 if (mvr.getRetiro().getId().compareTo(bt.getText().toString())==0){
@@ -104,10 +106,25 @@ public class RetirosListFragment extends Fragment implements View.OnClickListene
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("mvr", mvr);
 
-                    Fragment lp = new VistaRetiroFragment();
-                    lp.setArguments(bundle);
-                    fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                    fragmentTransaction.commit();
+                    if (mvr.getRetiro().getEstado().compareTo("aprobado")==0){
+                        Fragment lp = new VistaRetiroAprobadoFragment();
+                        lp.setArguments(bundle);
+                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                        fragmentTransaction.commit();
+                    }
+                    else if (mvr.getRetiro().getEstado().compareTo("finalizado")==0 || mvr.getRetiro().getEstado().compareTo("rechazado")==0){
+                        Fragment lp = new VistaRetiroFinalizadoFragment();
+                        lp.setArguments(bundle);
+                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                        fragmentTransaction.commit();
+                    }
+                    else{
+                        Fragment lp = new VistaRetiroFragment();
+                        lp.setArguments(bundle);
+                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                        fragmentTransaction.commit();
+                    }
+
                 }
             }
         }

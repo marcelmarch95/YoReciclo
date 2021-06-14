@@ -21,9 +21,7 @@ import com.example.pataconf.ui.cargando.CargandoFragment;
 import com.example.pataconf.ui.cargando.VistaFotografiaFragment;
 import com.example.pataconf.ui.informacion.InformacionFragment;
 import com.example.pataconf.ui.optionpuntos.OptionsPuntosListViewModel;
-import com.example.pataconf.ui.optionreports.OptionsReportesListFragment;
 import com.example.pataconf.ui.optionretiros.OptionsRetirosListFragment;
-import com.example.pataconf.ui.retiroslist.RetirosListFragment;
 import com.example.pataconf.ui.vistadireccion.VistaDireccionFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,15 +35,13 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 import Modelo.ModeloVistaPunto;
-import Modelo.ModeloVistaReporte;
 import Modelo.ModeloVistaRetiro;
 import Modelo.Punto;
-import Modelo.Reporte;
 import Modelo.Retiro;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class VistaRetiroFragment extends Fragment implements View.OnClickListener {
+public class VistaRetiroAprobadoFragment extends Fragment implements View.OnClickListener {
 
     private OptionsPuntosListViewModel homeViewModel;
     private TextView title;
@@ -78,8 +74,7 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
     private TextView nombre;
     private TextView numero;
 
-    private Button aprobar;
-    private Button rechazar;
+    private Button finalizar;
     private Button volver;
     private Button verdireccion;
     private ImageView foto;
@@ -97,7 +92,7 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
                              ViewGroup container, Bundle savedInstanceState)  {
         homeViewModel =
                 ViewModelProviders.of(this).get(OptionsPuntosListViewModel.class);
-        root = inflater.inflate(R.layout.fragment_vistaretiro, container, false);
+        root = inflater.inflate(R.layout.fragment_vistaretiroaprobado, container, false);
 
         this.mvr = (ModeloVistaRetiro) getArguments().getSerializable("mvr");
 
@@ -113,6 +108,9 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
         this.imgp = root.findViewById(R.id.imgp);
         this.imgl = root.findViewById(R.id.imgl);
         this.imgv = root.findViewById(R.id.imgv);
+
+        this.verfoto = root.findViewById(R.id.verfoto);
+        this.verfoto.setOnClickListener(this);
 
         this.nombre = root.findViewById(R.id.nombre);
         this.numero = root.findViewById(R.id.numero);
@@ -163,9 +161,6 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
         this.flayout.requestLayout();
         this.flayout1.requestLayout();
 
-        this.verfoto = root.findViewById(R.id.verfoto);
-        this.verfoto.setOnClickListener(this);
-
         this.fecha.setText(mvr.getTramo().getFecha());
         this.hora.setText(mvr.getTramo().getHorainicio() + " - " + mvr.getTramo().getHorafinal());
 
@@ -175,11 +170,12 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
         this.direccion.setText(mvr.getDireccion().getCalle() + " #" + mvr.getDireccion().getNumero() + ", " + mvr.getDireccion().getCiudad());
         this.sector.setText(mvr.getDireccion().getSector());
 
-        this.aprobar = root.findViewById(R.id.aprobar);
-        this.aprobar.setOnClickListener(this);
+        this.finalizar = root.findViewById(R.id.finalizar);
+        this.finalizar.setOnClickListener(this);
 
-        this.rechazar = root.findViewById(R.id.rechazar);
-        this.rechazar.setOnClickListener(this);
+        this.verdireccion = root.findViewById(R.id.verdireccion);
+        this.verdireccion.setOnClickListener(this);
+
 
         if (mvr.getRetiro().getComentarios().compareTo("")==0 || mvr.getRetiro().getComentarios()==null ||mvr.getRetiro().getComentarios().isEmpty())
             this.comentarios.setText("Sin Comentarios");
@@ -189,9 +185,6 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
 
         this.volver = root.findViewById(R.id.volver);
         this.volver.setOnClickListener(this);
-
-        this.verdireccion = root.findViewById(R.id.verdireccion);
-        this.verdireccion.setOnClickListener(this);
 
         ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Vista Retiro");
 
@@ -203,32 +196,9 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
 
-        if (view==this.aprobar){
-            this.aprobar.setEnabled(false);
-            this.rechazar.setEnabled(true);
-            this.aprobarRetiro();
-        }
-
-
-        if (view == this.rechazar){
-            this.rechazar.setEnabled(false);
-            this.aprobar.setEnabled(true);
-            this.rechazarRetiro();
-        }
-
-        if (view==this.verfoto){
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("url", this.mvr.getRetiro().getFoto1());
-            System.out.printf("aeiou");
-
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
-
-            Fragment lp = new VistaFotografiaFragment();
-            lp.setArguments(bundle);
-            fragmentTransaction2.replace(R.id.nav_host_fragment, lp);
-            fragmentTransaction2.addToBackStack(null);
-            fragmentTransaction2.commit();
+        if (view==this.finalizar){
+            this.finalizar.setEnabled(false);
+            this.finalizarRetiro();
         }
 
         if (view==this.verdireccion){
@@ -246,6 +216,22 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
             fragmentTransaction2.commit();
         }
 
+        if (view==this.verfoto){
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("url", this.mvr.getRetiro().getFoto1());
+            System.out.printf("aeiou");
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+
+            Fragment lp = new VistaFotografiaFragment();
+            lp.setArguments(bundle);
+            fragmentTransaction2.replace(R.id.nav_host_fragment, lp);
+            fragmentTransaction2.addToBackStack(null);
+            fragmentTransaction2.commit();
+        }
+
+
         if (view== this.volver){
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -257,7 +243,7 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
 
     }
 
-    private void aprobarRetiro(){
+    private void finalizarRetiro(){
         db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -265,13 +251,13 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
 
         // Set the "isCapital" field of the city 'DC'
         washingtonRef
-                .update("estado", "aprobado")
+                .update("estado", "finalizado")
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         InformacionFragment fi = new InformacionFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("mensaje", "Retiro aprobado");
+                        bundle.putSerializable("mensaje", "Retiro finalizado");
                         bundle.putBoolean("estado", true);
                         fi.setArguments(bundle);
 
@@ -291,40 +277,7 @@ public class VistaRetiroFragment extends Fragment implements View.OnClickListene
                 });
     }
 
-    private void rechazarRetiro(){
-        db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        DocumentReference washingtonRef = db.collection("retiro").document(this.mvr.getRetiro().getId());
-
-        // Set the "isCapital" field of the city 'DC'
-        washingtonRef
-                .update("estado", "rechazado")
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully updated!");
-                        InformacionFragment fi = new InformacionFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("mensaje", "Retiro rechazado");
-                        bundle.putBoolean("estado", false);
-                        fi.setArguments(bundle);
-
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
-
-                        fragmentTransaction2.replace(R.id.nav_host_fragment, fi);
-                        fragmentTransaction2.commit();
-                        Log.d(TAG, "DocumentSnapshot successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating document", e);
-                    }
-                });
-    }
 
 
     private void crearReporte(){

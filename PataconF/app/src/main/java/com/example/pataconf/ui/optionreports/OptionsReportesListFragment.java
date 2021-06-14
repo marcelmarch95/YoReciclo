@@ -21,6 +21,7 @@ import com.example.pataconf.R;
 import com.example.pataconf.ui.OptionsGestionProductosFragment;
 import com.example.pataconf.ui.agregarpunto.AgregarPuntoFragment;
 import com.example.pataconf.ui.cargando.CargandoFragment;
+import com.example.pataconf.ui.cargando.SinDocumentoFragment;
 import com.example.pataconf.ui.puntos.PuntosListFragment;
 import com.example.pataconf.ui.puntosmapa.PuntosMapaFragment;
 import com.example.pataconf.ui.reportes.ReportesListFragment;
@@ -95,6 +96,14 @@ public class OptionsReportesListFragment extends Fragment implements View.OnClic
     }
 
     public void cargarReportes(String estado){
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        Fragment lp = new CargandoFragment();
+        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
         db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         ArrayList<Reporte> reportes = new ArrayList<>();
@@ -138,17 +147,32 @@ public class OptionsReportesListFragment extends Fragment implements View.OnClic
                                                 }
                                             }
                                         }
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable("reportes", data);
 
-                                        FragmentManager fragmentManager = getFragmentManager();
-                                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                        if (data.size()==0){
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("mensaje", "reporte");
 
-                                        Fragment lp = new ReportesListFragment();
-                                        lp.setArguments(bundle);
-                                        fragmentTransaction.replace(R.id.nav_host_fragment, lp);
-                                        fragmentTransaction.addToBackStack(null);
-                                        fragmentTransaction.commit();
+                                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+                                            Fragment lp = new SinDocumentoFragment();
+                                            lp.setArguments(bundle);
+                                            fragmentTransaction2.replace(R.id.nav_host_fragment, lp);
+                                            fragmentTransaction2.addToBackStack(null);
+                                            fragmentTransaction2.commit();
+                                        }
+
+                                        else {
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("reportes", data);
+
+                                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+
+                                            Fragment lp = new ReportesListFragment();
+                                            lp.setArguments(bundle);
+                                            fragmentTransaction2.replace(R.id.nav_host_fragment, lp);
+                                            fragmentTransaction2.addToBackStack(null);
+                                            fragmentTransaction2.commit();
+                                        }
+
 
                                     } else {
 
