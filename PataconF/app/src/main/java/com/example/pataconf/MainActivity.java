@@ -1,10 +1,14 @@
 package com.example.pataconf;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,7 +19,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.pataconf.ui.Permisos;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -61,11 +67,30 @@ public class MainActivity extends AppCompatActivity {
         btnIngresar.requestFocus();
 
         if (currentUser!=null){
-            Log.d("tag", "signInWithEmail:success");
-            Intent i = new Intent(getBaseContext(), PerfilComerciante.class);
-            startActivity(i);
-            barra.setVisibility(View.INVISIBLE);
-            btnIngresar.setEnabled(true);
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+                System.out.println("Provider contains=> " + provider);
+                if (provider.contains("gps") || provider.contains("network")){
+                    Log.d("tag", "signInWithEmail:success");
+                    Intent i = new Intent(getBaseContext(), PerfilComerciante.class);
+                    startActivity(i);
+                    barra.setVisibility(View.INVISIBLE);
+                    btnIngresar.setEnabled(true);
+                }
+                else {
+                    Intent i = new Intent(getBaseContext(), Permisos.class);
+                    startActivity(i);
+                    barra.setVisibility(View.INVISIBLE);
+                    btnIngresar.setEnabled(true);
+                }
+            }
+            else {
+                Intent i = new Intent(getBaseContext(), Permisos.class);
+                startActivity(i);
+                barra.setVisibility(View.INVISIBLE);
+                btnIngresar.setEnabled(true);
+            }
+
         }
 
         emailT = (EditText) findViewById(R.id.contraseña);
