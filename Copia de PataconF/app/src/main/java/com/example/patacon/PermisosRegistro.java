@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -29,9 +28,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.IOException;
-
-public class Permisos extends AppCompatActivity implements View.OnClickListener{
+public class PermisosRegistro extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth mAuth;
     private boolean ubicacion;
@@ -92,7 +89,7 @@ public class Permisos extends AppCompatActivity implements View.OnClickListener{
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         Log.i("", "Location settings are not satisfied. Show the user a dialog to" + "upgrade location settings ");
                         try {
-                            status.startResolutionForResult(Permisos.this, REQUEST_CHECK_SETTINGS);
+                            status.startResolutionForResult(PermisosRegistro.this, REQUEST_CHECK_SETTINGS);
                         } catch (IntentSender.SendIntentException e) {
                             Log.e("Applicationsett", e.toString());
                         }
@@ -118,7 +115,7 @@ public class Permisos extends AppCompatActivity implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         if (view==this.permitir1){
-            if (ContextCompat.checkSelfPermission(Permisos.this,
+            if (ContextCompat.checkSelfPermission(PermisosRegistro.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED)   ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, /* Este codigo es para identificar tu request */ 1);
             else {
@@ -153,8 +150,7 @@ public class Permisos extends AppCompatActivity implements View.OnClickListener{
                     if (camara){
                         progressBar.setIndeterminate(true);
                         progressBar.setVisibility(View.VISIBLE);
-                        Log.d("tag", "signInWithEmail:success");
-                        Intent i = new Intent(getBaseContext(), PerfilComerciante.class);
+                        Intent i = new Intent(getBaseContext(), RegisterActivity.class);
                         startActivity(i);
                     }
                     else {
@@ -170,11 +166,15 @@ public class Permisos extends AppCompatActivity implements View.OnClickListener{
                 String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
                 System.out.println("Provider contains=> " + provider);
                 if (provider.contains("gps") || provider.contains("network")){
-                    progressBar.setIndeterminate(true);
-                    progressBar.setVisibility(View.VISIBLE);
-                    Log.d("tag", "signInWithEmail:success");
-                    Intent i = new Intent(getBaseContext(), PerfilComerciante.class);
-                    startActivity(i);
+                    if (camara){
+                        progressBar.setIndeterminate(true);
+                        progressBar.setVisibility(View.VISIBLE);
+                        Intent i = new Intent(getBaseContext(), RegisterActivity.class);
+                        startActivity(i);
+                    }
+                    else {
+                        Toast.makeText(getApplication(), "Otorgar permisos de cámara para continuar", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }

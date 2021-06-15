@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
         emailT = (EditText) findViewById(R.id.contraseña);
         passT = (EditText) findViewById(R.id.pass);
 
-        emailT.setText("jucarmarch70@gmail.com");
-        passT.setText("123456");
+        //emailT.setText("jucarmarch70@gmail.com");
+        //passT.setText("123456");
 
         tvError = (TextView) findViewById(R.id.tvError);
 
@@ -108,13 +108,30 @@ public class MainActivity extends AppCompatActivity {
         myTextClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "Remplazar por tu codigo", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(getBaseContext(), RegisterActivity.class);
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+                    System.out.println("Provider contains=> " + provider);
+                    if (provider.contains("gps") || provider.contains("network")){
+                        Intent i = new Intent(getBaseContext(), RegisterActivity.class);
+                        startActivity(i);
+                        barra.setVisibility(View.INVISIBLE);
+                        btnIngresar.setEnabled(true);
+                    }
+                    else {
+                        Intent i = new Intent(getBaseContext(), PermisosRegistro.class);
+                        startActivity(i);
+                        barra.setVisibility(View.INVISIBLE);
+                        btnIngresar.setEnabled(true);
+                    }
+                }
+                else {
+                    Intent i = new Intent(getBaseContext(), PermisosRegistro.class);
+                    startActivity(i);
+                    barra.setVisibility(View.INVISIBLE);
+                    btnIngresar.setEnabled(true);
+                }
 
-                //i.putExtra("MyClass", (Serializable) usuario);
-                startActivity(i);
-                barra.setVisibility(View.INVISIBLE);
-                btnIngresar.setEnabled(true);
+
             }
         });
 

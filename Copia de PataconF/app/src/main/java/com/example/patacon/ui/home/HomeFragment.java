@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.arch.lifecycle.ViewModelProviders;
+import android.widget.Toast;
 
 import com.example.patacon.ModeloVistaDashboardAdapter;
 import com.example.patacon.PerfilComerciante;
@@ -117,6 +118,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rvMusicas.setAdapter(adapter);*/
         return root;
     }
+
 
     @Override
     public void onClick(View view) {

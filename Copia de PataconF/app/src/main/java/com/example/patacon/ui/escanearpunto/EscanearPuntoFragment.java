@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
@@ -129,8 +130,7 @@ public class EscanearPuntoFragment extends Fragment implements View.OnClickListe
                         // el dialog de la solicitud de la camara
                         if (shouldShowRequestPermissionRationale(
                                 Manifest.permission.CAMERA)) ;
-                        requestPermissions(new String[]{Manifest.permission.CAMERA},
-                                MY_PERMISSIONS_REQUEST_CAMERA);
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
                     }
                     return;
                 } else {
@@ -256,6 +256,17 @@ public class EscanearPuntoFragment extends Fragment implements View.OnClickListe
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS_REQUEST_CAMERA) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(), "camera permission granted", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
 
     @Override

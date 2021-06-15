@@ -40,6 +40,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lala"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -77,10 +78,11 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:gravity="bottom"
-                            android:text="ACCESO A FOTOS"
+                            android:text="CÁMARA"
+                            android:textAlignment="textStart"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            android:visibility="invisible" />
+                            android:visibility="visible" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -101,6 +103,7 @@
                         android:textColor="#FFFFFF" />
 
                     <LinearLayout
+                        android:id="@+id/permitir4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
@@ -113,7 +116,7 @@
                             android:background="@drawable/border2"
                             android:text="PERMITIR"
                             android:textColor="#FFFFFF"
-                            android:visibility="invisible" />
+                            android:visibility="visible" />
                     </LinearLayout>
 
                 </LinearLayout>

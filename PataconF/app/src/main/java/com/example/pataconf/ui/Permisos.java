@@ -138,6 +138,10 @@ public class Permisos extends AppCompatActivity implements View.OnClickListener{
         return mGoogleApiClient;
     }
 
+    @Override
+    public void onBackPressed (){
+        Toast.makeText(this, "Debes otorgar los permisos para poder continuar", Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public void onClick(View view) {

@@ -111,6 +111,9 @@ public class PerfilComerciante extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    @Override
+    public void onBackPressed (){
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

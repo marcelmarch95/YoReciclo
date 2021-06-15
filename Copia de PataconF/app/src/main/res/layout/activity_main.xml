@@ -62,8 +62,7 @@
                     android:id="@+id/contraseña"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:text="jucarmarch70@gmail.com" />
+                    android:inputType="textEmailAddress" />
 
                 <TextView
                     android:id="@+id/textView7"
@@ -76,8 +75,7 @@
                     android:id="@+id/pass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:text="matias1996" />
+                    android:inputType="textPassword" />
 
             </LinearLayout>
 

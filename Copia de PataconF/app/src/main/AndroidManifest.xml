@@ -72,6 +72,9 @@
             android:name="com.example.patacon.Permisos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name="com.example.patacon.PermisosRegistro"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name="com.example.patacon.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
