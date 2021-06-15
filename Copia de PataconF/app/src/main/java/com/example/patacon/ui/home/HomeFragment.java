@@ -182,10 +182,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Direccion d = document.toObject(Direccion.class);
-                            ModeloVistaDireccion mvd = new ModeloVistaDireccion();
-                            d.setId(document.getId());
-                            mvd.setDireccion(d);
-                            data.add(mvd);
+                            if (!d.isDeleted()){
+                                ModeloVistaDireccion mvd = new ModeloVistaDireccion();
+                                d.setId(document.getId());
+                                mvd.setDireccion(d);
+                                data.add(mvd);
+                            }
                         }
 
                         Bundle bundle = new Bundle();

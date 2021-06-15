@@ -11,6 +11,7 @@ public class Direccion implements Serializable {
     private String sector;
     private String numero;
     private String indicaciones;
+    private boolean deleted;
     private String lat;
     private String lng;
 
@@ -35,6 +36,7 @@ public class Direccion implements Serializable {
                 ", indicaciones='" + indicaciones + '\'' +
                 ", lat='" + lat + '\'' +
                 ", lng='" + lng + '\'' +
+                ", deleted='" + deleted + '\'' +
                 '}';
     }
 
@@ -108,5 +110,13 @@ public class Direccion implements Serializable {
 
     public void setIndicaciones(String indicaciones) {
         this.indicaciones = indicaciones;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

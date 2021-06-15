@@ -43,13 +43,6 @@
                 android:layout_height="72dp"
                 app:srcCompat="@drawable/profile" />
 
-            <TextView
-                android:id="@+id/textView22"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Nivel Roble"
-                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout

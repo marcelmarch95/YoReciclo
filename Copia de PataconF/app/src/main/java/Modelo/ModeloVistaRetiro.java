@@ -7,6 +7,7 @@ public class ModeloVistaRetiro implements Serializable {
     private Retiro retiro;
     private TramoRetiro tramo;
     private Direccion direccion;
+    private Generador generador;
 
     public ModeloVistaRetiro(){
 
@@ -34,5 +35,13 @@ public class ModeloVistaRetiro implements Serializable {
 
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
+    }
+
+    public Generador getGenerador() {
+        return generador;
+    }
+
+    public void setGenerador(Generador generador) {
+        this.generador = generador;
     }
 }

@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,7 @@ import com.example.patacon.R;
 import com.example.patacon.ui.agregardireccion.AgregarDireccionFragment;
 import com.example.patacon.ui.cargando.CargandoFragment;
 import com.example.patacon.ui.editardireccion.EditarDireccionFragment;
+import com.example.patacon.ui.informacion.InformacionFragment;
 import com.example.patacon.ui.verpunto.VerPuntoFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -57,6 +59,8 @@ import Modelo.Direccion;
 import Modelo.Generador;
 import Modelo.ModeloVistaDireccion;
 import Modelo.ModeloVistaReporte;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class MisDireccionesFragment extends Fragment implements View.OnClickListener {
 
@@ -94,10 +98,13 @@ public class MisDireccionesFragment extends Fragment implements View.OnClickList
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Direccion d = document.toObject(Direccion.class);
-                                ModeloVistaDireccion mvd = new ModeloVistaDireccion();
-                                d.setId(document.getId());
-                                mvd.setDireccion(d);
-                                data.add(mvd);
+                                if (!d.isDeleted()){
+                                    ModeloVistaDireccion mvd = new ModeloVistaDireccion();
+                                    d.setId(document.getId());
+                                    mvd.setDireccion(d);
+                                    data.add(mvd);
+                                }
+
                             }
                             ((PerfilComerciante) getActivity()).getSupportActionBar().setTitle("Mis Direcciones");
                             setHasOptionsMenu(true);
@@ -199,8 +206,13 @@ public class MisDireccionesFragment extends Fragment implements View.OnClickList
             if (accion.compareTo("EL") == 0) {
                 System.out.println("ELIMINAR");
 
-                db.collection("direccion").document(d.getDireccion().getId())
-                        .delete()
+                db = FirebaseFirestore.getInstance();
+
+                DocumentReference washingtonRef = db.collection("direccion").document(d.getDireccion().getId());
+
+                // Set the "isCapital" field of the city 'DC'
+                washingtonRef
+                        .update("deleted", true)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -211,7 +223,7 @@ public class MisDireccionesFragment extends Fragment implements View.OnClickList
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-
+                                Log.w(TAG, "Error updating document", e);
                             }
                         });
 

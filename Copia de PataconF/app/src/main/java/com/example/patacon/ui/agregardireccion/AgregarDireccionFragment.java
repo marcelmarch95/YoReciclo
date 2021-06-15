@@ -119,6 +119,7 @@ public class AgregarDireccionFragment extends Fragment implements View.OnClickLi
             return;
 
         Direccion d = new Direccion();
+        d.setDeleted(false);
         d.setCalle(ecalle.getText().toString());
         d.setNumero(enumero.getText().toString());
         d.setIndicaciones(eindicaciones.getText().toString());

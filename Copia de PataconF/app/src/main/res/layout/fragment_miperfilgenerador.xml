@@ -244,7 +244,8 @@
                     android:layout_gravity="bottom|center"
                     android:background="@drawable/buttonshape"
                     android:gravity="center"
-                    android:text="Guardar Cambios" />
+                    android:text="Guardar Cambios"
+                    android:visibility="invisible" />
             </LinearLayout>
 
 

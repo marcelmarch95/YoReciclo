@@ -12,11 +12,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.patacon.ui.RetirosListFragment;
 import com.example.patacon.ui.cargando.CargandoFragment;
 import com.example.patacon.ui.home.HomeFragment;
+import com.example.patacon.ui.optionretiros.OptionsRetirosListFragment;
 import com.example.patacon.ui.puntos.PuntosListFragment;
 import com.example.patacon.R;
+import com.example.patacon.ui.retiroslist.RetirosListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -70,6 +71,18 @@ public class InformacionFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         if (view == this.finalizar) {
+            if (this.mensaje.compareTo("Retiro aprobado")==0 || this.mensaje.compareTo("Retiro cancelado")==0 || this.mensaje.compareTo("Retiro finalizado")==0){
+
+                FragmentManager fragmentManager = getFragmentManager();
+                db = FirebaseFirestore.getInstance();
+
+                Fragment lp = new OptionsRetirosListFragment();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment, lp);
+                fragmentTransaction.commit();
+
+                return;
+            }
 
             if (this.mensaje.compareTo("Direccion editada correctamente")==0){
                 FragmentManager fragmentManager = getFragmentManager();

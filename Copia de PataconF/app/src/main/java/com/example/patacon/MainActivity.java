@@ -1,11 +1,15 @@
 package com.example.patacon;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -212,13 +216,29 @@ public class MainActivity extends AppCompatActivity {
                                                     });
                                         }
 
-                                        /*Intent i = new Intent(getBaseContext(), ActivityPrincipal.class);
-                                        i.putExtra("return", 1);
-                                        startActivity(i);*/
-                                        Intent i = new Intent(getBaseContext(), PerfilComerciante.class);
-                                        startActivity(i);
-                                        barra.setVisibility(View.INVISIBLE);
-                                        btnIngresar.setEnabled(true);
+                                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                                            String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+                                            System.out.println("Provider contains=> " + provider);
+                                            if (provider.contains("gps") || provider.contains("network")){
+                                                Log.d("tag", "signInWithEmail:success");
+                                                Intent i = new Intent(getBaseContext(), PerfilComerciante.class);
+                                                startActivity(i);
+                                                barra.setVisibility(View.INVISIBLE);
+                                                btnIngresar.setEnabled(true);
+                                            }
+                                            else {
+                                                Intent i = new Intent(getBaseContext(), Permisos.class);
+                                                startActivity(i);
+                                                barra.setVisibility(View.INVISIBLE);
+                                                btnIngresar.setEnabled(true);
+                                            }
+                                        }
+                                        else {
+                                            Intent i = new Intent(getBaseContext(), Permisos.class);
+                                            startActivity(i);
+                                            barra.setVisibility(View.INVISIBLE);
+                                            btnIngresar.setEnabled(true);
+                                        }
                                     }
                                 });
                     } else {

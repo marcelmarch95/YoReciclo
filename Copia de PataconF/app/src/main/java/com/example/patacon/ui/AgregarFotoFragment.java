@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
@@ -69,6 +70,7 @@ public class AgregarFotoFragment extends Fragment implements View.OnClickListene
     private Button exit;
     private ImageView foto;
     private FirebaseAuth mAuth;
+    private boolean fotocargada = false;
 
     private FirebaseFirestore db;
     private Bitmap img;
@@ -147,6 +149,7 @@ public class AgregarFotoFragment extends Fragment implements View.OnClickListene
             Bundle extras = data.getExtras();
             img = (Bitmap) extras.get("data");
             foto.setImageBitmap(img);
+            fotocargada = true;
             eliminarfoto.setEnabled(true);
         }
     }
@@ -173,6 +176,11 @@ public class AgregarFotoFragment extends Fragment implements View.OnClickListene
         }
 
         if (view==this.continuar){
+            if (!fotocargada){
+                Toast.makeText(getContext(), "Error, debes tomar una foto a los residuos...", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Fragment lp = new ConfirmacionFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("tramo",tramoseleccionado);
@@ -183,11 +191,12 @@ public class AgregarFotoFragment extends Fragment implements View.OnClickListene
             bundle.putSerializable("carton",totcarton);
             bundle.putSerializable("comentarios", comentarios.getText().toString());
 
+
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             img.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
-
             bundle.putByteArray("img", byteArray);
+
             lp.setArguments(bundle);
 
             FragmentManager fragmentManager = getFragmentManager();

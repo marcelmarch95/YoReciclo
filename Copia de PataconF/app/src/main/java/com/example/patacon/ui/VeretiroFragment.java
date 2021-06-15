@@ -21,6 +21,7 @@ import com.example.patacon.PerfilComerciante;
 import com.example.patacon.R;
 import com.example.patacon.ui.cargando.CargandoFragment;
 import com.example.patacon.ui.informacion.InformacionFragment;
+import com.example.patacon.ui.retiroslist.RetirosListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

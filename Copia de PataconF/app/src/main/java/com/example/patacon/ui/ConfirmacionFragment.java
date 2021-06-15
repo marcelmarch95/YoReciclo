@@ -67,8 +67,15 @@ public class ConfirmacionFragment extends Fragment implements View.OnClickListen
         foto = (ImageView) root.findViewById(R.id.imageView10);
 
         byte[] byteArray = getArguments().getByteArray("img");
-        img = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        foto.setImageBitmap(img);
+
+        if (byteArray==null){
+            foto.setImageResource(R.drawable.nofoto);
+        }
+        else {
+            img = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            foto.setImageBitmap(img);
+        }
+
 
         fecha = root.findViewById(R.id.fecha);
         tramo = root.findViewById(R.id.tramo);

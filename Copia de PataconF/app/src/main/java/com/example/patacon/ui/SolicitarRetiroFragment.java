@@ -86,9 +86,16 @@ public class SolicitarRetiroFragment extends Fragment implements View.OnClickLis
         totplastico = (int) getArguments().getSerializable("plastico");
         comentarios = (String) getArguments().getSerializable("comentarios");
 
-
         byte[] byteArray = getArguments().getByteArray("img");
-        img = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+        if (byteArray==null){
+            img = null;
+        }
+        else {
+            img = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        }
+
+
 
         Glide.with(this).load(R.drawable.carg).into(imagen);
 
@@ -166,13 +173,13 @@ public class SolicitarRetiroFragment extends Fragment implements View.OnClickLis
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        System.out.println("Retiro actualizado correctamente");
+                                        System.out.println("Retiro creado correctamente");
                                         //Toast.makeText(getContext(),"Reporte creado correctamente con ID: " + documentReference.getId(),Toast.LENGTH_SHORT).show();
 
 
                                         InformacionFragment fi = new InformacionFragment();
                                         Bundle bundle = new Bundle();
-                                        bundle.putSerializable("mensaje", "Retiro actualizado correctamente");
+                                        bundle.putSerializable("mensaje", "Retiro creado correctamente");
                                         bundle.putBoolean("estado", true);
                                         fi.setArguments(bundle);
 
